@@ -145,7 +145,7 @@ function Player() {
                                     lyrics.lyrics.length === 0 ? <option>{"无"}</option> :
                                         lyrics.lyrics.map((data, i) => {
                                             return <option value={i}
-                                                           key={i}>{data.title} - {data.artists} - {data.album}</option>
+                                                           key={i}>{data.title} - {data.artist ? data.artist : data.artists} - {data.album}</option>
                                         })
                                 }
                             </select>
