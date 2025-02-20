@@ -18,53 +18,54 @@ function Player() {
         artist: "",
         kind: null,
     });
-    const [albumcover, setAlbumcover] = useState({data: null, isloading: true})
+    const [albumcover, setAlbumcover] = useState({data: null, isloading: true, blob: null})
     const [lyrics, setLyrics] = useState({
         lyrics: [{lyrics: ""}],
         selected: 0
     });
     useEffect(() => {
+        let myWorker = new Worker(new URL("WebWorkerPoly.js", import.meta.url));
+        myWorker.postMessage({
+            type: 0, param: param, url: baseUrl
+        })
+        myWorker.onmessage = e => {
+            setAlbumcover({
 
-        async function f() {
+                data: e.data,
+                isloading: false, blob: e.data ?  URL.createObjectURL(new Blob([Uint8Array.from(e.data.data).buffer])) : null
+            })
+        }
 
-            let infos = await (await fetch(baseUrl + "getSingle?id=" + param)).json()
-
+        myWorker = new Worker(new URL("WebWorkerPoly.js", import.meta.url));
+        myWorker.postMessage({
+            type: 1, param: param, url: baseUrl
+        })
+        myWorker.onmessage = e => {
+            let info_local = e.data
             setInfo({
                 ...info,
 
-                artist: infos.artist,
-                kind: infos.kind,
+                artist: e.data.artist,
+                kind: e.data.kind,
 
-                song_name: infos.song_name,
-                album_name: infos.album_name
+                song_name: e.data.song_name,
+                album_name: e.data.album_name
             })
-            setLyrics({
-                ...lyrics,
-                lyrics: (await (await fetch(baseUrl + "lyric", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        name: infos.song_name,
-                        artist: infos.artist,
-                        albumName: infos.album_name,
-                    }),
-
-                })).json())
-            });
-            setAlbumcover({
-
-                data: (await (await fetch(baseUrl + 'getSingle?albumcover=true&id=' + param)).json()).albumcover,
-                isloading: false
+            myWorker = new Worker(new URL("WebWorkerPoly.js", import.meta.url));
+            myWorker.postMessage({
+                type: 2, info: info_local, url: baseUrl
             })
+            myWorker.onmessage = e => {
+                setLyrics({
+                    ...lyrics,
+                    lyrics: e.data,
+                });
+            }
 
         }
 
-        f()
 
     }, [])
-    const cover = albumcover.isloading ? white : (albumcover.data === null || albumcover.data.data.length === 0) ? sampleImg : URL.createObjectURL(new Blob([Uint8Array.from(albumcover.data.data).buffer]));
     return (
         <>
             <div className="">
@@ -80,7 +81,7 @@ function Player() {
 
                                 backgroundSize: "contain"
                             }} className={"mx-auto "}>
-                                <img src={cover} alt="cover" width="100%"/>
+                                <img src={albumcover.isloading ? white : (albumcover.data === null || albumcover.data.data.length === 0) ? sampleImg : albumcover.blob} alt="cover" width="100%"/>
 
                             </div>
                             <div id={"no-card"} className={"card mx-auto mb-3 rounded-top-0"}
@@ -142,10 +143,10 @@ function Player() {
                             }}>
                                 {
                                     lyrics.lyrics.length === 0 ? <option>{"无"}</option> :
-                                    lyrics.lyrics.map((data, i) => {
-                                        return <option value={i}
-                                                       key={i}>{data.title} - {data.artists} - {data.album}</option>
-                                    })
+                                        lyrics.lyrics.map((data, i) => {
+                                            return <option value={i}
+                                                           key={i}>{data.title} - {data.artists} - {data.album}</option>
+                                        })
                                 }
                             </select>
                             <div className={"lyric-box"}
