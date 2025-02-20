@@ -2,21 +2,51 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {parseBlob, selectCover} from 'music-metadata'
-import {baseUrl, Kind} from "./Singletons.js";
+import {baseUrl, fetchUrl, Kind} from "./Singletons";
 import {useCookies} from "react-cookie";
 
 // TODO Localizations
 
 
-// eslint-disable-next-line react/prop-types
-function Navbar({isFixed}) {
+function Navbar({isFixed, username}) {
+    const [loading, setLoading] = useState(true);
+    const [login, setLogin] = useState({
+        loggedIn: false,
+        uuid: "",
+        username: "",
+        email: "",
+    });
+    useEffect(() => {
+        async function f() {
+            let res = await fetch(fetchUrl + "userapi", {
+                credentials: "include",
+            })
+            setLoading(false)
+            if (res.ok) {
+                let json = await res.json();
+                setLogin({
+                    loggedIn: true,
+                    uuid: json.uuid,
+                    username: json.username,
+                    email: json.email,
+                })
+            }
+
+        }
+
+        if (username===undefined || username===null) {
+            console.log(username);
+            f()
+        }
+    }, [username])
+
 
     return (
 
         <nav
-            className={isFixed ? "navbar fixed-top navbar-expand-sm bg-dark navbar-dark" : "navbar navbar-expand-sm bg-dark navbar-dark"}>
+            className={isFixed ? "navbar fixed-top navbar-expand-sm bg-dark navbar-dark" : "navbar navbar-expand-md bg-dark navbar-dark"}>
             <div className="container-fluid">
                 <a className="navbar-brand" href="/">伴奏网</a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -24,7 +54,7 @@ function Navbar({isFixed}) {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul className="navbar-nav">
+                    <ul className="navbar-nav me-auto">
                         <li className="nav-item">
                             <a className="nav-link" href="/">主页</a>
                         </li>
@@ -35,37 +65,37 @@ function Navbar({isFixed}) {
                             <a className="nav-link" href="/query">处理队列</a>
                         </li>
                         <li className="nav-item">
-                            <div className={"dropdown "}>
-                                <button className="nav-link dropdown-toggle" type={"button"} data-bs-toggle={"dropdown"}
-                                        aria-expanded={false}>联系我
-                                </button>
-
-                                <ul className={"dropdown-menu"}>
-                                    <li><a className={"dropdown-item"} href={"mailto:xiey0@qq.com"}>邮箱</a></li>
-                                    <li><a className={"dropdown-item"}
-                                           href={"https://message.bilibili.com/?spm_id_from=..0.0#/whisper/mid255413001"}>B站私信</a>
-                                    </li>
-                                    <li><a className={"dropdown-item"}
-                                           href={"https://github.com/AXCWG/instrunet-vite/issues"}>GitHub Issues</a>
-                                    </li>
-
-                                </ul>
-                            </div>
-
+                            <a className="nav-link" href="mailto:xiey0@qq.com">联系我</a>
                         </li>
                         <li className={"nav-item"}>
-
-                            <a className="nav-link text-danger fw-bold "
-                               href="https://afdian.com/a/re_xiey0" aria-expanded={false}>打赏
-                            </a>
-
-
+                            <a className="nav-link" href="https://afdian.com/a/re_xiey0">如果喜欢本站，请考虑打赏哦</a>
                         </li>
                         <li className={"nav-item"}>
                             <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
                         </li>
 
+
                     </ul>
+                    <div className="d-flex">
+                        {
+                            !username ?
+                                loading ?
+                                    null :
+                                    login.loggedIn ?
+                                        <a className={"text-decoration-none me-3 right-hand"}
+                                           href={"/home"}>{login.username}</a> :
+                                        <>
+                                            <a className={" text-decoration-none me-3 right-hand"}
+                                               href={"/login"}>登录</a>
+                                            <a className={" text-decoration-none me-1 right-hand"}
+                                               href={"/register"}>注册</a>
+                                        </>
+                                : <a className={"text-decoration-none me-3 right-hand"}
+                                     href={"/home"}>{username}</a>
+
+                        }
+
+                    </div>
                 </div>
             </div>
         </nav>)
@@ -76,10 +106,10 @@ function App() {
     const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
 
     const [form, setForm] = useState({
-        name: "未知名称",
+        name: "",
         albumName: "",
         link: "",
-        file: {},
+        file: null,
         email: cookies["email"],
         artist: "",
         kind: 0,
@@ -179,7 +209,6 @@ function App() {
     return (<>
         <Navbar isFixed={true}/>
         <div className="container mt-5 ">
-
             <div style={{height: '81vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
                 <div className="row">
                     <div className={"display-1 text-lg-center mt-5"} style={{userSelect: "none"}}>
@@ -271,7 +300,7 @@ function App() {
                             </div>
 
                             <input required={true} onChange={(obj) => {
-                                if (obj.target.files[0]) {
+                                if(obj.target.files[0] ) {
                                     parseBlob(obj.target.files[0], {
                                         skipCovers: false,
 
@@ -355,10 +384,8 @@ function App() {
                                         }} className={"form-control form-select"} style={{userSelect: "none"}}>
                                             <option value={0}>{Kind["0"]}</option>
                                             <option value={1}>{Kind["1"]}</option>
-                                            <option value={2}>{Kind["2"]}</option>
                                             <option value={3}>{Kind["3"]}</option>
                                             <option value={4}>{Kind["4"]}</option>
-                                            <option value={5}>{Kind["5"]}</option>
                                             <option value={0} disabled={true}>更多正在开发中……</option>
 
                                         </select>
@@ -409,12 +436,9 @@ function App() {
                                         }} className={"form-control form-select"} style={{userSelect: "none"}}>
                                             <option value={0}>{Kind["0"]}</option>
                                             <option value={1}>{Kind["1"]}</option>
-                                            <option value={2}>{Kind["2"]}</option>
                                             <option value={3}>{Kind["3"]}</option>
                                             <option value={4}>{Kind["4"]}</option>
-                                            <option value={5}>{Kind["5"]}</option>
                                             <option value={0} disabled={true}>更多正在开发中……</option>
-
 
                                         </select>
                                     </div>

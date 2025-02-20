@@ -1,7 +1,7 @@
 import H5AudioPlayer from "react-h5-audio-player";
 import 'react-h5-audio-player/lib/styles.css';
-import {baseUrl, fetchUrl, Kind, white} from "./Singletons.js";
-import sampleImg from "./SampleImg.png";
+import {baseUrl, fetchUrl, Kind, white} from "./Singletons";
+import sampleImg from "./Assets/SampleImg.png";
 import {Navbar} from "./App.jsx";
 import {useEffect, useState} from "react";
 import parse from "html-react-parser";
@@ -9,9 +9,13 @@ import parse from "html-react-parser";
 const urlParams = new URLSearchParams(window.location.search);
 
 let param = urlParams.get('play');
+let playlistparam = urlParams.get('playlist');
 
 function Player() {
-
+    const [playlist, setPlaylist] = useState({});
+    useEffect(() => {
+        // TODO fetch playlist
+    }, []);
     const [info, setInfo] = useState({
         song_name: "正在加载……",
         album_name: "",
