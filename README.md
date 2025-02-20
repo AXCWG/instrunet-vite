@@ -1,8 +1,20 @@
-# React + Vite
+# 伴奏网 InstruNet
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个用来生成，搜索和分享歌曲伴奏的网页。
 
-Currently, two official plugins are available:
+![网页大概](Showcase%201.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![上传](Showcase%202.png)
+
+支持分离和声/非和声伴奏与其人声；贝斯，鼓。
+
+
+TODO list: 
+
+- [x] <span style="text-decoration: line-through;"> 歌词</span> 
+- [ ] 本地化
+- [ ] 可能的更换播放器的选项（这个有点BUG）
+
+
+## Vite
+曾经的我对React的Framework极其鄙夷，然而我错了。
