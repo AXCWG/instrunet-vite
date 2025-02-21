@@ -9,7 +9,7 @@ import parse from "html-react-parser";
 const urlParams = new URLSearchParams(window.location.search);
 
 let param = urlParams.get('play');
-
+// TODO Wasteful base64. BASE64 is shit. 18MB->66MB. Nice bruh. AWWWWFULLLLLLLL!!!!!!
 function Player() {
 
     const [info, setInfo] = useState({

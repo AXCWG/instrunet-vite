@@ -2,77 +2,110 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {parseBlob, selectCover} from 'music-metadata'
 import {baseUrl, Kind} from "./Singletons.js";
 import {useCookies} from "react-cookie";
-
+import {NavLink} from "react-router-dom";
+import {Modal, Text} from "@mantine/core";
+import {useDisclosure} from "@mantine/hooks";
+import {Lrc} from "react-lrc";
 // TODO Localizations
 
 
 // eslint-disable-next-line react/prop-types
 function Navbar({isFixed}) {
+    const [opened, {open, close}] = useDisclosure(false);
+    useEffect(() => {
+        cookies["shownPopup"] ? null : open()
+    }, [open])
+    const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
 
     return (
+        <>
+            <Modal overlayProps={{
+                blur: 10,
+            }} yOffset={"10vh"} zIndex={1031} opened={opened} onClose={() => {
+                close()
+                setCookie("shownPopup", true, {
+                    sameSite: "strict",
+                })
+            }} title={"注意事项"}>
+                <div>
+                    
+                    <Text>
+                        <ul>
+                            <li>此网站仅支持处理立体声文件——也就是说，5.1声道的音频，请事先转换为立体声音频，否则无法处理。</li>
+                            <li>有事找我：QQ 3095864740——尽量避免B站私信，因为傻逼B站私信永远推送不到我手机上。</li>
+                        </ul>
 
-        <nav
-            className={isFixed ? "navbar fixed-top navbar-expand-sm bg-dark navbar-dark" : "navbar navbar-expand-sm bg-dark navbar-dark"}>
-            <div className="container-fluid">
-                <a className="navbar-brand" href="/">伴奏网</a>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapsibleNavbar">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <a className="nav-link" href="/">主页</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/Search">全部</a>
-                        </li>
-                        <li className={"nav-item"}>
-                            <a className="nav-link" href="/query">处理队列</a>
-                        </li>
-                        <li className="nav-item">
-                            <div className={"dropdown "}>
-                                <button className="nav-link dropdown-toggle" type={"button"} data-bs-toggle={"dropdown"}
-                                        aria-expanded={false}>联系我
-                                </button>
-
-                                <ul className={"dropdown-menu"}>
-                                    <li><a className={"dropdown-item"} href={"mailto:xiey0@qq.com"}>邮箱</a></li>
-                                    <li><a className={"dropdown-item"}
-                                           href={"https://message.bilibili.com/?spm_id_from=..0.0#/whisper/mid255413001"}>B站私信</a>
-                                    </li>
-                                    <li><a className={"dropdown-item"}
-                                           href={"https://github.com/AXCWG/instrunet-vite/issues"}>GitHub Issues</a>
-                                    </li>
-
-                                </ul>
-                            </div>
-
-                        </li>
-                        <li className={"nav-item"}>
-
-                            <a className="nav-link text-danger fw-bold "
-                               href="https://afdian.com/a/re_xiey0" aria-expanded={false}>打赏
-                            </a>
-
-
-                        </li>
-                        <li className={"nav-item"}>
-                            <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
-                        </li>
-
-                    </ul>
+                    </Text>
                 </div>
-            </div>
-        </nav>)
+            </Modal>
+            <nav
+                className={isFixed ? "navbar fixed-top navbar-expand-sm bg-dark navbar-dark" : "navbar navbar-expand-sm bg-dark navbar-dark"}>
+                <div className="container-fluid">
+
+                    <NavLink className="navbar-brand" to="/">伴奏网</NavLink>
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapsibleNavbar">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse" id="collapsibleNavbar">
+                        <ul className="navbar-nav">
+                            <li className="nav-item">
+                                <NavLink className="nav-link" to="/">主页</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink className="nav-link" to="/Search">全部</NavLink>
+                            </li>
+                            <li className={"nav-item"}>
+                                <NavLink className="nav-link" to="/query">处理队列</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <div className={"dropdown "}>
+                                    <button className="nav-link dropdown-toggle" type={"button"}
+                                            data-bs-toggle={"dropdown"}
+                                            aria-expanded={false}>联系我
+                                    </button>
+
+                                    <ul className={"dropdown-menu"}>
+                                        <li><NavLink className={"dropdown-item"}
+                                                     to={"mailto:xiey0@qq.com"}>邮箱</NavLink></li>
+                                        <li><NavLink className={"dropdown-item"}
+                                                     to={"https://message.bilibili.com/?spm_id_from=..0.0#/whisper/mid255413001"}>B站私信</NavLink>
+                                        </li>
+                                        <li><NavLink className={"dropdown-item"}
+                                                     to={"https://github.com/AXCWG/instrunet-vite/issues"}>GitHub
+                                            Issues</NavLink>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                            </li>
+                            <li className={"nav-item"}>
+
+                                <a className="nav-link text-danger fw-bold "
+                                   href="https://afdian.com/a/re_xiey0" aria-expanded={false}>打赏
+                                </a>
+
+
+                            </li>
+                            <li className={"nav-item"}>
+                                <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+        </>
+    )
 }
 
 function App() {
-
     const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
 
     const [form, setForm] = useState({
