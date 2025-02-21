@@ -7,7 +7,7 @@ import {parseBlob, selectCover} from 'music-metadata'
 import {baseUrl, Kind} from "./Singletons.js";
 import {useCookies} from "react-cookie";
 import {NavLink} from "react-router-dom";
-import {Modal, Text} from "@mantine/core";
+import {Button, Flex, Modal, ModalStack, Text, useModalsStack} from "@mantine/core";
 import {useDisclosure} from "@mantine/hooks";
 import {Lrc} from "react-lrc";
 // TODO Localizations
@@ -16,32 +16,71 @@ import {Lrc} from "react-lrc";
 // eslint-disable-next-line react/prop-types
 function Navbar({isFixed}) {
     const [opened, {open, close}] = useDisclosure(false);
-    useEffect(() => {
-        cookies["shownPopup"] ? null : open()
-    }, [open])
+    const stack = useModalsStack(['caution', 'notice']);
+    // useEffect(() => {
+    //     if(!cookies["shownPopup"]){
+    //         stack.open('caution')
+    //     }
+    // }, [])
     const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
 
     return (
         <>
-            <Modal overlayProps={{
-                blur: 10,
-            }} yOffset={"10vh"} zIndex={1031} opened={opened} onClose={() => {
-                close()
-                setCookie("shownPopup", true, {
-                    sameSite: "strict",
-                })
-            }} title={"注意事项"}>
-                <div>
-                    
-                    <Text>
-                        <ul>
-                            <li>此网站仅支持处理立体声文件——也就是说，5.1声道的音频，请事先转换为立体声音频，否则无法处理。</li>
-                            <li>有事找我：QQ 3095864740——尽量避免B站私信，因为傻逼B站私信永远推送不到我手机上。</li>
-                        </ul>
+            <ModalStack>
+                <Modal {...stack.register('caution')} overlayProps={{
+                    blur: 10,
+                }} yOffset={"10vh"} zIndex={1031} opened={opened} onClose={() => {
+                    close()
+                    setCookie("shownPopup", true, {
+                        sameSite: "strict",
+                    })
+                }} title={"注意事项"}>
+                    <div>
 
-                    </Text>
-                </div>
-            </Modal>
+                        <Text>
+                            <ul>
+                                <li>此网站仅支持处理立体声文件——也就是说，5.1声道的音频，请事先转换为立体声音频，否则无法处理。</li>
+                                <li>有事找我：QQ 3095864740——尽量避免B站私信，因为傻逼B站私信永远推送不到我手机上。</li>
+                            </ul>
+
+                        </Text>
+                    </div>
+                </Modal>
+                <Modal {...stack.register('notice')} overlayProps={{
+                    blur: 10,
+                }} yOffset={"10vh"} zIndex={1032} opened={opened} onClose={() => {
+                    close()
+                    setCookie("shownPopup", true, {
+                        sameSite: "strict",
+                    })
+                }} title={"注意事项"}>
+                    <div>
+
+                        <Text>
+                            网站 v1.1.1 更新介绍
+                            <br/>
+                            <br/>
+
+                            - 优化UI
+                            <br/>
+
+                            - 人声去除功能
+                            <br/>
+
+                            - Vite
+                            <br/>
+
+                            - 可以从播放界面搜索相关专辑和歌手
+                            <br/>
+
+                            - WebWorker优化（谁说webworker没用的？？？）
+                            <br/>
+
+                        </Text>
+                    </div>
+                </Modal>
+            </ModalStack>
+
             <nav
                 className={isFixed ? "navbar fixed-top navbar-expand-sm bg-dark navbar-dark" : "navbar navbar-expand-sm bg-dark navbar-dark"}>
                 <div className="container-fluid">
@@ -61,6 +100,11 @@ function Navbar({isFixed}) {
                             </li>
                             <li className={"nav-item"}>
                                 <NavLink className="nav-link" to="/query">处理队列</NavLink>
+                            </li>
+                            <li className={"nav-item"}>
+                                <a onClick={()=>{
+                                    stack.open('notice');
+                                }} className="nav-link">更新v1.1.1</a>
                             </li>
                             <li className="nav-item">
                                 <div className={"dropdown "}>
@@ -231,13 +275,23 @@ function App() {
                                 searchGeneral();
                             }
                         }}/>
-                        <button type="button" className="btn btn-primary" onClick={() => {
-                            setState(-1)
-                            searchGeneral()
-                        }}><i
-                            className={"bi bi-search"}></i>
-                        </button>
+
                     </form>
+                            <Flex id={"double"} style={{ margin:"auto"}} mt={"md"} gap={"lg"} justify="space-evenly">
+                                <Button fullWidth={true}
+                                        className="btn btn-primary" onClick={() => {
+                                    setState(-1)
+                                    searchGeneral()
+                                }}>搜索
+                                </Button>
+                                <Button disabled={true} fullWidth={true} variant={"gradient"} gradient={{from: "blue", to: "violet", deg: 45}}
+                                        className="btn btn-primary" onClick={() => {
+                                    setState(-1)
+                                    searchGeneral()
+                                }}>随机
+                                </Button>
+                            </Flex>
+
 
                 </div>
 
@@ -386,12 +440,10 @@ function App() {
                                                 ...form, kind: Number.parseInt(e.target.value)
                                             })
                                         }} className={"form-control form-select"} style={{userSelect: "none"}}>
-                                            <option value={0}>{Kind["0"]}</option>
-                                            <option value={1}>{Kind["1"]}</option>
-                                            <option value={2}>{Kind["2"]}</option>
-                                            <option value={3}>{Kind["3"]}</option>
-                                            <option value={4}>{Kind["4"]}</option>
-                                            <option value={5}>{Kind["5"]}</option>
+                                            {Kind.map((val, index) =>
+                                                <option key={index} value={index}>{val}</option>
+                                            )}
+
                                             <option value={0} disabled={true}>更多正在开发中……</option>
 
                                         </select>
@@ -440,12 +492,9 @@ function App() {
                                                 kind: Number.parseInt(e.target.value)
                                             })
                                         }} className={"form-control form-select"} style={{userSelect: "none"}}>
-                                            <option value={0}>{Kind["0"]}</option>
-                                            <option value={1}>{Kind["1"]}</option>
-                                            <option value={2}>{Kind["2"]}</option>
-                                            <option value={3}>{Kind["3"]}</option>
-                                            <option value={4}>{Kind["4"]}</option>
-                                            <option value={5}>{Kind["5"]}</option>
+                                            {Kind.map((val, index) =>
+                                                <option key={index} value={index}>{val}</option>
+                                            )}
                                             <option value={0} disabled={true}>更多正在开发中……</option>
 
 

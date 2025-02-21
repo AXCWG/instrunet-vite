@@ -19,6 +19,13 @@
 .lyric-box-scroll{
     transition: all 0.5s ease-out;
 }
+#double{
+    width: fit-content;
+
+    @media (max-width: 992px){
+        width: 100%;
+    }
+}
 .select{
     @media(max-width: 1200px) {
         max-width: 500px;

@@ -5,6 +5,7 @@ import sampleImg from "./SampleImg.png";
 import {Navbar} from "./App.jsx";
 import {useEffect, useState} from "react";
 import parse from "html-react-parser";
+import {NavLink} from "react-router-dom";
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -87,11 +88,13 @@ function Player() {
                             <div id={"no-card"} className={"card mx-auto mb-3 rounded-top-0"}
                                  style={{maxWidth: "500px"}}>
                                 <div className={"card-body"}>
-                                    <div className={"h6"}>
+                                    <div className={"h3"}>
                                         {info.song_name}
                                     </div>
-                                    <div>
-                                        {info.album_name} - {info.artist}
+                                    <div >
+                                        <a className={"text-dark"} href={"/search?p="+info.album_name}>{info.album_name}</a>
+                                          <br/>
+                                        <a className={"text-dark"} href={"/search?p="+info.artist}>{info.artist}</a>
                                     </div>
                                     <div>
                                         {Kind[info.kind]}
