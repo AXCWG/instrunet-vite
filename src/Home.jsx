@@ -142,7 +142,7 @@ function Home() {
                                <div style={{display: "flex", flexDirection: "row"}} className={"mt-2"}>
                                    {playlist.length === 0 ? null : playlist.map((item, index) => {
                                         
-                                   })} <RLink style={{display: "flex", justifyContent: "space-around", alignItems:"center"}} className={"btn btn-primary pl-item"} to={"/PlayList"}>添加</RLink>
+                                   })} <RLink style={{display: "flex", justifyContent: "space-around", alignItems:"center"}} className={"btn btn-primary pl-item"} to={"/playlist"}>添加</RLink>
                                </div>
 
                             </div>

@@ -11,7 +11,7 @@ import {fetchUrl} from "./Singletons";
 import Pitched from "./Pitched";
 import Home from "./Home";
 import AccountDeletion from "./AccountDeletion";
-// import '@mantine/core/styles.css';
+import '@mantine/core/styles.css';
 import {MantineProvider} from '@mantine/core';
 import PlayList from "./PlayList.jsx";
 
@@ -53,7 +53,8 @@ root.render(
                 <Route path={"/logout"} element={<Logout/>}/>
                 <Route path={"/home"} element={<Home/>}/>
                 <Route path={"/AccDel"} element={<AccountDeletion/>}/>
-                <Route path={"/PlayList"} element={<PlayList/>}/>
+                <Route path={"/playlist"} element={<PlayList createNew={true}/>}/>
+                <Route path={"/playlist/:playlistuuid"} element={<PlayList createNew={false }/>}/>
 
             </Routes>
         </BrowserRouter>

@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import {parseBlob, selectCover} from 'music-metadata'
 import {baseUrl, fetchUrl, Kind} from "./Singletons";
 import {useCookies} from "react-cookie";
+import {Grid} from "@mantine/core";
 
 // TODO Localizations
 
@@ -37,7 +38,6 @@ function Navbar({isFixed, username}) {
         }
 
         if (username===undefined || username===null) {
-            console.log(username);
             f()
         }
     }, [username])
@@ -219,6 +219,7 @@ function App() {
                 </div>
                 <div className={"row mt-5 "}>
                     <form className={"d-flex w-100"} onSubmit={Prevent}>
+
                         <input className={"form-control me-2"} type={"text"} placeholder={"搜索"} onChange={(e) => {
                             setSearchParam(e.target.value);
                         }} value={searchParam} onKeyDown={(e) => {
@@ -227,6 +228,7 @@ function App() {
                                 searchGeneral();
                             }
                         }}/>
+
                         <button type="button" className="btn btn-primary" onClick={() => {
                             setState(-1)
                             searchGeneral()
@@ -234,6 +236,7 @@ function App() {
                             className={"bi bi-search"}></i>
                         </button>
                     </form>
+
 
                 </div>
 
