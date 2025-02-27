@@ -26,6 +26,14 @@
         padding-bottom: 0px;
     }
 }
+#listTmb{
+    max-width: 100%;
+    margin: auto;
+    @media(max-width: $mantine-breakpoint-sm){
+        max-width: 70%;
+    }
+
+}
 
 .right-hand{
     transition: all 0.15s ease-in-out;

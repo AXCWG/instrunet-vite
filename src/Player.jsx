@@ -12,7 +12,6 @@ let param = urlParams.get('play');
 let playlistparam = urlParams.get('playlist');
 
 function Player() {
-    const [playlist, setPlaylist] = useState({});
     useEffect(() => {
         // TODO fetch playlist
     }, []);
