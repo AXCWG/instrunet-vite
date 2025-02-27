@@ -2,7 +2,19 @@ import {Navbar} from "./App.jsx";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {baseUrl, fetchUrl, Kind} from "./Singletons.js";
-import {Button, ButtonGroup, Container, Grid, Image, Input, Modal, NumberInput, Switch, Table} from "@mantine/core";
+import {
+    Button,
+    ButtonGroup,
+    Container,
+    Grid,
+    Image,
+    Input,
+    Modal,
+    Notification,
+    NumberInput,
+    Switch,
+    Table
+} from "@mantine/core";
 import sampleImg from "./Assets/SampleImg.png";
 import H5AudioPlayer from "react-h5-audio-player";
 import {useDisclosure} from "@mantine/hooks";
@@ -18,7 +30,7 @@ function PlayList({createNew}) {
         return this;
     }
     const [list, setList] = useState({
-        list: [], owner: "", playlistuuid: ""
+        list: [], owner: "", playlistuuid: "", private: false, tmb: null, title: null, ownerliteral: ""
     });
     const [index, setIndex] = useState(0);
     const params = useParams();
@@ -28,14 +40,7 @@ function PlayList({createNew}) {
         username: "",
         email: "",
     });
-    const [playlistParams, setPlaylistParams] = useState({
-        playlistuuid: null,
-        content: [],
-        private: false,
-        tmb: null,
-        title: "正在加载",
-        owner: null,
-    })
+
     useEffect(() => {
         async function f() {
             let success = false;
@@ -83,20 +88,21 @@ function PlayList({createNew}) {
                 }
 
 
-                setList({list: listLocal, owner: info.owner, playlistuuid: info.uuid});
-                setPlaylistParams({
-                    playlistuuid: params.playlistuuid,
-                    content: info.content,
-                    private: info.private,
-                    tmb: info.tmb,
-                    title: info.title,
-                    owner: await (await fetch(fetchUrl + "userapi?getname=true&uuid=" + info.owner, {
+                setList({
+                    list: listLocal,
+                    owner: info.owner,
+                    ownerliteral: await (await fetch(fetchUrl + "userapi?getname=true&uuid=" + info.owner, {
                         credentials: "include",
                         headers: {
                             "Content-Type": "application/json"
                         }
-                    })).text()
-                })
+                    })).text(),
+                    playlistuuid: info.uuid,
+                    title: info.title,
+                    private: info.private,
+                    tmb: info.tmb
+                });
+
             }
 
         }
@@ -136,17 +142,19 @@ function PlayList({createNew}) {
                                 async function click() {
                                     let pre = (await (await fetch(baseUrl + "getSingle?albumcover=true&id=" + item.uuid)).json()).albumcover
 
-                                    setList(list.list.concat([{
-                                        addr: fetchUrl + item.uuid,
-                                        album_name: item.album_name,
-                                        albumcover: pre.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(pre.data).buffer])) : sampleImg,
-                                        artist: item.artist,
-                                        kind: item.kind,
-                                        song_name: item.song_name,
-                                        uuid: item.uuid,
+                                    setList({
+                                        ...list, list: list.list.concat([{
+                                            addr: fetchUrl + item.uuid,
+                                            album_name: item.album_name,
+                                            albumcover: pre.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(pre.data).buffer])) : sampleImg,
+                                            artist: item.artist,
+                                            kind: item.kind,
+                                            song_name: item.song_name,
+                                            uuid: item.uuid,
 
 
-                                    }]))
+                                        }])
+                                    })
                                     close();
 
                                 }
@@ -175,13 +183,13 @@ function PlayList({createNew}) {
 
                     <Grid.Col span={{base: 12, sm: 5}}>
 
-                        <Image id={"listTmb"} src={playlistParams.tmb ? playlistParams.tmb : sampleImg}
+                        <Image id={"listTmb"} src={list.tmb ? list.tmb : sampleImg}
                                className={"border-black border-1 rounded-3 shadow"} style={{width: "100%"}}/>
 
-                        <div className={"mt-4 text-center h4"}>{playlistParams.title}</div>
-                        <div className={"mt-3 text-center h6"}>{playlistParams.owner}</div>
+                        <div className={"mt-4 text-center h4"}>{list.title}</div>
+                        <div className={"mt-3 text-center h6"}>{list.ownerliteral}</div>
                         <Switch style={{margin: "auto", width: "fit-content"}} className={"mt-3"} label={"公开"}
-                                checked={!playlistParams.private} onChange={() => {
+                                checked={!list.private} onChange={() => {
 
                         }}/>
                         <div className={"mt-4 shadow-lg rounded-3 overflow-hidden"}>
@@ -214,6 +222,14 @@ function PlayList({createNew}) {
 
                                 }
 
+                            }} onEnded={() => {
+                                if (index + 1 > list.list.length - 1) {
+                                    setIndex(0)
+                                } else {
+                                    setIndex(index + 1);
+
+                                }
+
                             }} onClickPrevious={() => {
                                 if (index - 1 < 0) {
                                     setIndex(list.list.length - 1)
@@ -229,7 +245,60 @@ function PlayList({createNew}) {
                     </Grid.Col>
 
                     <Grid.Col span={{base: 12, sm: 7}}>
-                        {login.uuid && list.owner && login.uuid === list.owner ? <Button fullWidth>保存</Button> : null }
+                        {createNew ? <Button fullWidth onClick={async () => {
+                            let pre = [];
+                            for (let obj of list.list) {
+                                pre.push(obj.uuid);
+                            }
+                            let res = await fetch(fetchUrl + "upload-playlist", {
+                                method: "POST",
+                                credentials: "include",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    content: pre,
+                                    playlistuuid: list.playlistuuid,
+                                    private: list.private,
+                                    tmb: list.tmb,
+                                    title: list.title,
+
+
+                                })
+                            })
+                            if (res.ok) {
+                                console.log("ok")
+                                window.location.replace("/playlist/"+(await res.json()).UUID)  ;
+                            }
+                        }}>保存</Button> : login.uuid && list.owner && login.uuid === list.owner ?
+                            <Button fullWidth onClick={() => {
+                                let pre = [];
+                                for (let obj of list.list) {
+                                    pre.push(obj.uuid);
+                                }
+                                let res = fetch(fetchUrl + "upload-playlist", {
+                                    method: "POST",
+                                    credentials: "include",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                        content: pre,
+
+                                        playlistuuid: list.playlistuuid,
+                                        private: list.private,
+                                        tmb: list.tmb,
+                                        title: list.title,
+
+
+                                    })
+                                })
+                                if (res.ok) {
+                                    return <Notification zIndex={1033} icon={<>s</>} color="teal" title="成功" mt="md">
+                                        Everything is fine
+                                    </Notification>
+                                }
+                            }}>保存</Button> : null}
 
                         <Table className={"mt-3"} striped withTableBorder highlightOnHover>
                             <Table.Tbody>
@@ -265,13 +334,20 @@ function PlayList({createNew}) {
                                     </Table.Tr>
                                 ))}
                                 <Table.Tr>
-                                    {login.uuid && list.owner && login.uuid === list.owner ?  <Table.Td colSpan={5} style={{height: "3rem"}}>
+                                    {createNew ? <Table.Td colSpan={5} style={{height: "3rem"}}>
 
                                         <div onClick={() => open()}
                                              style={{textAlign: "center", userSelect: "none"}}>
                                             添加
                                         </div>
-                                    </Table.Td> : null }
+                                    </Table.Td> :  login.uuid && list.owner && login.uuid === list.owner ?
+                                        <Table.Td colSpan={5} style={{height: "3rem"}}>
+
+                                            <div onClick={() => open()}
+                                                 style={{textAlign: "center", userSelect: "none"}}>
+                                                添加
+                                            </div>
+                                        </Table.Td> : null}
 
                                 </Table.Tr>
                             </Table.Tbody>

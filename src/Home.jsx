@@ -51,7 +51,7 @@ function Home() {
     }, [login]);
     useEffect(()=>{
         async function f() {
-            setPlaylist(await (await fetch(fetchUrl + "playlist", {
+            setPlaylist(await (await fetch(fetchUrl + "playlist-owned", {
                 method: "POST",
                 credentials: "include",
             })).json())
@@ -136,12 +136,14 @@ function Home() {
                             gap: "1rem",
                         }}>
 
-                            <div className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"} style={{borderStyle: "solid"}}>
+
+                            <div className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"} style={{borderStyle: "solid", }}>
                                 歌单
                                 <br/>
-                               <div style={{display: "flex", flexDirection: "row"}} className={"mt-2"}>
+                               <div style={{display: "flex", flexDirection: "row", overflow: "scroll", gap: "5px"}} className={"mt-2"}>
                                    {playlist.length === 0 ? null : playlist.map((item, index) => {
-                                        
+
+                                       return <RLink key={index} style={{display: "flex", justifyContent: "space-around", alignItems:"center"}} className={"btn btn-primary pl-item"} to={"/playlist/"+item.uuid}>{item.title}</RLink>
                                    })} <RLink style={{display: "flex", justifyContent: "space-around", alignItems:"center"}} className={"btn btn-primary pl-item"} to={"/playlist"}>添加</RLink>
                                </div>
 
