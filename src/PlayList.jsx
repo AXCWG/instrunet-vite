@@ -2,19 +2,24 @@ import {Navbar} from "./App.jsx";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {baseUrl, fetchUrl, Kind} from "./Singletons.js";
-import {Button, ButtonGroup, Container, Grid, Image, NumberInput, Switch, Table} from "@mantine/core";
+import {Button, ButtonGroup, Container, Grid, Image, Input, Modal, NumberInput, Switch, Table} from "@mantine/core";
 import sampleImg from "./Assets/SampleImg.png";
 import H5AudioPlayer from "react-h5-audio-player";
+import {useDisclosure} from "@mantine/hooks";
+import log from "eslint-plugin-react/lib/util/log.js";
 
 
 function PlayList({createNew}) {
+    const [opened, {open, close}] = useDisclosure(false);
     Array.prototype.swap = function (x, y) {
         let b = this[x];
         this[x] = this[y];
         this[y] = b;
         return this;
     }
-    const [list, setList] = useState([]);
+    const [list, setList] = useState({
+        list: [], owner: "", playlistuuid: ""
+    });
     const [index, setIndex] = useState(0);
     const params = useParams();
     const [login, setLogin] = useState({
@@ -62,10 +67,11 @@ function PlayList({createNew}) {
                 const listLocal = [];
 
                 for (let uuidstr of info.content) {
+                    let pre = (await (await fetch(baseUrl + "getSingle?albumcover=true&id=" + uuidstr)).json()).albumcover
                     let song_info = await (await fetch(baseUrl + "getSingle?id=" + uuidstr)).json()
                     listLocal.push({
                         uuid: uuidstr,
-                        albumcover: (await (await fetch(baseUrl + "getSingle?albumcover=true&id=" + uuidstr)).json()).albumcover,
+                        albumcover: pre.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(pre.data).buffer])) : sampleImg,
                         song_name: song_info.song_name,
                         album_name: song_info.album_name,
                         artist: song_info.artist,
@@ -75,9 +81,9 @@ function PlayList({createNew}) {
 
 
                 }
-                console.log(listLocal[1].albumcover)
 
-                setList(listLocal)
+
+                setList({list: listLocal, owner: info.owner, playlistuuid: info.uuid});
                 setPlaylistParams({
                     playlistuuid: params.playlistuuid,
                     content: info.content,
@@ -99,10 +105,70 @@ function PlayList({createNew}) {
 
 
     }, [])
+    console.log(list);
 
+    const [results, setResults] = useState([])
 
     return (
         <>
+            <Modal size={"auto"} zIndex={1031} opened={opened} onClose={close} title="搜索">
+                <Input onChange={async (e) => {
+
+                    setResults(
+                        await (await fetch(fetchUrl + "search_api", {
+                            method: "POST",
+                            body: JSON.stringify(
+                                {
+                                    searchStr: e.target.value,
+                                }
+                            ),
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        })).json()
+                    )
+
+
+                }}></Input>
+                <Table>
+                    <Table.Tbody>
+                        {results.map((item, index) => {
+                                async function click() {
+                                    let pre = (await (await fetch(baseUrl + "getSingle?albumcover=true&id=" + item.uuid)).json()).albumcover
+
+                                    setList(list.list.concat([{
+                                        addr: fetchUrl + item.uuid,
+                                        album_name: item.album_name,
+                                        albumcover: pre.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(pre.data).buffer])) : sampleImg,
+                                        artist: item.artist,
+                                        kind: item.kind,
+                                        song_name: item.song_name,
+                                        uuid: item.uuid,
+
+
+                                    }]))
+                                    close();
+
+                                }
+
+                                return <>
+                                    <Table.Tr key={index}>
+
+                                        <Table.Td onClick={click}>{item.song_name}</Table.Td>
+                                        <Table.Td onClick={click}>{item.artist}</Table.Td>
+                                        <Table.Td onClick={click}>{item.album_name}</Table.Td>
+                                        <Table.Td onClick={click}>{Kind[item.kind]}</Table.Td>
+
+                                    </Table.Tr>
+
+                                </>
+                            }
+                        )
+                        }
+
+                    </Table.Tbody>
+                </Table>
+            </Modal>
             <Navbar isFixed={true}/>
             <Container style={{marginTop: "5rem"}}>
                 <Grid gutter={"md"}>
@@ -122,7 +188,7 @@ function PlayList({createNew}) {
                             <div className={"p-3 d-flex gap-3"}>
                                 <div>
                                     <Image
-                                        src={list[index] ? list[index].albumcover.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(list[index].albumcover.data).buffer])) : sampleImg : sampleImg}
+                                        src={list.list[index] ? list.list[index].albumcover : sampleImg}
                                         style={{
                                             width: "3rem",
                                             height: "3rem",
@@ -134,14 +200,14 @@ function PlayList({createNew}) {
                                 </div>
                                 <div className={"d-flex flex-column"}>
                                     <span
-                                        style={{fontSize: "larger"}}>{list[index] ? list[index].song_name : "正在加载"}</span>
+                                        style={{fontSize: "larger"}}>{list.list[index] ? list.list[index].song_name : "正在加载"}</span>
                                     <span
-                                        style={{fontSize: "small"}}>{list[index] ? list[index].song_name : null}</span>
+                                        style={{fontSize: "small"}}>{list.list[index] ? list.list[index].song_name : null}</span>
                                 </div>
                             </div>
                             <H5AudioPlayer showSkipControls={true} style={{boxShadow: "none"}}
-                                           src={list[index] ? list[index].addr : null} onClickNext={() => {
-                                if (index + 1 > list.length - 1) {
+                                           src={list.list[index] ? list.list[index].addr : null} onClickNext={() => {
+                                if (index + 1 > list.list.length - 1) {
                                     setIndex(0)
                                 } else {
                                     setIndex(index + 1);
@@ -150,7 +216,7 @@ function PlayList({createNew}) {
 
                             }} onClickPrevious={() => {
                                 if (index - 1 < 0) {
-                                    setIndex(list.length - 1)
+                                    setIndex(list.list.length - 1)
                                 } else {
                                     setIndex(index - 1);
 
@@ -163,10 +229,11 @@ function PlayList({createNew}) {
                     </Grid.Col>
 
                     <Grid.Col span={{base: 12, sm: 7}}>
-                        <Button fullWidth>保存</Button>
+                        {login.uuid && list.owner && login.uuid === list.owner ? <Button fullWidth>保存</Button> : null }
+
                         <Table className={"mt-3"} striped withTableBorder highlightOnHover>
                             <Table.Tbody>
-                                {list.map((item, index) => (
+                                {list.list.map((item, index) => (
                                     <Table.Tr key={index}>
 
                                         <Table.Td onClick={() => {
@@ -179,7 +246,7 @@ function PlayList({createNew}) {
                                                 borderColor: "gray"
                                             }}>
                                                 <Image
-                                                    src={list[index] ? list[index].albumcover.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(list[index].albumcover.data).buffer])) : sampleImg : sampleImg}/>
+                                                    src={list.list[index] ? list.list[index].albumcover : sampleImg}/>
 
                                             </div>
                                         </Table.Td>
@@ -198,11 +265,14 @@ function PlayList({createNew}) {
                                     </Table.Tr>
                                 ))}
                                 <Table.Tr>
-                                    <Table.Td colSpan={5} style={{height: "3rem"}}>
-                                        <div style={{textAlign: "center", userSelect: "none"}}>
-                                            +
+                                    {login.uuid && list.owner && login.uuid === list.owner ?  <Table.Td colSpan={5} style={{height: "3rem"}}>
+
+                                        <div onClick={() => open()}
+                                             style={{textAlign: "center", userSelect: "none"}}>
+                                            添加
                                         </div>
-                                    </Table.Td>
+                                    </Table.Td> : null }
+
                                 </Table.Tr>
                             </Table.Tbody>
                         </Table>
