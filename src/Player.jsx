@@ -67,6 +67,20 @@ function Player() {
 
 
     }, [])
+    if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: info ? info.song_name : null,
+            artist: info ? info.artist : null,
+            album: info ? info.album_name : null,
+            artwork:  [{
+                src:
+                    albumcover.isloading ? white : (albumcover.data === null || albumcover.data.data.length === 0) ? sampleImg : albumcover.blob,
+                sizes: "512x512",
+                type: "image/webp",
+            }] ,
+
+        });
+    }
     return (
         <>
             <div className="">

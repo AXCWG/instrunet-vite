@@ -127,7 +127,13 @@ function PlayList({createNew}) {
                 list.list[index].albumcover,
                 sizes: "512x512",
                 type: "image/webp",
-            }] : [],
+            }] : [
+                {
+                    src: sampleImg,
+                    sizes: "512x512",
+                    type: "image/png",
+                }
+            ],
 
         });
     }
