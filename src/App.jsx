@@ -15,8 +15,6 @@ import {Grid} from "@mantine/core";
 // TODO Localizations
 
 
-
-
 // eslint-disable-next-line react/prop-types
 function Navbar({isFixed, username}) {
     const [loading, setLoading] = useState(true);
@@ -44,11 +42,10 @@ function Navbar({isFixed, username}) {
 
         }
 
-        if (username===undefined || username===null) {
+        if (username === undefined || username === null) {
             f()
         }
     }, [username])
-
 
 
     return (
@@ -110,26 +107,31 @@ function Navbar({isFixed, username}) {
                                 <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
                             </li>
 
-                        </ul><div className="d-flex">
-                        {
-                            !username ?
-                                loading ?
-                                    null :
-                                    login.loggedIn ?
-                                        <a className={"text-decoration-none me-3 right-hand"}
-                                           href={"/home"}>{login.username}</a> :
-                                        <>
-                                            <a className={" text-decoration-none me-3 right-hand"}
-                                               href={"/login"}>登录</a>
-                                            <a className={" text-decoration-none me-1 right-hand"}
-                                               href={"/register"}>注册</a>
-                                        </>
-                                : <a className={"text-decoration-none me-3 right-hand"}
-                                     href={"/home"}>{username}</a>
+                        </ul>
+                        <div className="d-flex">
+                            <a className={"text-decoration-none me-3 right-hand"}
+                            >用户系统公开测试</a>
 
-                        }
 
-                    </div>
+                            {
+                                !username ?
+                                    loading ?
+                                        null :
+                                        login.loggedIn ?
+                                            <a className={"text-decoration-none me-3 right-hand"}
+                                               href={"/home"}>{login.username}</a> :
+                                            <>
+                                                <a className={" text-decoration-none me-3 right-hand"}
+                                                   href={"/login"}>登录</a>
+                                                <a className={" text-decoration-none me-1 right-hand"}
+                                                   href={"/register"}>注册</a>
+                                            </>
+                                    : <a className={"text-decoration-none me-3 right-hand"}
+                                         href={"/home"}>{username}</a>
+
+                            }
+
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -267,20 +269,21 @@ function App() {
                         }}/>
 
                     </form>
-                            <Flex id={"double"} style={{ margin:"auto"}} mt={"md"} gap={"lg"} justify="space-evenly">
-                                <Button fullWidth={true}
-                                        className="btn btn-primary" onClick={() => {
-                                    setState(-1)
-                                    searchGeneral()
-                                }}>搜索
-                                </Button>
-                                <Button disabled={true} fullWidth={true} variant={"gradient"} gradient={{from: "blue", to: "violet", deg: 45}}
-                                        className="btn btn-primary" onClick={() => {
-                                    setState(-1)
-                                    searchGeneral()
-                                }}>随机
-                                </Button>
-                            </Flex>
+                    <Flex id={"double"} style={{margin: "auto"}} mt={"md"} gap={"lg"} justify="space-evenly">
+                        <Button fullWidth={true}
+                                className="btn btn-primary" onClick={() => {
+                            setState(-1)
+                            searchGeneral()
+                        }}>搜索
+                        </Button>
+                        <Button disabled={true} fullWidth={true} variant={"gradient"}
+                                gradient={{from: "blue", to: "violet", deg: 45}}
+                                className="btn btn-primary" onClick={() => {
+                            setState(-1)
+                            searchGeneral()
+                        }}>随机
+                        </Button>
+                    </Flex>
 
                 </div>
 
