@@ -116,6 +116,21 @@ function PlayList({createNew}) {
     const [results, setResults] = useState([])
 
     let ownerCheck = login.uuid && list.owner && login.uuid === list.owner;
+
+    if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: list.list[index] ? list.list[index].song_name : null,
+            artist: list.list[index] ? list.list[index].artist : null,
+            album: list.list[index] ? list.list[index].album_name : null,
+            artwork: list.list[index] ? [{
+                src:
+                list.list[index].albumcover,
+                sizes: "512x512",
+                type: "image/webp",
+            }] : [],
+
+        });
+    }
     return (
         <>
             <Modal size={"auto"} zIndex={1031} opened={opened} onClose={close} title="搜索">
@@ -192,7 +207,7 @@ function PlayList({createNew}) {
                                 textAlign: "center",
 
                             }
-                        }}  className={"mt-4 text-center h4"} value={list.title} onChange={(e) => {
+                        }} className={"mt-4 text-center h4"} value={list.title} onChange={(e) => {
                             setList({
                                 ...list,
                                 title: e.target.value,
@@ -214,7 +229,7 @@ function PlayList({createNew}) {
                         <div className={"mt-3 text-center h6"}>{list.ownerliteral}</div>
                         <Switch style={{margin: "auto", width: "fit-content"}} className={"mt-3"} label={"公开"}
                                 checked={!list.private} onChange={() => {
-                                    setList({...list, private: !list.private});
+                            setList({...list, private: !list.private});
                         }}/>
                         <div className={"mt-4 shadow-lg rounded-3 overflow-hidden"}>
                             <div className={"p-3 d-flex gap-3"}>
