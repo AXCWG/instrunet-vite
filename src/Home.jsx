@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {fetchUrl} from "./Singletons";
 import Akkarin from './Assets/Transparent_Akkarin.png'
 import {Link as RLink} from "react-router-dom";
+import SampleImg from "./Assets/SampleImg.png"
+import {Image} from "@mantine/core";
 
 function Home() {
     const [loading, setLoading] = useState(true);
@@ -49,13 +51,14 @@ function Home() {
             f()
         }
     }, [login]);
-    useEffect(()=>{
+    useEffect(() => {
         async function f() {
             setPlaylist(await (await fetch(fetchUrl + "playlist-owned", {
                 method: "POST",
                 credentials: "include",
             })).json())
         }
+
         if (login.loggedIn) {
 
             f()
@@ -89,7 +92,13 @@ function Home() {
                     <div style={{
                         containerType: "inline-size",
                     }} className={"h-100 w-100 d-flex align-items-center justify-content-center"}>
-                        <input  type={"file"} className={"rounded rounded-circle"} style={{opacity: 0, position: "absolute", width: "100%", height: "100%", pointerEvents: "visiblePainted"}} />
+                        <input type={"file"} className={"rounded rounded-circle"} style={{
+                            opacity: 0,
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            pointerEvents: "visiblePainted"
+                        }}/>
                         <i className={"bi-camera "} style={{
                             color: "white",
                             fontSize: "25cqw",
@@ -137,15 +146,29 @@ function Home() {
                         }}>
 
 
-                            <div className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"} style={{borderStyle: "solid", }}>
+                            <div
+                                className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"}
+                                style={{borderStyle: "solid",}}>
                                 歌单
                                 <br/>
-                               <div style={{display: "flex", flexDirection: "row", overflow: "scroll", gap: "5px"}} className={"mt-2"}>
-                                   {playlist.length === 0 ? null : playlist.map((item, index) => {
+                                <div style={{display: "flex", flexDirection: "row", overflow: "scroll", gap: "5px"}}
+                                     className={"mt-2"}>
+                                    {playlist.length === 0 ? null : playlist.map((item, index) => {
 
-                                       return <RLink key={index} style={{display: "flex", justifyContent: "space-around", alignItems:"center"}} className={"btn btn-primary pl-item"} to={"/playlist/"+item.uuid}>{item.title}</RLink>
-                                   })} <RLink style={{display: "flex", justifyContent: "space-around", alignItems:"center"}} className={"btn btn-primary pl-item"} to={"/playlist"}>添加</RLink>
-                               </div>
+                                        return <RLink key={index} style={{
+                                            justifyContent: "space-around",
+                                            alignItems: "center",
+                                            borderStyle: "solid",
+                                            borderWidth: "0.3px",
+                                            borderColor: "gray"
+                                        }} className={"pl-item"} to={"/playlist/" + item.uuid}><Image
+                                            src={item.tmb ? item.tmb : SampleImg}></Image></RLink>
+                                    })} <RLink
+                                    style={{display: "flex", justifyContent: "space-around", alignItems: "center",
+                                        width: "5rem",
+                                        height: "5rem"}}
+                                    className={"btn btn-primary"} to={"/playlist"}>添加</RLink>
+                                </div>
 
                             </div>
 

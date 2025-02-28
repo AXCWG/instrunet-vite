@@ -30,7 +30,7 @@ function PlayList({createNew}) {
         return this;
     }
     const [list, setList] = useState({
-        list: [], owner: "", playlistuuid: "", private: false, tmb: null, title: null, ownerliteral: ""
+        list: [], owner: "", playlistuuid: "", private: false, tmb: null, title: "", ownerliteral: ""
     });
     const [index, setIndex] = useState(0);
     const params = useParams();
@@ -115,6 +115,7 @@ function PlayList({createNew}) {
 
     const [results, setResults] = useState([])
 
+    let ownerCheck = login.uuid && list.owner && login.uuid === list.owner;
     return (
         <>
             <Modal size={"auto"} zIndex={1031} opened={opened} onClose={close} title="搜索">
@@ -185,12 +186,35 @@ function PlayList({createNew}) {
 
                         <Image id={"listTmb"} src={list.tmb ? list.tmb : sampleImg}
                                className={"border-black border-1 rounded-3 shadow"} style={{width: "100%"}}/>
+                        {createNew ? <Input styles={{
+                            input: {
+                                fontSize: "1.3rem",
+                                textAlign: "center",
 
-                        <div className={"mt-4 text-center h4"}>{list.title}</div>
+                            }
+                        }}  className={"mt-4 text-center h4"} value={list.title} onChange={(e) => {
+                            setList({
+                                ...list,
+                                title: e.target.value,
+                            })
+                        }}></Input> : login.uuid && list.owner && (login.uuid === list.owner) ?
+                            <Input styles={{
+                                input: {
+                                    fontSize: "1.3rem",
+                                    textAlign: "center",
+
+                                }
+                            }} variant={"default"} className={"mt-4"} value={list.title} onChange={(e) => {
+                                setList({
+                                    ...list,
+                                    title: e.target.value,
+                                })
+                            }}></Input> : <div className={"mt-4 text-center h4"}>{list.title}</div>}
+
                         <div className={"mt-3 text-center h6"}>{list.ownerliteral}</div>
                         <Switch style={{margin: "auto", width: "fit-content"}} className={"mt-3"} label={"公开"}
                                 checked={!list.private} onChange={() => {
-
+                                    setList({...list, private: !list.private});
                         }}/>
                         <div className={"mt-4 shadow-lg rounded-3 overflow-hidden"}>
                             <div className={"p-3 d-flex gap-3"}>
@@ -268,9 +292,9 @@ function PlayList({createNew}) {
                             })
                             if (res.ok) {
                                 console.log("ok")
-                                window.location.replace("/playlist/"+(await res.json()).UUID)  ;
+                                window.location.replace("/playlist/" + (await res.json()).UUID);
                             }
-                        }}>保存</Button> : login.uuid && list.owner && login.uuid === list.owner ?
+                        }}>保存</Button> : ownerCheck ?
                             <Button fullWidth onClick={() => {
                                 let pre = [];
                                 for (let obj of list.list) {
@@ -340,7 +364,7 @@ function PlayList({createNew}) {
                                              style={{textAlign: "center", userSelect: "none"}}>
                                             添加
                                         </div>
-                                    </Table.Td> :  login.uuid && list.owner && login.uuid === list.owner ?
+                                    </Table.Td> : ownerCheck ?
                                         <Table.Td colSpan={5} style={{height: "3rem"}}>
 
                                             <div onClick={() => open()}
