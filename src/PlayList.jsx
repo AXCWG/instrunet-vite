@@ -233,10 +233,11 @@ function PlayList({createNew}) {
                             }}></Input> : <div className={"mt-4 text-center h4"}>{list.title}</div>}
 
                         <div className={"mt-3 text-center h6"}>{list.ownerliteral}</div>
-                        <Switch style={{margin: "auto", width: "fit-content"}} className={"mt-3"} label={"公开"}
-                                checked={!list.private} onChange={() => {
+                        {login.uuid && list.owner && (login.uuid === list.owner) ?  <Switch style={{margin: "auto", width: "fit-content"}} className={"mt-3"} label={"公开"}
+                                                                                            checked={!list.private} onChange={() => {
                             setList({...list, private: !list.private});
-                        }}/>
+                        }}/> : null}
+
                         <div className={"mt-4 shadow-lg rounded-3 overflow-hidden"}>
                             <div className={"p-3 d-flex gap-3"}>
                                 <div>

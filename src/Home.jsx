@@ -98,7 +98,7 @@ function Home() {
                             width: "100%",
                             height: "100%",
                             pointerEvents: "visiblePainted"
-                        }}/>
+                        }} />
                         <i className={"bi-camera "} style={{
                             color: "white",
                             fontSize: "25cqw",
