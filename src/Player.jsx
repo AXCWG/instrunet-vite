@@ -1,15 +1,15 @@
 import H5AudioPlayer from "react-h5-audio-player";
 import 'react-h5-audio-player/lib/styles.css';
-import {baseUrl, fetchUrl, Kind, white} from "./Singletons.js";
-import sampleImg from "./SampleImg.png";
+import {baseUrl, fetchUrl, Kind, white} from "./Singletons";
+import sampleImg from "./Assets/SampleImg.png";
 import {Navbar} from "./App.jsx";
 import {useEffect, useState} from "react";
 import parse from "html-react-parser";
-import {NavLink} from "react-router-dom";
 
 const urlParams = new URLSearchParams(window.location.search);
 
 let param = urlParams.get('play');
+
 // TODO Wasteful base64. BASE64 is shit. 18MB->66MB. Nice bruh. AWWWWFULLLLLLLL!!!!!!
 function Player() {
 

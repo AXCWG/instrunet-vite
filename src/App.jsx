@@ -4,82 +4,56 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {useEffect, useState} from "react";
 import {parseBlob, selectCover} from 'music-metadata'
-import {baseUrl, Kind} from "./Singletons.js";
+import {baseUrl, fetchUrl, Kind} from "./Singletons";
 import {useCookies} from "react-cookie";
 import {NavLink} from "react-router-dom";
-import {Button, Flex, Modal, ModalStack, Text, useModalsStack} from "@mantine/core";
+import {Button, Flex, Modal, Text, useModalsStack} from "@mantine/core";
 import {useDisclosure} from "@mantine/hooks";
 import {Lrc} from "react-lrc";
+import {Grid} from "@mantine/core";
+
 // TODO Localizations
 
 
+
+
 // eslint-disable-next-line react/prop-types
-function Navbar({isFixed}) {
-    const [opened, {open, close}] = useDisclosure(false);
-    const stack = useModalsStack(['caution', 'notice']);
-    // useEffect(() => {
-    //     if(!cookies["shownPopup"]){
-    //         stack.open('caution')
-    //     }
-    // }, [])
-    const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
+function Navbar({isFixed, username}) {
+    const [loading, setLoading] = useState(true);
+    const [login, setLogin] = useState({
+        loggedIn: false,
+        uuid: "",
+        username: "",
+        email: "",
+    });
+    useEffect(() => {
+        async function f() {
+            let res = await fetch(fetchUrl + "userapi", {
+                credentials: "include",
+            })
+            setLoading(false)
+            if (res.ok) {
+                let json = await res.json();
+                setLogin({
+                    loggedIn: true,
+                    uuid: json.uuid,
+                    username: json.username,
+                    email: json.email,
+                })
+            }
+
+        }
+
+        if (username===undefined || username===null) {
+            f()
+        }
+    }, [username])
+
+
 
     return (
         <>
-            <ModalStack>
-                <Modal {...stack.register('caution')} overlayProps={{
-                    blur: 10,
-                }} yOffset={"10vh"} zIndex={1031} opened={opened} onClose={() => {
-                    close()
-                    setCookie("shownPopup", true, {
-                        sameSite: "strict",
-                    })
-                }} title={"注意事项"}>
-                    <div>
 
-                        <Text>
-                            <ul>
-                                <li>此网站仅支持处理立体声文件——也就是说，5.1声道的音频，请事先转换为立体声音频，否则无法处理。</li>
-                                <li>有事找我：QQ 3095864740——尽量避免B站私信，因为傻逼B站私信永远推送不到我手机上。</li>
-                            </ul>
-
-                        </Text>
-                    </div>
-                </Modal>
-                <Modal {...stack.register('notice')} overlayProps={{
-                    blur: 10,
-                }} yOffset={"10vh"} zIndex={1032} opened={opened} onClose={() => {
-                    close()
-                    setCookie("shownPopup", true, {
-                        sameSite: "strict",
-                    })
-                }} title={"注意事项"}>
-                    <div>
-
-                        <Text>
-                            网站 v1.1.1 更新介绍
-                            <br/>
-                            <br/>
-
-                            - 优化UI
-                            <br/>
-
-                            - 人声去除功能
-                            <br/>
-
-                            - Vite
-                            <br/>
-
-                            - 可以从播放界面搜索相关专辑和歌手
-                            <br/>
-
-                            - WebWorker优化（谁说webworker没用的？？？）
-                            <br/>
-
-                        </Text>
-                    </div>
-                </Modal>
-            </ModalStack>
 
             <nav
                 className={isFixed ? "navbar fixed-top navbar-expand-sm bg-dark navbar-dark" : "navbar navbar-expand-sm bg-dark navbar-dark"}>
@@ -91,7 +65,7 @@ function Navbar({isFixed}) {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="collapsibleNavbar">
-                        <ul className="navbar-nav">
+                        <ul className="navbar-nav" style={{marginRight: "auto"}}>
                             <li className="nav-item">
                                 <NavLink className="nav-link" to="/">主页</NavLink>
                             </li>
@@ -101,11 +75,7 @@ function Navbar({isFixed}) {
                             <li className={"nav-item"}>
                                 <NavLink className="nav-link" to="/query">处理队列</NavLink>
                             </li>
-                            <li className={"nav-item"}>
-                                <a onClick={()=>{
-                                    stack.open('notice');
-                                }} className="nav-link">更新v1.1.1</a>
-                            </li>
+
                             <li className="nav-item">
                                 <div className={"dropdown "}>
                                     <button className="nav-link dropdown-toggle" type={"button"}
@@ -140,7 +110,26 @@ function Navbar({isFixed}) {
                                 <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
                             </li>
 
-                        </ul>
+                        </ul><div className="d-flex">
+                        {
+                            !username ?
+                                loading ?
+                                    null :
+                                    login.loggedIn ?
+                                        <a className={"text-decoration-none me-3 right-hand"}
+                                           href={"/home"}>{login.username}</a> :
+                                        <>
+                                            <a className={" text-decoration-none me-3 right-hand"}
+                                               href={"/login"}>登录</a>
+                                            <a className={" text-decoration-none me-1 right-hand"}
+                                               href={"/register"}>注册</a>
+                                        </>
+                                : <a className={"text-decoration-none me-3 right-hand"}
+                                     href={"/home"}>{username}</a>
+
+                        }
+
+                    </div>
                     </div>
                 </div>
             </nav>
@@ -150,6 +139,7 @@ function Navbar({isFixed}) {
 }
 
 function App() {
+
     const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
 
     const [form, setForm] = useState({
@@ -291,7 +281,6 @@ function App() {
                                 }}>随机
                                 </Button>
                             </Flex>
-
 
                 </div>
 

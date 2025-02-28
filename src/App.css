@@ -26,10 +26,45 @@
         width: 100%;
     }
 }
+.avatar{
+    transition: ease-out all 0.1s;
+}
+.t{
+    padding-bottom: 20px;
+
+    @media (min-width: 768px){
+        padding-bottom: 0px;
+    }
+}
+#listTmb{
+    max-width: 100%;
+    margin: auto;
+    @media(max-width: $mantine-breakpoint-sm){
+        max-width: 70%;
+    }
+
+}
+
+.right-hand{
+    transition: all 0.15s ease-in-out;
+    color: rgba(var(--bs-secondary-rgb));
+}
+.right-hand:hover{
+    color: rgba(var(--bs-light-rgb));
+}
+
 .select{
     @media(max-width: 1200px) {
         max-width: 500px;
     }
+}
+.pl-item{
+    width: 5rem;
+    height: 5rem;
+    transition: all 0.15s ease-out;
+}
+.pl-item:hover{
+    filter: brightness(80%);
 }
 body {
     margin: 0;
