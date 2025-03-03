@@ -19,6 +19,7 @@ import sampleImg from "./Assets/SampleImg.png";
 import H5AudioPlayer from "react-h5-audio-player";
 import {useDisclosure} from "@mantine/hooks";
 import log from "eslint-plugin-react/lib/util/log.js";
+import {Lrc} from "react-lrc";
 
 
 function PlayList({createNew}) {
@@ -204,6 +205,7 @@ function PlayList({createNew}) {
             </Modal>
             <Navbar isFixed={true}/>
             <Container style={{marginTop: "5rem"}}>
+
                 <Grid gutter={"md"}>
 
                     <Grid.Col span={{base: 12, sm: 5}}>
@@ -350,7 +352,7 @@ function PlayList({createNew}) {
                                 }
                             }}>保存</Button> : null}
 
-                        <Table className={"mt-3"} striped withTableBorder highlightOnHover>
+                        <Table className={"mt-3 "} striped withTableBorder highlightOnHover>
                             <Table.Tbody>
                                 {list.list.map((item, index) => (
                                     <Table.Tr key={index}>
@@ -371,26 +373,20 @@ function PlayList({createNew}) {
                                         </Table.Td>
                                         <Table.Td onClick={() => {
                                             setIndex(index)
-                                        }}>{item.song_name}</Table.Td>
-                                        <Table.Td onClick={() => {
-                                            setIndex(index)
-                                        }}>{item.artist}</Table.Td>
-                                        <Table.Td onClick={() => {
-                                            setIndex(index)
-                                        }}>{item.album_name}</Table.Td>
-                                        <Table.Td onClick={() => {
-                                            setIndex(index)
-                                        }}>{Kind[item.kind]}</Table.Td>
+                                        }}>{item.song_name}<br/>{item.artist}<br/>{item.album_name}<br/>{Kind[item.kind]}</Table.Td>
+
                                         <Table.Td>
                                             {swapping ? <Button color={"red"} onClick={() => {
-                                                let newlist = list.list;
-                                                let original = newlist[index];
-                                                newlist[index] = newlist[swapFirst]
-                                                newlist[swapFirst] = original
-                                                setList({
-                                                    ...list, list: newlist
-                                                })
-                                                setSwapping(false)
+                                                    let newlist = list.list;
+                                                    let original = newlist[index];
+                                                    newlist[index] = newlist[swapFirst]
+                                                    newlist[swapFirst] = original
+                                                    setList({
+                                                        ...list, list: newlist
+                                                    })
+                                                    setSwapping(false)
+
+
                                                 }}>与其交换</Button> :
                                                 <Button onClick={() => {
                                                     setSwapping(true)
@@ -398,6 +394,15 @@ function PlayList({createNew}) {
                                                 }}>交换</Button>}
 
                                         </Table.Td>
+                                        <Table.Td><Button color={"red"} onClick={()=>{
+                                            let listTmp = list.list
+                                            listTmp.splice(index, 1);
+                                            // listTmp = listTmp.filter(item => item !== index);
+                                            setList({
+                                                ...list, list: listTmp
+                                            })
+                                            setSwapping(false)
+                                        }}>删除</Button></Table.Td>
                                     </Table.Tr>
                                 ))}
                                 <Table.Tr>

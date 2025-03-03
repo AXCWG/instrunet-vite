@@ -15,6 +15,7 @@ import Home from "./Home";
 import AccountDeletion from "./AccountDeletion";
 import '@mantine/core/styles.css';
 import PlayList from "./PlayList.jsx";
+import LrcTest from "./LrcTest.jsx";
 
 
 function PageNotFound() {
@@ -56,6 +57,7 @@ root.render(
                 <Route path={"/AccDel"} element={<AccountDeletion/>}/>
                 <Route path={"/playlist"} element={<PlayList createNew={true}/>}/>
                 <Route path={"/playlist/:playlistuuid"} element={<PlayList createNew={false }/>}/>
+                <Route path={"/LrcTest"} element={<LrcTest/>}/>
 
             </Routes>
         </BrowserRouter>
