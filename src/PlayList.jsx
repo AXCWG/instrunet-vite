@@ -22,6 +22,8 @@ import log from "eslint-plugin-react/lib/util/log.js";
 
 
 function PlayList({createNew}) {
+    const [swapping, setSwapping] = useState(false);
+
     const [opened, {open, close}] = useDisclosure(false);
     Array.prototype.swap = function (x, y) {
         let b = this[x];
@@ -137,6 +139,7 @@ function PlayList({createNew}) {
 
         });
     }
+    const [swapFirst, setSwappFirst] = useState(0);
     return (
         <>
             <Modal size={"auto"} zIndex={1031} opened={opened} onClose={close} title="搜索">
@@ -233,10 +236,11 @@ function PlayList({createNew}) {
                             }}></Input> : <div className={"mt-4 text-center h4"}>{list.title}</div>}
 
                         <div className={"mt-3 text-center h6"}>{list.ownerliteral}</div>
-                        {login.uuid && list.owner && (login.uuid === list.owner) ?  <Switch style={{margin: "auto", width: "fit-content"}} className={"mt-3"} label={"公开"}
-                                                                                            checked={!list.private} onChange={() => {
-                            setList({...list, private: !list.private});
-                        }}/> : null}
+                        {login.uuid && list.owner && (login.uuid === list.owner) ?
+                            <Switch style={{margin: "auto", width: "fit-content"}} className={"mt-3"} label={"公开"}
+                                    checked={!list.private} onChange={() => {
+                                setList({...list, private: !list.private});
+                            }}/> : null}
 
                         <div className={"mt-4 shadow-lg rounded-3 overflow-hidden"}>
                             <div className={"p-3 d-flex gap-3"}>
@@ -377,6 +381,23 @@ function PlayList({createNew}) {
                                         <Table.Td onClick={() => {
                                             setIndex(index)
                                         }}>{Kind[item.kind]}</Table.Td>
+                                        <Table.Td>
+                                            {swapping ? <Button color={"red"} onClick={() => {
+                                                let newlist = list.list;
+                                                let original = newlist[index];
+                                                newlist[index] = newlist[swapFirst]
+                                                newlist[swapFirst] = original
+                                                setList({
+                                                    ...list, list: newlist
+                                                })
+                                                setSwapping(false)
+                                                }}>与其交换</Button> :
+                                                <Button onClick={() => {
+                                                    setSwapping(true)
+                                                    setSwappFirst(index)
+                                                }}>交换</Button>}
+
+                                        </Table.Td>
                                     </Table.Tr>
                                 ))}
                                 <Table.Tr>
@@ -387,9 +408,9 @@ function PlayList({createNew}) {
                                             添加
                                         </div>
                                     </Table.Td> : ownerCheck ?
-                                        <Table.Td colSpan={5} style={{height: "3rem"}}>
+                                        <Table.Td onClick={() => open()} colSpan={6} style={{height: "3rem"}}>
 
-                                            <div onClick={() => open()}
+                                            <div
                                                  style={{textAlign: "center", userSelect: "none"}}>
                                                 添加
                                             </div>
