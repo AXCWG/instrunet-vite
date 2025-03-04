@@ -16,6 +16,7 @@ import AccountDeletion from "./AccountDeletion";
 import '@mantine/core/styles.css';
 import PlayList from "./PlayList.jsx";
 import LrcTest from "./LrcTest.jsx";
+import 'react-image-crop/dist/ReactCrop.css'
 
 
 function PageNotFound() {

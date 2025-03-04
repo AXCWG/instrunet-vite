@@ -5,7 +5,7 @@ import {baseUrl, fetchUrl, Kind} from "./Singletons.js";
 import {
     Button,
     ButtonGroup,
-    Container,
+    Container, FileInput,
     Grid,
     Image,
     Input,
@@ -21,7 +21,7 @@ import {useDisclosure} from "@mantine/hooks";
 import log from "eslint-plugin-react/lib/util/log.js";
 import {Lrc} from "react-lrc";
 
-
+// TODO Decouple Webworker.
 function PlayList({createNew}) {
     const [swapping, setSwapping] = useState(false);
 
@@ -141,6 +141,19 @@ function PlayList({createNew}) {
         });
     }
     const [swapFirst, setSwappFirst] = useState(0);
+    console.log(list.tmb)
+    //TODO 歌单创建副本功能
+    function ShuffleButton() {
+        return <Button mt={"md"} fullWidth={true} onClick={() => {
+            setList({
+                ...list, list: list.list
+                    .map(value => ({value, sort: Math.random()}))
+                    .sort((a, b) => a.sort - b.sort)
+                    .map(({value}) => value)
+            });
+        }}>随机打乱</Button>;
+    }
+
     return (
         <>
             <Modal size={"auto"} zIndex={1031} opened={opened} onClose={close} title="搜索">
@@ -210,8 +223,16 @@ function PlayList({createNew}) {
 
                     <Grid.Col span={{base: 12, sm: 5}}>
 
-                        <Image id={"listTmb"} src={list.tmb ? list.tmb : sampleImg}
+                        <Image id={"listTmb"} src={list.tmb && list.tmb.data.length !== 0 ? URL.createObjectURL(new Blob( [Uint8Array.from(list.tmb.data)])) : sampleImg}
                                className={"border-black border-1 rounded-3 shadow"} style={{width: "100%"}}/>
+                        {ownerCheck ? <FileInput accept={"image/*"} onChange={async (e) => {
+                            setList({...list, tmb: {type: "Buffer",data: new Uint8Array(await e.arrayBuffer())}})
+
+                        }} variant={"white"} mt={"lg"} fullWidth={true} placeholder={"更改封面"} styles={{
+                            input: {
+                                textAlign: "center",
+                            }
+                        }}>更改封面</FileInput> : null}
                         {createNew ? <Input styles={{
                             input: {
                                 fontSize: "1.3rem",
@@ -297,7 +318,7 @@ function PlayList({createNew}) {
                     </Grid.Col>
 
                     <Grid.Col span={{base: 12, sm: 7}}>
-                        {createNew ? <Button fullWidth onClick={async () => {
+                        {createNew ? <><Button fullWidth onClick={async () => {
                             let pre = [];
                             for (let obj of list.list) {
                                 pre.push(obj.uuid);
@@ -322,13 +343,13 @@ function PlayList({createNew}) {
                                 console.log("ok")
                                 window.location.replace("/playlist/" + (await res.json()).UUID);
                             }
-                        }}>保存</Button> : ownerCheck ?
-                            <Button fullWidth onClick={() => {
+                        }}>保存</Button><ShuffleButton></ShuffleButton></> : ownerCheck ? <>
+                            <Button fullWidth onClick={async () => {
                                 let pre = [];
                                 for (let obj of list.list) {
                                     pre.push(obj.uuid);
                                 }
-                                let res = fetch(fetchUrl + "upload-playlist", {
+                                let res = await fetch(fetchUrl + "upload-playlist", {
                                     method: "POST",
                                     credentials: "include",
                                     headers: {
@@ -350,7 +371,7 @@ function PlayList({createNew}) {
                                         Everything is fine
                                     </Notification>
                                 }
-                            }}>保存</Button> : null}
+                            }}>保存</Button> {<ShuffleButton></ShuffleButton>}</> : null}
 
                         <Table className={"mt-3 "} striped withTableBorder highlightOnHover>
                             <Table.Tbody>
@@ -373,10 +394,11 @@ function PlayList({createNew}) {
                                         </Table.Td>
                                         <Table.Td onClick={() => {
                                             setIndex(index)
-                                        }}>{item.song_name}<br/>{item.artist}<br/>{item.album_name}<br/>{Kind[item.kind]}</Table.Td>
+                                        }}>{item.song_name}<br/>{item.artist}<br/>{item.album_name}<br/>{Kind[item.kind]}
+                                        </Table.Td>
 
                                         <Table.Td>
-                                            {swapping ? <Button color={"red"} onClick={() => {
+                                            {ownerCheck ? swapping ? <Button color={"red"} onClick={() => {
                                                     let newlist = list.list;
                                                     let original = newlist[index];
                                                     newlist[index] = newlist[swapFirst]
@@ -391,10 +413,10 @@ function PlayList({createNew}) {
                                                 <Button onClick={() => {
                                                     setSwapping(true)
                                                     setSwappFirst(index)
-                                                }}>交换</Button>}
+                                                }}>交换</Button> : null}
 
                                         </Table.Td>
-                                        <Table.Td><Button color={"red"} onClick={()=>{
+                                        <Table.Td>{ownerCheck ? <Button color={"red"} onClick={() => {
                                             let listTmp = list.list
                                             listTmp.splice(index, 1);
                                             // listTmp = listTmp.filter(item => item !== index);
@@ -402,7 +424,7 @@ function PlayList({createNew}) {
                                                 ...list, list: listTmp
                                             })
                                             setSwapping(false)
-                                        }}>删除</Button></Table.Td>
+                                        }}>删除</Button> : null} </Table.Td>
                                     </Table.Tr>
                                 ))}
                                 <Table.Tr>
@@ -416,7 +438,7 @@ function PlayList({createNew}) {
                                         <Table.Td onClick={() => open()} colSpan={6} style={{height: "3rem"}}>
 
                                             <div
-                                                 style={{textAlign: "center", userSelect: "none"}}>
+                                                style={{textAlign: "center", userSelect: "none"}}>
                                                 添加
                                             </div>
                                         </Table.Td> : null}

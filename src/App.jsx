@@ -38,6 +38,14 @@ function Navbar({isFixed, username}) {
                     username: json.username,
                     email: json.email,
                 })
+                localStorage.setItem("acc", JSON.stringify({
+                    loggedIn: true,
+                    uuid: json.uuid,
+                    username: json.username,
+                    email: json.email,
+                }))
+            }else{
+                localStorage.removeItem("acc");
             }
 
         }
@@ -149,14 +157,14 @@ function App() {
         albumName: "",
         link: "",
         file: {},
-        email: cookies["email"],
+        email: localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email :  cookies["email"],
         artist: "",
         kind: 0,
         albumCover: ""
     })
     const [ncmForm, setncmForm] = useState({
         id: "",
-        email: cookies["email"],
+        email: localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email :  cookies["email"],
         kind: 0,
     })
 

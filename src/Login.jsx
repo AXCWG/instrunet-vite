@@ -14,6 +14,7 @@ function Login() {
             // alert("登录成功，正在为您返回主界面……")
             setState(1)
             setInterval(() => {
+
                 window.location.href = "/";
             }, 500)
         } else {
