@@ -8,7 +8,109 @@ import {Image, Modal} from "@mantine/core";
 import Cropper from 'react-easy-crop'
 import {useDisclosure} from "@mantine/hooks";
 
+
+
 function Home() {
+    function PlayList() {
+        const [playlist, setPlaylist] = useState([])
+        const [inEdit, setInEdit] = useState(false)
+
+        useEffect(() => {
+            async function f() {
+                setPlaylist(await (await fetch(fetchUrl + "playlist-owned", {
+                    method: "POST",
+                    credentials: "include",
+                })).json())
+            }
+
+            if (login.loggedIn) {
+
+                f()
+            }
+        }, [login])
+        return <div
+            className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"}
+            style={{borderStyle: "solid",}}>
+            歌单
+            <br/>
+            <div style={{
+                display: "flex",
+                scrollbarWidth: "auto",
+                flexDirection: "row",
+                overflow: "scroll",
+                gap: "5px",
+                alignItems: "center"
+            }}
+                 className={"mt-2"}>
+                {playlist.length === 0 ? null : playlist.map((item, index) => {
+
+                    return inEdit ? <RLink key={index} style={{
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                            borderStyle: "solid",
+                            borderWidth: "0.3px",
+                            borderColor: "gray"
+                        }} className={"pl-item"} onClick={async () => {
+                            let res = await fetch(fetchUrl + "remove-playlist", {
+                                credentials: "include",
+                                headers: {
+                                    "Content-Type": "application/json",
+
+                                },
+                                method: "POST",
+                                body: JSON.stringify({
+                                    playlistuuid: item.uuid
+                                })
+                            })
+                            if (res.ok) {
+                                setInEdit(false)
+                                window.location.reload()
+                            }
+
+                        }}>
+                            <Image
+                                src={(item.tmb && item.tmb.data.length !== 0) ? URL.createObjectURL(new Blob([Uint8Array.from(item.tmb.data)])) : SampleImg}></Image></RLink> :
+                        <RLink key={index} style={{
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                            borderStyle: "solid",
+                            borderWidth: "0.3px",
+                            borderColor: "gray",
+
+                        }} className={"pl-item"} to={"/playlist/" + item.uuid}><Image
+                            src={(item.tmb && item.tmb.data.length !== 0) ? URL.createObjectURL(new Blob([Uint8Array.from(item.tmb.data)])) : SampleImg}></Image></RLink>
+                })}
+                {inEdit ? <RLink
+                    style={{
+                        display: "flex", justifyContent: "space-around", alignItems: "center",
+                        width: "5rem",
+                        height: "5rem", flexShrink: 0
+                    }}
+                    className={"btn btn-primary"} onClick={() => {
+                    setInEdit(false)
+                }}>取消</RLink> : <><RLink
+                    style={{
+                        display: "flex", justifyContent: "space-around", alignItems: "center",
+                        width: "5rem",
+                        height: "5rem", flexShrink: 0
+                    }}
+                    className={"btn btn-primary"} to={"/playlist"}>添加</RLink>
+                    <RLink
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                            width: "5rem",
+                            height: "5rem", flexShrink: 0
+                        }}
+                        className={"btn btn-danger"} onClick={() => {
+                        setInEdit(true)
+                    }}>删除</RLink></>
+                }
+            </div>
+
+        </div>;
+    }
     const [opened, {open, close}] = useDisclosure(false);
 
     const [loading, setLoading] = useState(true);
@@ -19,7 +121,6 @@ function Home() {
         email: "",
     });
     const [avatar, setAvatar] = useState(null)
-    const [playlist, setPlaylist] = useState([])
     useEffect(() => {
         async function f() {
             let res = await fetch(fetchUrl + "userapi", {
@@ -56,20 +157,7 @@ function Home() {
             f()
         }
     }, [login]);
-    useEffect(() => {
-        async function f() {
-            setPlaylist(await (await fetch(fetchUrl + "playlist-owned", {
-                method: "POST",
-                credentials: "include",
-            })).json())
-        }
 
-        if (login.loggedIn) {
-
-            f()
-        }
-    }, [login])
-    const [inEdit, setInEdit] = useState(false)
 
     const [forCrop, setForCrop] = useState(new Blob())
 
@@ -172,128 +260,56 @@ function Home() {
                      onZoomChange={setZoom}></Cropper>
         </Modal>
     }
-    console.log(playlist)
     return (<>
-       {/*<Crop/>*/}
-           <Navbar username={login.username} isFixed={false}/>
-           <div className={"container  mt-5 "}>
-               <div className={"row "} style={{height: '45rem'}}>
-                   <div className={"col-md-6"}>
-                       <div style={{textAlign: "center", userSelect: "none"}}>
+        {/*<Crop/>*/}
+        <Navbar username={login.username} isFixed={false}/>
+        <div className={"container  mt-5 "}>
+            <div className={"row "} style={{height: '45rem'}}>
+                <div className={"col-md-6"}>
+                    <div style={{textAlign: "center", userSelect: "none"}}>
 
-                           <Avatar/>
-                           <div className={"display-6 mt-3"}>{login.username}</div>
-                           <div className={"mt-3"}>{login.email ? login.email : "未设置邮箱"}</div>
+                        <Avatar/>
+                        <div className={"display-6 mt-3"}>{login.username}</div>
+                        <div className={"mt-3"}>{login.email ? login.email : "未设置邮箱"}</div>
 
-                       </div>
-
-
-                   </div>
-                   <div className={"col-md-6 t mt-3 mt-md-0"}>
-                       <div
-                           className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"}
-                           style={{borderStyle: "solid"}}>
-                           <div>
-                               用户功能
-                           </div>
-                           <div className={"mt-3"} style={{
-                               display: "flex",
-                               justifyContent: "space-between",
-                               flexWrap: "wrap",
-                               flexDirection: "column",
-                               gap: "1rem",
-                           }}>
+                    </div>
 
 
-                               <div
-                                   className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"}
-                                   style={{borderStyle: "solid",}}>
-                                   歌单
-                                   <br/>
-                                   <div style={{display: "flex", flexDirection: "row", overflow: "scroll", gap: "5px"}}
-                                        className={"mt-2"}>
-                                       {playlist.length === 0 ? null : playlist.map((item, index) => {
-
-                                           return inEdit ? <RLink key={index} style={{
-                                                   justifyContent: "space-around",
-                                                   alignItems: "center",
-                                                   borderStyle: "solid",
-                                                   borderWidth: "0.3px",
-                                                   borderColor: "gray"
-                                               }} className={"pl-item"} onClick={async ()=>{
-                                                   let res = await fetch(fetchUrl + "remove-playlist", {
-                                                        credentials: "include",
-                                                       headers: {
-                                                            "Content-Type": "application/json",
-
-                                                       },
-                                                       method: "POST",
-                                                       body: JSON.stringify({
-                                                           playlistuuid: item.uuid
-                                                       })
-                                                   })
-                                                    if(res.ok) {
-                                                        setInEdit(false)
-                                                        window.location.reload()
-                                                    }
-                                               }}><Image
-                                                   src={(item.tmb && item.tmb.data.length !== 0 ) ? URL.createObjectURL(new Blob( [Uint8Array.from(item.tmb.data)])) : SampleImg}></Image></RLink> :
-                                               <RLink key={index} style={{
-                                                   justifyContent: "space-around",
-                                                   alignItems: "center",
-                                                   borderStyle: "solid",
-                                                   borderWidth: "0.3px",
-                                                   borderColor: "gray"
-                                               }} className={"pl-item"} to={"/playlist/" + item.uuid}><Image
-                                                   src={(item.tmb && item.tmb.data.length !== 0 ) ? URL.createObjectURL(new Blob( [Uint8Array.from(item.tmb.data)])) : SampleImg}></Image></RLink>
-                                       })}
-                                       {inEdit ? <RLink
-                                           style={{
-                                               display: "flex", justifyContent: "space-around", alignItems: "center",
-                                               width: "5rem",
-                                               height: "5rem"
-                                           }}
-                                           className={"btn btn-primary"} onClick={() => {
-                                           setInEdit(false)
-                                       }}>取消</RLink> : <><RLink
-                                           style={{
-                                               display: "flex", justifyContent: "space-around", alignItems: "center",
-                                               width: "5rem",
-                                               height: "5rem"
-                                           }}
-                                           className={"btn btn-primary"} to={"/playlist"}>添加</RLink>
-                                           <RLink
-                                               style={{
-                                                   display: "flex",
-                                                   justifyContent: "space-around",
-                                                   alignItems: "center",
-                                                   width: "5rem",
-                                                   height: "5rem"
-                                               }}
-                                               className={"btn btn-danger"} onClick={() => {
-                                               setInEdit(true)
-                                           }}>删除</RLink></>
-                                       }
-                                   </div>
-
-                               </div>
+                </div>
+                <div className={"col-md-6 t mt-3 mt-md-0"}>
+                    <div
+                        className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"}
+                        style={{borderStyle: "solid"}}>
+                        <div>
+                            用户功能
+                        </div>
+                        <div className={"mt-3"} style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            flexWrap: "wrap",
+                            flexDirection: "column",
+                            gap: "1rem",
+                        }}>
 
 
-                               <button onClick={() => {
-                                   window.location.href = "/logout"
-                               }} className={"btn btn-secondary"}>登出
-                               </button>
-                               <button className={"btn btn-danger"} onClick={() => {
-                                   window.location.href = "/AccDel"
-                               }}>删除账号
-                               </button>
+                            {<PlayList/>}
 
-                           </div>
-                       </div>
 
-                   </div>
-               </div>
-           </div>
+                            <button onClick={() => {
+                                window.location.href = "/logout"
+                            }} className={"btn btn-secondary"}>登出
+                            </button>
+                            <button className={"btn btn-danger"} onClick={() => {
+                                window.location.href = "/AccDel"
+                            }}>删除账号
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </>)
 }
 

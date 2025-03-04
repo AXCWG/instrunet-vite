@@ -60,8 +60,9 @@
 }
 .pl-item{
     width: 5rem;
-    height: 5rem;
+    height: fit-content;
     transition: all 0.15s ease-out;
+    flex-shrink: 0;
 }
 .pl-item:hover{
     filter: brightness(80%);
