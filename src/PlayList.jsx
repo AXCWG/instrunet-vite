@@ -79,7 +79,7 @@ function PlayList({createNew}) {
                     let song_info = await (await fetch(baseUrl + "getSingle?id=" + uuidstr)).json()
                     listLocal.push({
                         uuid: uuidstr,
-                        albumcover: pre.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(pre.data).buffer])) : sampleImg,
+                        albumcover: (pre && pre.data && pre.data.length !== 0) ? URL.createObjectURL(new Blob([Uint8Array.from(pre.data).buffer])) : sampleImg,
                         song_name: song_info.song_name,
                         album_name: song_info.album_name,
                         artist: song_info.artist,
@@ -185,7 +185,7 @@ function PlayList({createNew}) {
                                         ...list, list: list.list.concat([{
                                             addr: fetchUrl + item.uuid,
                                             album_name: item.album_name,
-                                            albumcover: pre.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(pre.data).buffer])) : sampleImg,
+                                            albumcover: (pre && pre.data && pre.data.length !== 0) ? URL.createObjectURL(new Blob([Uint8Array.from(pre.data).buffer])) : sampleImg,
                                             artist: item.artist,
                                             kind: item.kind,
                                             song_name: item.song_name,
