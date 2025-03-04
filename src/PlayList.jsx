@@ -286,7 +286,7 @@ function PlayList({createNew}) {
                                         style={{fontSize: "small"}}>{list.list[index] ? list.list[index].song_name : null}</span>
                                 </div>
                             </div>
-                            <H5AudioPlayer showSkipControls={true} style={{boxShadow: "none"}}
+                            <H5AudioPlayer autoPlayAfterSrcChange={true} showSkipControls={true} style={{boxShadow: "none"}}
                                            src={list.list[index] ? list.list[index].addr : null} onClickNext={() => {
                                 if (index + 1 > list.list.length - 1) {
                                     setIndex(0)
