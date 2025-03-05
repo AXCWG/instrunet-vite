@@ -4,24 +4,23 @@ import {useEffect, useState} from "react";
 import {baseUrl, fetchUrl, Kind} from "./Singletons.js";
 import {
     Button,
-    ButtonGroup,
     Container, FileInput,
     Grid,
     Image,
     Input,
     Modal,
     Notification,
-    NumberInput,
     Switch,
     Table
 } from "@mantine/core";
 import sampleImg from "./Assets/SampleImg.png";
 import H5AudioPlayer from "react-h5-audio-player";
 import {useDisclosure} from "@mantine/hooks";
-import log from "eslint-plugin-react/lib/util/log.js";
-import {Lrc} from "react-lrc";
+
 
 // TODO Decouple Webworker.
+
+// TODO Furthur decouple in progress. I just realized how hard it is to do if i write the API that way FFFFFFFFFvFFFUFUFUUUUUUu
 function PlayList({createNew}) {
     const [swapping, setSwapping] = useState(false);
 
@@ -33,8 +32,14 @@ function PlayList({createNew}) {
         return this;
     }
     const [list, setList] = useState({
-        list: [], owner: "", playlistuuid: "", private: false, tmb: null, title: "", ownerliteral: ""
+        list: [], playlistuuid: "", private: false, title: "",
     });
+    const [listOwner, setListOwner] = useState({
+        owner: "",
+        ownerliteral: ""
+    });
+    const [listTitle, setListTitle] = useState("正在加载")
+    const [listTmb, setListTmb] = useState(null);
     const [index, setIndex] = useState(0);
     const params = useParams();
     const [login, setLogin] = useState({
@@ -43,9 +48,33 @@ function PlayList({createNew}) {
         username: "",
         email: "",
     });
+    useEffect(() => {
+        let myWorker = new Worker(new URL("PlaylistWebWorkers/PlaylistCover.js", import.meta.url));
+        myWorker.postMessage({
+            url: baseUrl,
+            uuid: params.playlistuuid
+        })
+        myWorker.onmessage = e => {
+            setListTmb(
+                e.data.tmb
+            )
+        }
+
+    }, [])
 
     useEffect(() => {
+        let myWorker = new Worker(new URL("PlaylistWebWorkers/PlaylistNamae.js", import.meta.url));
+        myWorker.postMessage({
+            url: baseUrl,
+            uuid: params.playlistuuid
+        })
+        myWorker.onmessage = e => {
+            setListTitle(e.data)
+        }
+    }, [])
+    useEffect(() => {
         async function f() {
+
             let success = false;
             let res = await fetch(fetchUrl + "userapi", {
                 credentials: "include",
@@ -101,9 +130,9 @@ function PlayList({createNew}) {
                         }
                     })).text(),
                     playlistuuid: info.uuid,
-                    title: info.title,
+                    // title: info.title,
                     private: info.private,
-                    tmb: info.tmb
+                    // tmb: info.tmb
                 });
 
             }
@@ -114,7 +143,6 @@ function PlayList({createNew}) {
 
 
     }, [])
-    console.log(list);
 
     const [results, setResults] = useState([])
 
@@ -141,7 +169,7 @@ function PlayList({createNew}) {
         });
     }
     const [swapFirst, setSwappFirst] = useState(0);
-    console.log(list.tmb)
+
     //TODO 歌单创建副本功能
     function ShuffleButton() {
         return <Button mt={"md"} fullWidth={true} onClick={() => {
@@ -152,6 +180,48 @@ function PlayList({createNew}) {
                     .map(({value}) => value)
             });
         }}>随机打乱</Button>;
+    }
+
+    function LT() {
+        return <>
+            <Image id={"listTmb"}
+                   src={listTmb && listTmb.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(listTmb.data)], {type: "image/webp"})) : sampleImg}
+                   className={"border-black border-1 rounded-3 shadow"}
+                   style={{width: "100%", imageRendering: "pixelated"}}/>
+            {ownerCheck ? <FileInput accept={"image/*"} onChange={async (e) => {
+                setListTmb({type: "Buffer", data: new Uint8Array(await e.arrayBuffer())})
+
+            }} variant={"white"} mt={"lg"} fullWidth={true} placeholder={"更改封面"} styles={{
+                input: {
+                    textAlign: "center",
+                }
+            }}>更改封面</FileInput> : null}
+            {createNew ? <Input styles={{
+                input: {
+                    fontSize: "1.3rem",
+                    textAlign: "center",
+
+                }
+            }} className={"mt-4 text-center h4"} value={listTitle} onChange={(e) => {
+                setListTitle(e.target.value)
+            }}></Input> : login.uuid && list.owner && (login.uuid === list.owner) ?
+                <Input styles={{
+                    input: {
+                        fontSize: "1.3rem",
+                        textAlign: "center",
+
+                    }
+                }} variant={"default"} className={"mt-4"} value={listTitle} onChange={(e) => {
+                    setListTitle(e.target.value)
+                }}></Input> : <div className={"mt-4 text-center h4"}>{listTitle}</div>}
+
+            <div className={"mt-3 text-center h6"}>{list.ownerliteral}</div>
+            {login.uuid && list.owner && (login.uuid === list.owner) ?
+                <Switch style={{margin: "auto", width: "fit-content"}} className={"mt-3"} label={"公开"}
+                        checked={!list.private} onChange={() => {
+                    setList({...list, private: !list.private});
+                }}/> : null}
+        </>;
     }
 
     return (
@@ -223,47 +293,7 @@ function PlayList({createNew}) {
 
                     <Grid.Col span={{base: 12, sm: 5}}>
 
-                        <Image id={"listTmb"} src={list.tmb && list.tmb.data.length !== 0 ? URL.createObjectURL(new Blob( [Uint8Array.from(list.tmb.data)])) : sampleImg}
-                               className={"border-black border-1 rounded-3 shadow"} style={{width: "100%"}}/>
-                        {ownerCheck ? <FileInput accept={"image/*"} onChange={async (e) => {
-                            setList({...list, tmb: {type: "Buffer",data: new Uint8Array(await e.arrayBuffer())}})
-
-                        }} variant={"white"} mt={"lg"} fullWidth={true} placeholder={"更改封面"} styles={{
-                            input: {
-                                textAlign: "center",
-                            }
-                        }}>更改封面</FileInput> : null}
-                        {createNew ? <Input styles={{
-                            input: {
-                                fontSize: "1.3rem",
-                                textAlign: "center",
-
-                            }
-                        }} className={"mt-4 text-center h4"} value={list.title} onChange={(e) => {
-                            setList({
-                                ...list,
-                                title: e.target.value,
-                            })
-                        }}></Input> : login.uuid && list.owner && (login.uuid === list.owner) ?
-                            <Input styles={{
-                                input: {
-                                    fontSize: "1.3rem",
-                                    textAlign: "center",
-
-                                }
-                            }} variant={"default"} className={"mt-4"} value={list.title} onChange={(e) => {
-                                setList({
-                                    ...list,
-                                    title: e.target.value,
-                                })
-                            }}></Input> : <div className={"mt-4 text-center h4"}>{list.title}</div>}
-
-                        <div className={"mt-3 text-center h6"}>{list.ownerliteral}</div>
-                        {login.uuid && list.owner && (login.uuid === list.owner) ?
-                            <Switch style={{margin: "auto", width: "fit-content"}} className={"mt-3"} label={"公开"}
-                                    checked={!list.private} onChange={() => {
-                                setList({...list, private: !list.private});
-                            }}/> : null}
+                        {LT()}
 
                         <div className={"mt-4 shadow-lg rounded-3 overflow-hidden"}>
                             <div className={"p-3 d-flex gap-3"}>
@@ -286,7 +316,8 @@ function PlayList({createNew}) {
                                         style={{fontSize: "small"}}>{list.list[index] ? list.list[index].song_name : null}</span>
                                 </div>
                             </div>
-                            <H5AudioPlayer autoPlayAfterSrcChange={true} showSkipControls={true} style={{boxShadow: "none"}}
+                            <H5AudioPlayer autoPlayAfterSrcChange={true} showSkipControls={true}
+                                           style={{boxShadow: "none"}}
                                            src={list.list[index] ? list.list[index].addr : null} onClickNext={() => {
                                 if (index + 1 > list.list.length - 1) {
                                     setIndex(0)
@@ -318,7 +349,7 @@ function PlayList({createNew}) {
                     </Grid.Col>
 
                     <Grid.Col span={{base: 12, sm: 7}}>
-                        {createNew ? <><Button fullWidth onClick={async () => {
+                        {createNew ? <><Button fullWidth={true} onClick={async () => {
                             let pre = [];
                             for (let obj of list.list) {
                                 pre.push(obj.uuid);
@@ -333,18 +364,17 @@ function PlayList({createNew}) {
                                     content: pre,
                                     playlistuuid: list.playlistuuid,
                                     private: list.private,
-                                    tmb: list.tmb,
-                                    title: list.title,
+                                    tmb: listTmb,
+                                    title: listTitle,
 
 
                                 })
                             })
                             if (res.ok) {
-                                console.log("ok")
                                 window.location.replace("/playlist/" + (await res.json()).UUID);
                             }
                         }}>保存</Button><ShuffleButton></ShuffleButton></> : ownerCheck ? <>
-                            <Button fullWidth onClick={async () => {
+                            <Button fullWidth={true} onClick={async () => {
                                 let pre = [];
                                 for (let obj of list.list) {
                                     pre.push(obj.uuid);
@@ -360,8 +390,8 @@ function PlayList({createNew}) {
 
                                         playlistuuid: list.playlistuuid,
                                         private: list.private,
-                                        tmb: list.tmb,
-                                        title: list.title,
+                                        tmb: listTmb,
+                                        title: listTitle,
 
 
                                     })
