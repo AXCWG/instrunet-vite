@@ -197,7 +197,7 @@ function Home() {
                     <div style={{
                         containerType: "inline-size",
                     }} className={"h-100 w-100 d-flex align-items-center justify-content-center"}>
-                        <input type={"file"} className={"rounded rounded-circle"} style={{
+                        <input type={"file"} accept={"image/*"} className={"rounded rounded-circle"} style={{
                             opacity: 0,
                             position: "absolute",
                             width: "100%",
@@ -269,6 +269,10 @@ function Home() {
                     <div style={{textAlign: "center", userSelect: "none"}}>
 
                         <Avatar/>
+                        <div className={"mt-3"} style={{color: "gray"}}>
+                            {"点击头像以更改"}
+
+                        </div>
                         <div className={"display-6 mt-3"}>{login.username}</div>
                         <div className={"mt-3"}>{login.email ? login.email : "未设置邮箱"}</div>
 
