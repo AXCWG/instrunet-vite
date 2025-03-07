@@ -183,13 +183,14 @@ function PlayList({createNew}) {
     }
 
     function LT() {
+        console.log(listTmb)
         return <>
             <Image id={"listTmb"}
                    src={listTmb && listTmb.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(listTmb.data)], {type: "image/webp"})) : sampleImg}
                    className={"border-black border-1 rounded-3 shadow"}
                    style={{width: "100%", imageRendering: "pixelated"}}/>
             {ownerCheck ? <FileInput accept={"image/*"} onChange={async (e) => {
-                setListTmb({type: "Buffer", data: new Uint8Array(await e.arrayBuffer())})
+                setListTmb({type: "Buffer", data: Array.from(new Uint8Array(await e.arrayBuffer())) })
 
             }} variant={"white"} mt={"lg"} fullWidth={true} placeholder={"更改封面"} styles={{
                 input: {
