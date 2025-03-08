@@ -69,7 +69,7 @@ function Home() {
 
                         }}>
                             <Image
-                                src={(item.tmb && item.tmb.data.length !== 0) ? URL.createObjectURL(new Blob([Uint8Array.from(item.tmb.data)])) : SampleImg}></Image></RLink> :
+                                src={(item.tmb.data && item.tmb.data.length !== 0) ? URL.createObjectURL(new Blob([Uint8Array.from(item.tmb.data)])) : SampleImg}></Image></RLink> :
                         <RLink key={index} style={{
                             justifyContent: "space-around",
                             alignItems: "center",
@@ -78,7 +78,7 @@ function Home() {
                             borderColor: "gray",
 
                         }} className={"pl-item"} to={"/playlist/" + item.uuid}><Image
-                            src={(item.tmb && item.tmb.data.length !== 0) ? URL.createObjectURL(new Blob([Uint8Array.from(item.tmb.data)])) : SampleImg}></Image></RLink>
+                            src={(item.tmb.data && item.tmb.data.length !== 0) ? URL.createObjectURL(new Blob([Uint8Array.from(item.tmb.data)])) : SampleImg}></Image></RLink>
                 })}
                 {inEdit ? <RLink
                     style={{

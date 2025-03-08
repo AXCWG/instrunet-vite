@@ -39,7 +39,7 @@ function PlayList({createNew}) {
         ownerliteral: ""
     });
     const [listTitle, setListTitle] = useState("正在加载")
-    const [listTmb, setListTmb] = useState(null);
+    const [listTmb, setListTmb] = useState({type: "Buffer", data: null });
     const [index, setIndex] = useState(0);
     const params = useParams();
     const [login, setLogin] = useState({
@@ -56,7 +56,10 @@ function PlayList({createNew}) {
         })
         myWorker.onmessage = e => {
             setListTmb(
-                e.data.tmb
+                {
+                    type: "Buffer",
+                    data: e.data.tmb.data
+                }
             )
         }
 
@@ -186,7 +189,7 @@ function PlayList({createNew}) {
         console.log(listTmb)
         return <>
             <Image id={"listTmb"}
-                   src={listTmb && listTmb.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(listTmb.data)], {type: "image/webp"})) : sampleImg}
+                   src={listTmb.data && listTmb.data.length !== 0 ? URL.createObjectURL(new Blob([Uint8Array.from(listTmb.data)], {type: "image/webp"})) : sampleImg}
                    className={"border-black border-1 rounded-3 shadow"}
                    style={{width: "100%", imageRendering: "pixelated"}}/>
             {ownerCheck ? <FileInput accept={"image/*"} onChange={async (e) => {
