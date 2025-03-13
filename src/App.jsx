@@ -157,7 +157,7 @@ function App() {
         albumName: "",
         link: "",
         file: {},
-        email: localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email :  cookies["email"],
+        email: cookies["email"] ? localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email :  cookies["email"] : "",
         artist: "",
         kind: 0,
         albumCover: ""

@@ -149,7 +149,7 @@ function Home() {
 
     useEffect(() => {
         async function f() {
-            setAvatar(URL.createObjectURL(new Blob([await (await fetch(fetchUrl + "avatar?uuid=" + login.uuid)).arrayBuffer()])))
+            setAvatar(!(await fetch(fetchUrl + "avatar?uuid=" + login.uuid)).ok ? "" :  URL.createObjectURL(new Blob([await (await fetch(fetchUrl + "avatar?uuid=" + login.uuid)).arrayBuffer()])))
         }
 
         if (login.loggedIn) {
@@ -157,7 +157,7 @@ function Home() {
             f()
         }
     }, [login]);
-
+    console.log(avatar);
 
     const [forCrop, setForCrop] = useState(new Blob())
 
@@ -208,7 +208,7 @@ function Home() {
                             // open()
                             //TODO Image cropping
 
-                            let fileArray = new Uint8Array(await e.target.files[0].arrayBuffer());
+                            let fileArray =Array.from(new Uint16Array(await e.target.files[0].arrayBuffer())) ;
 
                             let res = await fetch(fetchUrl + "avatar", {
                                 method: "POST",
@@ -235,7 +235,7 @@ function Home() {
 
 
                     className={"img-fluid h-auto  w-100 "}
-                    src={avatar ? avatar.byteLength === 0 ? Akkarin : avatar : white} alt={"avatar"}/>
+                    src={avatar ? avatar : Akkarin} alt={"avatar"}/>
             </div>
         </>)
     }
