@@ -11,6 +11,7 @@ import {Button, Flex, Modal, Text, useModalsStack} from "@mantine/core";
 import {useDisclosure} from "@mantine/hooks";
 import {Lrc} from "react-lrc";
 import {Grid} from "@mantine/core";
+import TF from "./Assets/TF.png";
 
 // TODO Localizations
 
@@ -44,6 +45,9 @@ function Navbar({isFixed, username}) {
                     username: json.username,
                     email: json.email,
                 }))
+                if(json && (json.uuid === "7e29eb83-45a3-4a0c-ac61-3dc7375ab5ca" || json.username === "xiey0无节操")) {
+                    localStorage.setItem("HelloKryze", true)
+                }
             }else{
                 localStorage.removeItem("acc");
             }
@@ -54,6 +58,7 @@ function Navbar({isFixed, username}) {
             f()
         }
     }, [username])
+
 
 
     return (
@@ -114,14 +119,11 @@ function Navbar({isFixed, username}) {
                             <li className={"nav-item"}>
                                 <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
                             </li>
-                            <li className={"nav-item"}>
-                                <a className={"nav-link"} href={"mailto:KryzeZhang@moonshotacademy.cn"}>傻逼zeq</a>
-                            </li>
+
 
                         </ul>
                         <div className="d-flex">
-                            <a className={"text-decoration-none me-3 right-hand"}
-                            >用户系统公开测试</a>
+
 
 
                             {
@@ -152,6 +154,8 @@ function Navbar({isFixed, username}) {
 }
 
 function App() {
+    const [helloKryze, setHelloKryze] = useState("false");
+    const [loginHelloKryze, setLoginHelloKryze] = useState(null);
 
     const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
 
@@ -183,6 +187,34 @@ function App() {
 
     const [state, setState] = useState(-1)
 
+    if(localStorage.getItem("HelloKryze") !== helloKryze){
+        setHelloKryze(localStorage.getItem("HelloKryze"))
+    }
+    useEffect(()=>{
+        async function f() {
+            let res = await fetch(fetchUrl + "userapi", {
+                credentials: "include",
+            })
+            setLoading(false)
+            if (res.ok) {
+                let json = await res.json();
+                setLoginHelloKryze({
+                    loggedIn: true,
+                    uuid: json.uuid,
+                    username: json.username,
+                    email: json.email,
+                    kryze: json.uuid === "7e29eb83-45a3-4a0c-ac61-3dc7375ab5ca" || json.username === "xiey0无节操",
+                })
+
+
+            }else{
+                localStorage.removeItem("acc");
+            }
+
+        }
+
+       f()
+    }, [])
     async function UploadEntry() {
         if (!form.name || !form.file) {
             setState(1)
@@ -257,13 +289,50 @@ function App() {
     }
 
     return (<>
-        <Navbar isFixed={true}/>
+        {
+            (loginHelloKryze && loginHelloKryze.kryze) || helloKryze ==="true" ? <div style={{position: "fixed", zIndex: 1, top: "0"}}>
+
+                <div style={{position: "relative", marginTop: 0, width: "100vw", height: "100vh",}}>
+                    <Navbar isFixed={false}/>
+                    <div>
+                        <div style={{position: "absolute"}}>
+                            <img src={TF} style={{width: "5rem"}}></img>
+
+                        </div>
+                        <div style={{position: "absolute", right: 0}}>
+                            <img src={TF} style={{width: "5rem"}}></img>
+
+                        </div>
+                        <div style={{position: "absolute", bottom: 0}}>
+                            <img src={TF} style={{width: "5rem"}}></img>
+
+                        </div>
+                        <div style={{position: "absolute", bottom: 0, right: 0}}>
+                            <img src={TF} style={{width: "5rem"}}></img>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div> : <Navbar isFixed={true  }/>
+        }
+
+
         <div className="container mt-5 ">
 
             <div style={{height: '81vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
+
+
                 <div className="row">
-                    <div className={"display-1 text-lg-center mt-5"} style={{userSelect: "none"}}>
+                    <div className={"display-1 text-lg-center"} style={{userSelect: "none"}}>
+                        {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze ==="true" ?
+                            <img src={TF} style={{width: "10rem"}} className={"mt-5"}></img> : null}
+
+
+                        <div>
                         伴奏网
+                        </div>
                     </div>
                     <span className={"text-lg-center user-select-none "}
                           style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站</span>

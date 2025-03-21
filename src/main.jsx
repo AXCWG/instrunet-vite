@@ -36,6 +36,7 @@ function Logout() {
     window.location.href = "/"
 }
 
+
 // TODO: Pending homepage
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

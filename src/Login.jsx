@@ -15,7 +15,7 @@ function Login() {
             setState(1)
             setInterval(() => {
 
-                window.history.back();
+                window.location.href = "/";
             }, 500)
         } else {
             setState(-1)
