@@ -114,6 +114,9 @@ function Navbar({isFixed, username}) {
                             <li className={"nav-item"}>
                                 <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
                             </li>
+                            <li className={"nav-item"}>
+                                <a className={"nav-link"} href={"mailto:KryzeZhang@moonshotacademy.cn"}>傻逼zeq</a>
+                            </li>
 
                         </ul>
                         <div className="d-flex">
