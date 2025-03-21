@@ -1,7 +1,7 @@
 // TODO Always modify URL below before publishing.
 
-// const baseUrl = "https://andyxie.cn:8200/";
- const baseUrl = "http://localhost:5052/";
+const baseUrl = "https://andyxie.cn:8200/";
+ // const baseUrl = "http://localhost:5052/";
 const fetchUrl = baseUrl;
 
 const Kind = [
