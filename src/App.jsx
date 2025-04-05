@@ -45,10 +45,10 @@ function Navbar({isFixed, username}) {
                     username: json.username,
                     email: json.email,
                 }))
-                if(json && (json.uuid === "7e29eb83-45a3-4a0c-ac61-3dc7375ab5ca" || json.username === "xiey0无节操")) {
+                if (json && (json.uuid === "7e29eb83-45a3-4a0c-ac61-3dc7375ab5ca" || json.username === "xiey0无节操")) {
                     localStorage.setItem("HelloKryze", true)
                 }
-            }else{
+            } else {
                 localStorage.removeItem("acc");
             }
 
@@ -58,7 +58,6 @@ function Navbar({isFixed, username}) {
             f()
         }
     }, [username])
-
 
 
     return (
@@ -117,13 +116,17 @@ function Navbar({isFixed, username}) {
 
                             </li>
                             <li className={"nav-item"}>
+                                <a className="nav-link text-danger fw-bold "
+                                   href="https://andyxie.cn:5000/" aria-expanded={false}>反馈论坛
+                                </a>
+                            </li>
+                            <li className={"nav-item"}>
                                 <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
                             </li>
 
 
                         </ul>
                         <div className="d-flex">
-
 
 
                             {
@@ -164,14 +167,14 @@ function App() {
         albumName: "",
         link: "",
         file: {},
-        email: cookies["email"] ? localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email :  cookies["email"] : "",
+        email: cookies["email"] ? localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email : cookies["email"] : "",
         artist: "",
         kind: 0,
         albumCover: ""
     })
     const [ncmForm, setncmForm] = useState({
         id: "",
-        email: localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email :  cookies["email"],
+        email: localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email : cookies["email"],
         kind: 0,
     })
 
@@ -187,10 +190,10 @@ function App() {
 
     const [state, setState] = useState(-1)
 
-    if(localStorage.getItem("HelloKryze") !== helloKryze){
+    if (localStorage.getItem("HelloKryze") !== helloKryze) {
         setHelloKryze(localStorage.getItem("HelloKryze"))
     }
-    useEffect(()=>{
+    useEffect(() => {
         async function f() {
             let res = await fetch(fetchUrl + "userapi", {
                 credentials: "include",
@@ -207,14 +210,15 @@ function App() {
                 })
 
 
-            }else{
+            } else {
                 localStorage.removeItem("acc");
             }
 
         }
 
-       f()
+        f()
     }, [])
+
     async function UploadEntry() {
         if (!form.name || !form.file) {
             setState(1)
@@ -290,32 +294,33 @@ function App() {
 
     return (<>
         {
-            (loginHelloKryze && loginHelloKryze.kryze) || helloKryze ==="true" ? <div style={{position: "fixed", zIndex: 1, top: "0"}}>
+            (loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
+                <div style={{position: "fixed", zIndex: 1, top: "0"}}>
 
-                <div style={{position: "relative", marginTop: 0, width: "100vw", height: "100vh",}}>
-                    <Navbar isFixed={false}/>
-                    <div>
-                        <div style={{position: "absolute"}}>
-                            <img src={TF} style={{width: "5rem"}}></img>
+                    <div style={{position: "relative", marginTop: 0, width: "100vw", height: "100vh",}}>
+                        <Navbar isFixed={false}/>
+                        <div>
+                            <div style={{position: "absolute"}}>
+                                <img src={TF} style={{width: "5rem"}}></img>
 
+                            </div>
+                            <div style={{position: "absolute", right: 0}}>
+                                <img src={TF} style={{width: "5rem"}}></img>
+
+                            </div>
+                            <div style={{position: "absolute", bottom: 0}}>
+                                <img src={TF} style={{width: "5rem"}}></img>
+
+                            </div>
+                            <div style={{position: "absolute", bottom: 0, right: 0}}>
+                                <img src={TF} style={{width: "5rem"}}></img>
+
+                            </div>
                         </div>
-                        <div style={{position: "absolute", right: 0}}>
-                            <img src={TF} style={{width: "5rem"}}></img>
 
-                        </div>
-                        <div style={{position: "absolute", bottom: 0}}>
-                            <img src={TF} style={{width: "5rem"}}></img>
-
-                        </div>
-                        <div style={{position: "absolute", bottom: 0, right: 0}}>
-                            <img src={TF} style={{width: "5rem"}}></img>
-
-                        </div>
                     </div>
 
-                </div>
-
-            </div> : <Navbar isFixed={true  }/>
+                </div> : <Navbar isFixed={true}/>
         }
 
 
@@ -326,12 +331,12 @@ function App() {
 
                 <div className="row">
                     <div className={"display-1 text-lg-center"} style={{userSelect: "none"}}>
-                        {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze ==="true" ?
+                        {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
                             <img src={TF} style={{width: "10rem"}} className={"mt-5"}></img> : null}
 
 
                         <div>
-                        伴奏网
+                            伴奏网
                         </div>
                     </div>
                     <span className={"text-lg-center user-select-none "}
