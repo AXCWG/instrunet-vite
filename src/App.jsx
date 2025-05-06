@@ -124,7 +124,7 @@ function Navbar({isFixed, username}) {
                                 <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
                             </li>
                             <li className={"nav-item"}>
-                                <NavLink className="nav-link" to="secret-page">神秘小网页</NavLink>
+                                <NavLink className="nav-link" to="/secret-page">神秘小网页</NavLink>
                             </li>
 
 
