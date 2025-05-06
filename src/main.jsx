@@ -17,6 +17,7 @@ import '@mantine/core/styles.css';
 import PlayList from "./PlayList.jsx";
 import LrcTest from "./LrcTest.jsx";
 import 'react-image-crop/dist/ReactCrop.css'
+import SecretPage from "./SecretPage.jsx";
 
 
 function PageNotFound() {
@@ -60,6 +61,7 @@ root.render(
                 <Route path={"/playlist"} element={<PlayList createNew={true}/>}/>
                 <Route path={"/playlist/:playlistuuid"} element={<PlayList createNew={false }/>}/>
                 <Route path={"/LrcTest"} element={<LrcTest/>}/>
+                <Route path={"/secret-page"} element={<SecretPage/>}/>
 
             </Routes>
         </BrowserRouter>
