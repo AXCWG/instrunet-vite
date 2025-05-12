@@ -7,7 +7,7 @@ import {parseBlob, selectCover} from 'music-metadata'
 import {baseUrl, fetchUrl, Kind} from "./Singletons";
 import {useCookies} from "react-cookie";
 import {NavLink} from "react-router-dom";
-import {Button, Flex, Modal, Text, useModalsStack} from "@mantine/core";
+import {Button, Flex, Modal, Switch, Text, useModalsStack} from "@mantine/core";
 import {useDisclosure} from "@mantine/hooks";
 import {Lrc} from "react-lrc";
 import {Grid} from "@mantine/core";
@@ -172,13 +172,13 @@ function App() {
         file: {},
         email: cookies["email"] ? localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email : cookies["email"] : "",
         artist: "",
-        kind: 0,
+        kind: [],
         albumCover: ""
     })
     const [ncmForm, setncmForm] = useState({
         id: "",
         email: localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email : cookies["email"],
-        kind: 0,
+        kind: [],
     })
 
     const [loading, setLoading] = useState(false);
@@ -327,303 +327,384 @@ function App() {
         }
 
 
-        <div className="container mt-5 ">
+            <div className="container mt-5 ">
 
-            <div style={{height: '81vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
-
-
-                <div className="row">
-                    <div className={"display-1 text-lg-center"} style={{userSelect: "none"}}>
-                        {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
-                            <img src={TF} style={{width: "10rem"}} className={"mt-5"}></img> : null}
+                <div style={{height: '81vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
 
 
-                        <div>
-                            伴奏网
+                    <div className="row">
+                        <div className={"display-1 text-lg-center"} style={{userSelect: "none"}}>
+                            {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
+                                <img src={TF} style={{width: "10rem"}} className={"mt-5"}></img> : null}
+
+
+                            <div>
+                                伴奏网
+                            </div>
                         </div>
+                        <span className={"text-lg-center user-select-none "}
+                              style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站</span>
                     </div>
-                    <span className={"text-lg-center user-select-none "}
-                          style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站</span>
-                </div>
-                <div className={"row mt-5 "}>
-                    <form className={"d-flex w-100"} onSubmit={Prevent}>
-                        <input className={"form-control me-2"} type={"text"} placeholder={"搜索"} onChange={(e) => {
-                            setSearchParam(e.target.value);
-                        }} value={searchParam} onKeyDown={(e) => {
-                            if (e.key === "Enter") {
+                    <div className={"row mt-5 "}>
+                        <form className={"d-flex w-100"} onSubmit={Prevent}>
+                            <input className={"form-control me-2"} type={"text"} placeholder={"搜索"} onChange={(e) => {
+                                setSearchParam(e.target.value);
+                            }} value={searchParam} onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    setState(-1)
+                                    searchGeneral();
+                                }
+                            }}/>
+
+                        </form>
+                        <Flex id={"double"} style={{margin: "auto"}} mt={"md"} gap={"lg"} justify="space-evenly">
+                            <Button fullWidth={true}
+                                    className="btn btn-primary" onClick={() => {
                                 setState(-1)
-                                searchGeneral();
-                            }
-                        }}/>
+                                searchGeneral()
+                            }}>搜索
+                            </Button>
+                            <Button disabled={true} fullWidth={true} variant={"gradient"}
+                                    gradient={{from: "blue", to: "violet", deg: 45}}
+                                    className="btn btn-primary" onClick={() => {
+                                setState(-1)
+                                searchGeneral()
+                            }}>随机
+                            </Button>
+                        </Flex>
 
-                    </form>
-                    <Flex id={"double"} style={{margin: "auto"}} mt={"md"} gap={"lg"} justify="space-evenly">
-                        <Button fullWidth={true}
-                                className="btn btn-primary" onClick={() => {
-                            setState(-1)
-                            searchGeneral()
-                        }}>搜索
-                        </Button>
-                        <Button disabled={true} fullWidth={true} variant={"gradient"}
-                                gradient={{from: "blue", to: "violet", deg: 45}}
-                                className="btn btn-primary" onClick={() => {
-                            setState(-1)
-                            searchGeneral()
-                        }}>随机
-                        </Button>
-                    </Flex>
+                    </div>
 
                 </div>
-
-            </div>
-            <div
-                className={"mt-5 text-center text-secondary text-decoration-underline"}>本站秉持先搜索，后上传的原则<br></br>找不到你想要的？
-            </div>
-            <div className={"row mt-5"}>
-                <div className={"display-4"}>为社区做一点贡献：</div>
-                <div className={"h5 mt-3 "}>别担心，你只需要提供歌曲的源文件和元数据即可。</div>
-                <div className={"h6"}>不会太久。</div>
-                <h6>全程大概5-30分钟左右。</h6>
-            </div>
-            <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
-                <Banner/>
-                <form className={" px-0"} style={{width: '80%'}} onSubmit={Prevent}>
-                    <div style={{visibility: loading ? "visible" : "collapse"}}>
+                <div
+                    className={"mt-5 text-center text-secondary text-decoration-underline"}>本站秉持先搜索，后上传的原则<br></br>找不到你想要的？
+                </div>
+                <div className={"row mt-5"}>
+                    <div className={"display-4"}>为社区做一点贡献：</div>
+                    <div className={"h5 mt-3 "}>别担心，你只需要提供歌曲的源文件和元数据即可。</div>
+                    <div className={"h6"}>不会太久。</div>
+                    <h6>全程大概5-30分钟左右。</h6>
+                </div>
+                <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
+                    <Banner/>
+                    <form className={" px-0"} style={{width: '80%'}} onSubmit={Prevent}>
+                        <div style={{visibility: loading ? "visible" : "collapse"}}>
                             <span className={"spinner-border"}
                             ></span><span>正在加载</span>
 
-                    </div>
+                        </div>
 
-                    <ul className="nav nav-tabs">
-                        <li className="nav-item">
-                            <a className="nav-link active" data-bs-toggle="tab" href="#file-mode">文件模式</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" data-bs-toggle="tab" href="#ncm-mode">网易云模式</a>
-                        </li>
+                        <ul className="nav nav-tabs">
+                            <li className="nav-item">
+                                <a className="nav-link active" data-bs-toggle="tab" href="#file-mode">文件模式</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" data-bs-toggle="tab" href="#ncm-mode">网易云模式</a>
+                            </li>
 
-                    </ul>
-                    <div className={"tab-content"}>
-                        <div className={"tab-pane  active"} id={"file-mode"}>
-                            <div className={"mb-3"} style={{
-                                borderWidth: ".5px",
-                                borderColor: "black",
-                                borderStyle: "solid",
-                                width: 200,
-                                height: 200,
-                                backgroundSize: "contain"
-                            }} id={"AlbumCover"}>
-                                <input type={"file"}
-                                       style={{
-                                           height: "100%",
-                                           width: "100%",
-                                           color: "transparent",
-                                           filter: "opacity(0)"
-                                       }}
-                                       onChange={(e) => {
-                                           document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(e.target.files[0])})`;
-                                           const reader = new FileReader();
-                                           reader.readAsDataURL(e.target.files[0]);
+                        </ul>
+                        <div className={"tab-content"}>
+                            <div className={"tab-pane  active"} id={"file-mode"}>
+                                <div className={"mb-3"} style={{
+                                    borderWidth: ".5px",
+                                    borderColor: "black",
+                                    borderStyle: "solid",
+                                    width: 200,
+                                    height: 200,
+                                    backgroundSize: "contain"
+                                }} id={"AlbumCover"}>
+                                    <input type={"file"}
+                                           style={{
+                                               height: "100%",
+                                               width: "100%",
+                                               color: "transparent",
+                                               filter: "opacity(0)"
+                                           }}
+                                           onChange={(e) => {
+                                               document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(e.target.files[0])})`;
+                                               const reader = new FileReader();
+                                               reader.readAsDataURL(e.target.files[0]);
 
-                                           reader.onload = async () => {
-                                               setForm({
-                                                   ...form,
-                                                   albumCover: reader.result,
-                                               })
-                                           }
+                                               reader.onload = async () => {
+                                                   setForm({
+                                                       ...form,
+                                                       albumCover: reader.result,
+                                                   })
+                                               }
 
-                                       }}/>
+                                           }}/>
 
 
-                            </div>
+                                </div>
 
-                            <input required={true} onChange={(obj) => {
-                                if (obj.target.files[0]) {
-                                    parseBlob(obj.target.files[0], {
-                                        skipCovers: false,
+                                <input required={true} onChange={(obj) => {
+                                    if (obj.target.files[0]) {
+                                        parseBlob(obj.target.files[0], {
+                                            skipCovers: false,
 
-                                    }).then(data => {
-                                        const reader = new FileReader();
-                                        reader.readAsDataURL(!data.common.picture ? new Blob([]) : new Blob([selectCover(data.common.picture).data.buffer]))
-                                        reader.onload = () => {
-                                            /** I really don't know what to do here. Sorry for violating React.*/
-                                            /** Jan 09 25 I really should use useState. Fuck me. **/
-                                            if (data.common.picture) {
-                                                let coverBlob = new Blob([selectCover(data.common.picture).data.buffer])
-                                                document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(coverBlob)})`;
-                                                setForm({
-                                                    ...form,
-                                                    name: data.common.title ? data.common.title : null,
-                                                    albumName: data.common.album ? data.common.album : null,
-                                                    artist: !data.common.artist
-                                                        ? data.common.albumartist ? data.common.albumartist : null
-                                                        : data.common.artist ? data.common.artist : null,
-                                                    file: obj.target.files[0],
+                                        }).then(data => {
+                                            const reader = new FileReader();
+                                            reader.readAsDataURL(!data.common.picture ? new Blob([]) : new Blob([selectCover(data.common.picture).data.buffer]))
+                                            reader.onload = () => {
+                                                /** I really don't know what to do here. Sorry for violating React.*/
+                                                /** Jan 09 25 I really should use useState. Fuck me. **/
+                                                if (data.common.picture) {
+                                                    let coverBlob = new Blob([selectCover(data.common.picture).data.buffer])
+                                                    document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(coverBlob)})`;
+                                                    setForm({
+                                                        ...form,
+                                                        name: data.common.title ? data.common.title : null,
+                                                        albumName: data.common.album ? data.common.album : null,
+                                                        artist: !data.common.artist
+                                                            ? data.common.albumartist ? data.common.albumartist : null
+                                                            : data.common.artist ? data.common.artist : null,
+                                                        file: obj.target.files[0],
 
-                                                    albumCover: reader.result,
-                                                })
-                                            } else {
-                                                document.getElementById("AlbumCover").style.backgroundImage = ``;
+                                                        albumCover: reader.result,
+                                                    })
+                                                } else {
+                                                    document.getElementById("AlbumCover").style.backgroundImage = ``;
 
-                                                setForm({
-                                                    ...form,
-                                                    name: data.common.title ? data.common.title : "",
-                                                    albumName: data.common.album ? data.common.album : "",
-                                                    artist: !data.common.artist
-                                                        ? data.common.albumartist ? data.common.albumartist : ""
-                                                        : data.common.artist ? data.common.artist : "",
-                                                    file: obj.target.files[0],
-                                                    albumCover: ""
-                                                })
+                                                    setForm({
+                                                        ...form,
+                                                        name: data.common.title ? data.common.title : "",
+                                                        albumName: data.common.album ? data.common.album : "",
+                                                        artist: !data.common.artist
+                                                            ? data.common.albumartist ? data.common.albumartist : ""
+                                                            : data.common.artist ? data.common.artist : "",
+                                                        file: obj.target.files[0],
+                                                        albumCover: ""
+                                                    })
+                                                }
                                             }
-                                        }
 
+
+                                        })
+                                    }
+
+
+                                }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}
+                                ></input>
+                                <input required={true} value={form.name} onChange={(obj) => {
+                                    setForm({
+                                        ...form, name: obj.target.value,
+                                    });
+                                }} className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"}/>
+                                <input onChange={(obj) => {
+                                    setForm({
+                                        ...form, albumName: obj.target.value
+                                    });
+                                }} value={form.albumName} className={"  mb-3 form-control"} placeholder={"所属专辑名"}
+                                       name={"albumName"}/>
+                                <input onChange={(obj) => {
+                                    setForm({
+                                        ...form, artist: obj.target.value
+                                    })
+                                }} placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist}/>
+
+                                <input onChange={(obj) => {
+                                    setForm({
+                                        ...form, email: obj.target.value
+                                    })
+                                    setCookie("email", obj.target.value, {
+                                        sameSite: "strict",
+                                    })
+                                }} value={form.email} className={"mb-3 form-control"}
+                                       placeholder={"邮箱（通知何时完毕，可选）"} type="email"
+                                />
+                                <div className={"row mb-3"}>
+                                    <div className={"col-lg-2 w-auto"}>
+                                        <Flex wrap={"wrap"}>
+                                            {
+                                                Kind.map((val, index) =>
+                                                    <div key={index} style={{width: "100%", marginBottom: "1rem"}}>
+                                                        <Switch label={val} value={index} onChange={(event) => {
+                                                            if (event.target.checked) {
+                                                                console.log("selected")
+                                                                setForm({
+                                                                    ...form,
+                                                                    kind: (()=>{
+                                                                        let newArray = form.kind;
+                                                                        newArray.push(Number(event.target.value));
+                                                                        newArray.sort();
+                                                                        console.log(newArray);
+                                                                        return newArray;
+                                                                    })()
+                                                                })
+                                                            } else {
+                                                                console.log("deselected")
+                                                                setForm({
+                                                                    ...form,
+                                                                    kind: (()=>{
+                                                                        let newArray = [];
+                                                                        for(let x of form.kind){
+                                                                            if(x !== Number(event.target.value)){
+                                                                                newArray.push(x);
+                                                                            }
+                                                                        }
+                                                                        newArray.sort();
+                                                                        console.log(newArray)
+                                                                        return newArray;
+                                                                    })()
+                                                                })
+                                                            }
+
+                                                        }}></Switch>
+
+
+                                                    </div>
+                                                )
+                                            }
+                                            {/*<select name={"mode"} onChange={(e) => {*/}
+                                            {/*    setForm({*/}
+                                            {/*        ...form, kind: Number.parseInt(e.target.value)*/}
+                                            {/*    })*/}
+                                            {/*}} className={"form-control form-select"} style={{userSelect: "none"}}>*/}
+
+                                            {/*    {Kind.map((val, index) =>*/}
+                                            {/*        <option key={index} value={index}>{val}</option>*/}
+                                            {/*    )}*/}
+
+
+                                            {/*</select>*/}
+                                        </Flex>
+
+
+                                    </div>
+
+                                </div>
+
+
+                                <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={async () => {
+                                    setState(-1)
+                                    await UploadEntry()
+                                }}
+                                        disabled={loading}><i
+                                    className={"bi-upload"}></i> 上传
+                                </button>
+                            </div>
+                            <div className={"tab-pane"} id={"ncm-mode"}>
+
+                                <input type={"text"} placeholder={"歌曲ID（网易云网页端地址中“id”参数）"}
+                                       className={"mb-3 mt-3 form-control "} value={ncmForm.id} onChange={(e) => {
+                                    setncmForm({
+                                        ...ncmForm,
+                                        id: e.target.value,
 
                                     })
-                                }
+                                }}/>
+                                <a href={"https://www.bilibili.com/video/BV1Buc8eGEmh/?share_source=copy_web&vd_source=fff871e844f34f38697fc936b8301df5&t=49"}>如何寻找？</a>
+                                <input onChange={(obj) => {
+                                    setncmForm({
+                                        ...ncmForm,
+                                        email: obj.target.value,
+                                    })
+                                    setCookie("email", obj.target.value, {
+                                        sameSite: "strict",
+                                    })
+                                }} value={ncmForm.email} className={"mb-3 form-control"}
+                                       placeholder={"邮箱（通知何时完毕，可选）"} type="email"
+                                />
+                                <div className={"row mb-3"}>
+                                    <div className={"col-lg-2 w-auto"}>
+                                        <Flex wrap={"wrap"}>
+                                            {
+                                                Kind.map((val, index) =>
+                                                    <div key={index} style={{width: "100%", marginBottom: "1rem"}}>
+                                                        <Switch label={val} value={index} onChange={(event) => {
+                                                            if (event.target.checked) {
+                                                                console.log("selected")
+                                                                setncmForm({
+                                                                    ...ncmForm,
+                                                                    kind: (()=>{
+                                                                        let newArray = ncmForm.kind;
+                                                                        newArray.push(Number(event.target.value));
+                                                                        newArray.sort();
+                                                                        console.log(newArray);
+                                                                        return newArray;
+                                                                    })()
+                                                                })
+                                                            } else {
+                                                                console.log("deselected")
+                                                                setncmForm({
+                                                                    ...ncmForm,
+                                                                    kind: (()=>{
+                                                                        let newArray = [];
+                                                                        for(let x of ncmForm.kind){
+                                                                            if(x !== Number(event.target.value)){
+                                                                                newArray.push(x);
+                                                                            }
+                                                                        }
+                                                                        newArray.sort();
+                                                                        console.log(newArray)
+                                                                        return newArray;
+                                                                    })()
+                                                                })
+                                                            }
+
+                                                        }}></Switch>
 
 
-                            }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}
-                            ></input>
-                            <input required={true} value={form.name} onChange={(obj) => {
-                                setForm({
-                                    ...form, name: obj.target.value,
-                                });
-                            }} className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"}/>
-                            <input onChange={(obj) => {
-                                setForm({
-                                    ...form, albumName: obj.target.value
-                                });
-                            }} value={form.albumName} className={"  mb-3 form-control"} placeholder={"所属专辑名"}
-                                   name={"albumName"}/>
-                            <input onChange={(obj) => {
-                                setForm({
-                                    ...form, artist: obj.target.value
-                                })
-                            }} placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist}/>
+                                                    </div>
+                                                )
+                                            }
+                                            {/*<select name={"mode"} onChange={(e) => {*/}
+                                            {/*    setForm({*/}
+                                            {/*        ...form, kind: Number.parseInt(e.target.value)*/}
+                                            {/*    })*/}
+                                            {/*}} className={"form-control form-select"} style={{userSelect: "none"}}>*/}
 
-                            <input onChange={(obj) => {
-                                setForm({
-                                    ...form, email: obj.target.value
-                                })
-                                setCookie("email", obj.target.value, {
-                                    sameSite: "strict",
-                                })
-                            }} value={form.email} className={"mb-3 form-control"}
-                                   placeholder={"邮箱（通知何时完毕，可选）"} type="email"
-                            />
-                            <div className={"row mb-3"}>
-                                <div className={"col-lg-2 w-auto"}>
-                                    <div style={{display: "flex", justifyContent: "space-between"}}>
-                                        <select name={"mode"} onChange={(e) => {
-                                            setForm({
-                                                ...form, kind: Number.parseInt(e.target.value)
-                                            })
-                                        }} className={"form-control form-select"} style={{userSelect: "none"}}>
-                                            {Kind.map((val, index) =>
-                                                <option key={index} value={index}>{val}</option>
-                                            )}
+                                            {/*    {Kind.map((val, index) =>*/}
+                                            {/*        <option key={index} value={index}>{val}</option>*/}
+                                            {/*    )}*/}
 
-                                            <option value={0} disabled={true}>更多正在开发中……</option>
 
-                                        </select>
+                                            {/*</select>*/}
+                                        </Flex>
                                     </div>
-                                </div>
 
+                                </div>
+                                <button className={"btn btn-primary w-100"} onClick={async (e) => {
+                                    setState(-1)
+                                    setLoading(true);
+                                    e.currentTarget.disabled = true;
+                                    let res = (await fetch(baseUrl + "ncm/url", {
+                                        method: "POST",
+                                        body: JSON.stringify({
+                                            id: ncmForm.id,
+                                            kind: ncmForm.kind,
+                                            email: ncmForm.email,
+                                        }),
+                                        headers: {"Content-Type": "application/json"}
+                                    }))
+                                    if (res.ok) {
+                                        setState(3)
+                                        // alert("提交成功")
+                                    } else {
+                                        alert(await res.text())
+                                    }
+                                    e.target.disabled = false;
+
+                                    setLoading(false);
+                                }}>提交
+                                </button>
                             </div>
 
 
-                            <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={async () => {
-                                setState(-1)
-                                await UploadEntry()
-                            }}
-                                    disabled={loading}><i
-                                className={"bi-upload"}></i> 上传
-                            </button>
                         </div>
-                        <div className={"tab-pane"} id={"ncm-mode"}>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
 
-                            <input type={"text"} placeholder={"歌曲ID（网易云网页端地址中“id”参数）"}
-                                   className={"mb-3 mt-3 form-control "} value={ncmForm.id} onChange={(e) => {
-                                setncmForm({
-                                    ...ncmForm,
-                                    id: e.target.value,
-
-                                })
-                            }}/>
-                            <a href={"https://www.bilibili.com/video/BV1Buc8eGEmh/?share_source=copy_web&vd_source=fff871e844f34f38697fc936b8301df5&t=49"}>如何寻找？</a>
-                            <input onChange={(obj) => {
-                                setncmForm({
-                                    ...ncmForm,
-                                    email: obj.target.value,
-                                })
-                                setCookie("email", obj.target.value, {
-                                    sameSite: "strict",
-                                })
-                            }} value={ncmForm.email} className={"mb-3 form-control"}
-                                   placeholder={"邮箱（通知何时完毕，可选）"} type="email"
-                            />
-                            <div className={"row mb-3"}>
-                                <div className={"col-lg-2 w-auto"}>
-                                    <div style={{display: "flex", justifyContent: "space-between"}}>
-                                        <select name={"mode"} onChange={(e) => {
-                                            setncmForm({
-                                                ...ncmForm,
-                                                kind: Number.parseInt(e.target.value)
-                                            })
-                                        }} className={"form-control form-select"} style={{userSelect: "none"}}>
-                                            {Kind.map((val, index) =>
-                                                <option key={index} value={index}>{val}</option>
-                                            )}
-                                            <option value={0} disabled={true}>更多正在开发中……</option>
+                    </form>
 
 
-                                        </select>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <button className={"btn btn-primary w-100"} onClick={async (e) => {
-                                setState(-1)
-                                setLoading(true);
-                                e.currentTarget.disabled = true;
-                                let res = (await fetch(baseUrl + "ncm/url", {
-                                    method: "POST",
-                                    body: JSON.stringify({
-                                        id: ncmForm.id,
-                                        kind: ncmForm.kind,
-                                        email: ncmForm.email,
-                                    }),
-                                    headers: {"Content-Type": "application/json"}
-                                }))
-                                if (res.ok) {
-                                    setState(3)
-                                    // alert("提交成功")
-                                } else {
-                                    alert(await res.text())
-                                }
-                                e.target.disabled = false;
-
-                                setLoading(false);
-                            }}>提交
-                            </button>
-                        </div>
-
-
-                    </div>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-
-                </form>
-
+                </div>
 
             </div>
-
-        </div>
     </>);
 }
 
