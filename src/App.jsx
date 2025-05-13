@@ -249,7 +249,7 @@ function App() {
                 let res = await fetch(baseUrl + "submit", {
                     method: 'POST', body: JSON.stringify(prep), headers: {
                         'Content-Type': 'application/json',
-                    }
+                    }, credentials: "include",
 
 
                 }).catch((e) => {
@@ -675,6 +675,7 @@ function App() {
                                             kind: ncmForm.kind,
                                             email: ncmForm.email,
                                         }),
+                                        credentials: "include",
                                         headers: {"Content-Type": "application/json"}
                                     }))
                                     if (res.ok) {
