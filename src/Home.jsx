@@ -1,16 +1,83 @@
 import {Navbar} from "./App.jsx";
 import {useEffect, useState} from "react";
-import {fetchUrl, white} from "./Singletons";
+import {
+    fetchUrl, Kind,
+    // white
+} from "./Singletons";
 import Akkarin from './Assets/Transparent_Akkarin.png'
 import {Link as RLink} from "react-router-dom";
 import SampleImg from "./Assets/SampleImg.png"
-import {Image, Modal} from "@mantine/core";
-import Cropper from 'react-easy-crop'
-import {useDisclosure} from "@mantine/hooks";
-
+import {
+    Button,
+    Image, Table, TableTbody, TableTd, TableTh, TableThead, TableTr,
+    // Modal
+} from "@mantine/core";
+// import Cropper from 'react-easy-crop'
+// import {useDisclosure} from "@mantine/hooks";
 
 
 function Home() {
+    function UploadedMusics(){
+        const arr = [{key: "song_name", value: "歌曲名称"}, {key: "album_name", value: "专辑名称"}, {key: "artist", value: "艺术家"}, {key: "kind", value: "种类"}]
+        const [uploaded, setUploaded] = useState(null);
+        useEffect(()=>{
+            async function f(){
+                const uploadedList = await (await fetch(fetchUrl + "getuploaded" , {
+                    credentials: "include",
+                })).json();
+                let list = [];
+                for (const upload of uploadedList) {
+                    list.push(await (await fetch(fetchUrl + "getSingle?id="+upload.uuid)).json());
+                }
+                setUploaded(list);
+            }
+            f()
+        }, [])
+        return <div
+            className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"}
+            style={{borderStyle: "solid", maxHeight: "14rem", overflowY: "auto"}} >
+            你上传的歌曲
+            {
+                uploaded ? <Table striped={true} >
+                    <TableThead>
+                        <TableTr>
+                            {
+                                arr.map((item, index) =>
+                                    <TableTh key={index}>{item.value}</TableTh>
+                                )
+                            }
+                            <TableTh>删除</TableTh>
+                        </TableTr>
+
+                    </TableThead>
+
+                    <TableTbody>
+                        {
+                            uploaded.map((value, index)=><TableTr key={index}>
+                                {
+                                    arr.map((e, index)=>{
+                                        return   <TableTd key={index}>{e.key === "kind" ? value[e.key] === 2 ? "无和声人声" :  Kind[value[e.key]] :value[e.key]}</TableTd>
+                                    })
+                                }
+                                <Button disabled={true} m={5}>暂未上线</Button>
+                            </TableTr>)
+
+
+                        }
+                    </TableTbody>
+
+
+
+
+
+
+                </Table> : null
+            }
+
+            <br/>
+
+        </div>
+    }
     function PlayList() {
         const [playlist, setPlaylist] = useState([])
         const [inEdit, setInEdit] = useState(false)
@@ -37,7 +104,7 @@ function Home() {
                 display: "flex",
                 scrollbarWidth: "auto",
                 flexDirection: "row",
-                overflow: "scroll",
+                overflowX: "scroll",
                 gap: "5px",
                 alignItems: "center"
             }}
@@ -111,9 +178,10 @@ function Home() {
 
         </div>;
     }
-    const [opened, {open, close}] = useDisclosure(false);
 
-    const [loading, setLoading] = useState(true);
+    // const [opened, {open, close}] = useDisclosure(false);
+
+    // const [loading, setLoading] = useState(true);
     const [login, setLogin] = useState({
         loggedIn: false,
         uuid: "",
@@ -126,7 +194,7 @@ function Home() {
             let res = await fetch(fetchUrl + "userapi", {
                 credentials: "include",
             })
-            setLoading(false)
+            // setLoading(false)
             if (res.ok) {
                 let json = await res.json();
                 setLogin({
@@ -149,7 +217,7 @@ function Home() {
 
     useEffect(() => {
         async function f() {
-            setAvatar(!(await fetch(fetchUrl + "avatar?uuid=" + login.uuid)).ok ? "" :  URL.createObjectURL(new Blob([await (await fetch(fetchUrl + "avatar?uuid=" + login.uuid)).arrayBuffer()])))
+            setAvatar(!(await fetch(fetchUrl + "avatar?uuid=" + login.uuid)).ok ? "" : URL.createObjectURL(new Blob([await (await fetch(fetchUrl + "avatar?uuid=" + login.uuid)).arrayBuffer()])))
         }
 
         if (login.loggedIn) {
@@ -157,9 +225,8 @@ function Home() {
             f()
         }
     }, [login]);
-    console.log(avatar);
 
-    const [forCrop, setForCrop] = useState(new Blob())
+    // const [forCrop, setForCrop] = useState(new Blob())
 
     function Avatar() {
         const [hover, setHover] = useState(false);
@@ -167,9 +234,9 @@ function Home() {
 
         return (<>
 
-            <div onMouseEnter={(e) => {
+            <div onMouseEnter={() => {
                 setHover(true);
-            }} onMouseLeave={(e) => {
+            }} onMouseLeave={() => {
                 setHover(false)
 
             }} className={"rounded rounded-circle border-1 border-secondary-subtle border  overflow-hidden"}
@@ -208,7 +275,7 @@ function Home() {
                             // open()
                             //TODO Image cropping
 
-                            let fileArray =Array.from(new Uint16Array(await e.target.files[0].arrayBuffer())) ;
+                            let fileArray = Array.from(new Uint16Array(await e.target.files[0].arrayBuffer()));
 
                             let res = await fetch(fetchUrl + "avatar", {
                                 method: "POST",
@@ -240,81 +307,84 @@ function Home() {
         </>)
     }
 
-    function Crop() {
-        const [zoom, setZoom] = useState(1)
-        const [crop, setCrop] = useState({
-            x: 0, y: 0
-        })
-        return <Modal size={"lg"} styles={{
-            content: {
-                height: "100rem",
-            }
-        }} zIndex={1031} opened={opened} onClose={close} title={"编辑"}>
-            <Cropper onCropComplete={(croppedArea, croppedAreaPixels) => {
-                console.log(croppedAreaPixels, croppedArea)
-            }} style={{
-                containerStyle: {
-                    height: "100%",
-                }
-            }} image={URL.createObjectURL(forCrop)} crop={crop} zoom={zoom} aspect={1} onCropChange={setCrop}
-                     onZoomChange={setZoom}></Cropper>
-        </Modal>
-    }
+    // function Crop() {
+    //     const [zoom, setZoom] = useState(1)
+    //     const [crop, setCrop] = useState({
+    //         x: 0, y: 0
+    //     })
+    //     return <Modal size={"lg"} styles={{
+    //         content: {
+    //             height: "100rem",
+    //         }
+    //     }} zIndex={1031} opened={opened} onClose={close} title={"编辑"}>
+    //         <Cropper onCropComplete={(croppedArea, croppedAreaPixels) => {
+    //             console.log(croppedAreaPixels, croppedArea)
+    //         }} style={{
+    //             containerStyle: {
+    //                 height: "100%",
+    //             }
+    //         }} image={URL.createObjectURL(forCrop)} crop={crop} zoom={zoom} aspect={1} onCropChange={setCrop}
+    //                  onZoomChange={setZoom}></Cropper>
+    //     </Modal>
+    // }
     return (<>
-        {/*<Crop/>*/}
-        <Navbar username={login.username} isFixed={false}/>
-        <div className={"container  mt-5 "}>
-            <div className={"row "} style={{height: '45rem'}}>
-                <div className={"col-md-6"}>
-                    <div style={{textAlign: "center", userSelect: "none"}}>
+            {/*<Crop/>*/}
+            <Navbar username={login.username} isFixed={false}/>
+            <div className={"container  mt-5 "}>
+                <div className={"row "} style={{height: '45rem'}}>
+                    <div className={"col-md-6"}>
+                        <div style={{textAlign: "center", userSelect: "none"}}>
 
-                        <Avatar/>
-                        <div className={"mt-3"} style={{color: "gray"}}>
-                            {"点击头像以更改"}
+                            <Avatar/>
+                            <div className={"mt-3"} style={{color: "gray"}}>
+                                {"点击头像以更改"}
+
+                            </div>
+                            <div className={"display-6 mt-3"}>{login.username}</div>
+                            <div className={"mt-3"}>{login.email ? login.email : "未设置邮箱"}</div>
 
                         </div>
-                        <div className={"display-6 mt-3"}>{login.username}</div>
-                        <div className={"mt-3"}>{login.email ? login.email : "未设置邮箱"}</div>
+
 
                     </div>
+                    <div className={"col-md-6 t mt-3 mt-md-0"}>
+                        <div
+                            className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"}
+                            style={{borderStyle: "solid"}}>
+                            <div>
+                                用户功能
+                            </div>
+                            <div className={"mt-3"} style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                flexWrap: "wrap",
+                                flexDirection: "column",
+                                gap: "1rem",
+                            }}>
 
 
-                </div>
-                <div className={"col-md-6 t mt-3 mt-md-0"}>
-                    <div
-                        className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"}
-                        style={{borderStyle: "solid"}}>
-                        <div>
-                            用户功能
+                                {<PlayList/>}
+                                {<UploadedMusics/>}
+
+                                <button onClick={() => {
+                                    window.location.href = "/logout"
+                                }} className={"btn btn-secondary"}>登出
+                                </button>
+                                <button className={"btn btn-danger"} onClick={() => {
+                                    window.location.href = "/AccDel"
+                                }}>删除账号
+                                </button>
+
+                            </div>
+
                         </div>
-                        <div className={"mt-3"} style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            flexWrap: "wrap",
-                            flexDirection: "column",
-                            gap: "1rem",
-                        }}>
 
 
-                            {<PlayList/>}
-
-
-                            <button onClick={() => {
-                                window.location.href = "/logout"
-                            }} className={"btn btn-secondary"}>登出
-                            </button>
-                            <button className={"btn btn-danger"} onClick={() => {
-                                window.location.href = "/AccDel"
-                            }}>删除账号
-                            </button>
-
-                        </div>
                     </div>
-
                 </div>
             </div>
-        </div>
-    </>)
+        </>
+    )
 }
 
 export default Home

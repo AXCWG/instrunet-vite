@@ -14,7 +14,7 @@ import {Grid} from "@mantine/core";
 import TF from "./Assets/TF.png";
 
 // TODO Localizations
-
+// TODO 登录以管理XXXXXX
 
 // eslint-disable-next-line react/prop-types
 function Navbar({isFixed, username}) {
@@ -380,7 +380,14 @@ function App() {
                     className={"mt-5 text-center text-secondary text-decoration-underline"}>本站秉持先搜索，后上传的原则<br></br>找不到你想要的？
                 </div>
                 <div className={"row mt-5"}>
+                    <div className={"h4"} style={{
+                        color: "darkblue",
+                        fontWeight: "lighter"
+                    }}>（请登录以获得最佳体验如：歌单功能，记录歌曲上传者……）
+                    </div>
                     <div className={"display-4"}>为社区做一点贡献：</div>
+
+
                     <div className={"h5 mt-3 "}>别担心，你只需要提供歌曲的源文件和元数据即可。</div>
                     <div className={"h6"}>不会太久。</div>
                     <h6>全程大概5-30分钟左右。</h6>
