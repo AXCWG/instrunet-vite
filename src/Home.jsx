@@ -27,7 +27,9 @@ function Home() {
                 })).json();
                 let list = [];
                 for (const upload of uploadedList) {
-                    list.push(await (await fetch(fetchUrl + "getSingle?id="+upload.uuid)).json());
+                    let t = await (await fetch(fetchUrl + "getSingle?id="+upload.uuid)).json();
+                    t.uuid = upload.uuid;
+                    list.push(t);
                 }
                 setUploaded(list);
             }
@@ -59,7 +61,27 @@ function Home() {
                                         return   <TableTd key={index}>{e.key === "kind" ? value[e.key] === 2 ? "无和声人声" :  Kind[value[e.key]] :value[e.key]}</TableTd>
                                     })
                                 }
-                                <Button disabled={true} m={5}>暂未上线</Button>
+                                <Button style={{width: "5rem"}} color={"red"} m={5} onClick={async (event)=>{
+                                    if(event.currentTarget.innerText === "确认？") {
+                                        event.currentTarget.innerText = "删除中"
+                                        event.currentTarget.disabled = true;
+                                        const res = await fetch(fetchUrl + "delsong?uuid=" + value["uuid"], {
+                                            credentials: "include",
+                                        });
+                                        if(res.ok) {
+                                            // eslint-disable-next-line no-self-assign
+                                            window.location.href = window.location.href;
+
+                                        }else {
+                                            alert("未知原因失败。")
+                                        }
+
+                                    }else {
+                                        event.currentTarget.innerText = "确认？"
+                                        event.currentTarget.style.backgroundColor = "#FF0000"
+                                    }
+
+                                }}>删除</Button>
                             </TableTr>)
 
 
