@@ -18,63 +18,65 @@ import PlayList from "./PlayList.jsx";
 import LrcTest from "./LrcTest.jsx";
 import 'react-image-crop/dist/ReactCrop.css'
 import SecretPage from "./SecretPage.jsx";
+ (async ()=>{
+     const online = await (async () => {
+         try{
+             return (await fetch(fetchUrl + "ping")).ok
+         }catch(e){
+             return false;
+         }
+     })()
 
-const online = await (async () => {
-    try{
-         return (await fetch(fetchUrl + "ping")).ok
-    }catch(e){
-        return false;
-    }
-})()
+     function PageNotFound() {
+         return (
+             <>
+                 <div className="container">
+                     <h1 className={"display-1"}>正在建设中或不存在该页面</h1>
+                 </div>
+             </>
+         )
+     }
 
-function PageNotFound() {
-    return (
-        <>
-            <div className="container">
-                <h1 className={"display-1"}>正在建设中或不存在该页面</h1>
-            </div>
-        </>
-    )
-}
-
-function Logout() {
-    fetch(fetchUrl + "logout", {
-        credentials: "include",
-    })
-    window.location.href = "/"
-}
+     function Logout() {
+         fetch(fetchUrl + "logout", {
+             credentials: "include",
+         })
+         window.location.href = "/"
+     }
 
 
 // TODO: Pending homepage
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    online === true ?
-        <MantineProvider>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<App/>}/>
-                    <Route path="/search" element={<Search/>}/>
-                    <Route path="/player" element={<Player/>}/>
-                    <Route path="/query" element={<Query/>}/>
-                    <Route path="/404" element={<PageNotFound/>}/>
-                    <Route path="/login" element={<Login/>}/>
-                    <Route path={"/register"} element={<Register/>}/>
-                    <Route path={"*"} element={<Navigate replace to="/404"/>}/>
-                    <Route path={"/pitched-download"} element={<Pitched/>}/>
-                    <Route path={"/userapi"} element={<Userapi/>}/>
-                    <Route path={"/logout"} element={<Logout/>}/>
-                    <Route path={"/home"} element={<Home/>}/>
-                    <Route path={"/AccDel"} element={<AccountDeletion/>}/>
-                    <Route path={"/playlist"} element={<PlayList createNew={true}/>}/>
-                    <Route path={"/playlist/:playlistuuid"} element={<PlayList createNew={false}/>}/>
-                    <Route path={"/LrcTest"} element={<LrcTest/>}/>
-                    <Route path={"/secret-page"} element={<SecretPage/>}/>
+     const root = ReactDOM.createRoot(document.getElementById('root'));
+     root.render(
+         online === true ?
+             <MantineProvider>
+                 <BrowserRouter>
+                     <Routes>
+                         <Route path="/" element={<App/>}/>
+                         <Route path="/search" element={<Search/>}/>
+                         <Route path="/player" element={<Player/>}/>
+                         <Route path="/query" element={<Query/>}/>
+                         <Route path="/404" element={<PageNotFound/>}/>
+                         <Route path="/login" element={<Login/>}/>
+                         <Route path={"/register"} element={<Register/>}/>
+                         <Route path={"*"} element={<Navigate replace to="/404"/>}/>
+                         <Route path={"/pitched-download"} element={<Pitched/>}/>
+                         <Route path={"/userapi"} element={<Userapi/>}/>
+                         <Route path={"/logout"} element={<Logout/>}/>
+                         <Route path={"/home"} element={<Home/>}/>
+                         <Route path={"/AccDel"} element={<AccountDeletion/>}/>
+                         <Route path={"/playlist"} element={<PlayList createNew={true}/>}/>
+                         <Route path={"/playlist/:playlistuuid"} element={<PlayList createNew={false}/>}/>
+                         <Route path={"/LrcTest"} element={<LrcTest/>}/>
+                         <Route path={"/secret-page"} element={<SecretPage/>}/>
 
-                </Routes>
-            </BrowserRouter>
-        </MantineProvider> : <div className={"display-1"}>维护中</div>
-)
-;
+                     </Routes>
+                 </BrowserRouter>
+             </MantineProvider> : <div className={"display-1"}>维护中</div>
+     )
+     ;
+
+ })()
 
 
