@@ -19,6 +19,13 @@ import LrcTest from "./LrcTest.jsx";
 import 'react-image-crop/dist/ReactCrop.css'
 import SecretPage from "./SecretPage.jsx";
 
+const online = await (async () => {
+    try{
+         return (await fetch(fetchUrl + "ping")).ok
+    }catch(e){
+        return false;
+    }
+})()
 
 function PageNotFound() {
     return (
@@ -42,30 +49,32 @@ function Logout() {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <MantineProvider>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<App/>}/>
-                <Route path="/search" element={<Search/>}/>
-                <Route path="/player" element={<Player/>}/>
-                <Route path="/query" element={<Query/>}/>
-                <Route path="/404" element={<PageNotFound/>}/>
-                <Route path="/login" element={<Login/>}/>
-                <Route path={"/register"} element={<Register/>}/>
-                <Route path={"*"} element={<Navigate replace to="/404"/>}/>
-                <Route path={"/pitched-download"} element={<Pitched/>}/>
-                <Route path={"/userapi"} element={<Userapi/>}/>
-                <Route path={"/logout"} element={<Logout/>}/>
-                <Route path={"/home"} element={<Home/>}/>
-                <Route path={"/AccDel"} element={<AccountDeletion/>}/>
-                <Route path={"/playlist"} element={<PlayList createNew={true}/>}/>
-                <Route path={"/playlist/:playlistuuid"} element={<PlayList createNew={false }/>}/>
-                <Route path={"/LrcTest"} element={<LrcTest/>}/>
-                <Route path={"/secret-page"} element={<SecretPage/>}/>
+    online === true ?
+        <MantineProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<App/>}/>
+                    <Route path="/search" element={<Search/>}/>
+                    <Route path="/player" element={<Player/>}/>
+                    <Route path="/query" element={<Query/>}/>
+                    <Route path="/404" element={<PageNotFound/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path={"/register"} element={<Register/>}/>
+                    <Route path={"*"} element={<Navigate replace to="/404"/>}/>
+                    <Route path={"/pitched-download"} element={<Pitched/>}/>
+                    <Route path={"/userapi"} element={<Userapi/>}/>
+                    <Route path={"/logout"} element={<Logout/>}/>
+                    <Route path={"/home"} element={<Home/>}/>
+                    <Route path={"/AccDel"} element={<AccountDeletion/>}/>
+                    <Route path={"/playlist"} element={<PlayList createNew={true}/>}/>
+                    <Route path={"/playlist/:playlistuuid"} element={<PlayList createNew={false}/>}/>
+                    <Route path={"/LrcTest"} element={<LrcTest/>}/>
+                    <Route path={"/secret-page"} element={<SecretPage/>}/>
 
-            </Routes>
-        </BrowserRouter>
-    </MantineProvider>
-);
+                </Routes>
+            </BrowserRouter>
+        </MantineProvider> : <div className={"display-1"}>维护中</div>
+)
+;
 
 
