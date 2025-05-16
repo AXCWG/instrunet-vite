@@ -9,7 +9,15 @@
     transition: all 0.1s ease-out;
     user-select: none;
 }
+.head{
+    height: 90vh;
+    gap: 1rem;
+    @media(max-width: 1200px){
+        margin-top: 10rem;
+        height: auto;
 
+    }
+}
 .lyric-box{
     @media(max-width: 1200px) {
         max-width: 500px;
@@ -20,11 +28,29 @@
     transition: all 0.5s ease-out;
 }
 #double{
-    width: fit-content;
+    width: 100%;
 
     @media (max-width: 992px){
         width: 100%;
     }
+}
+.generic-box-shadow-card{
+    border-color: lightgray;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: .3rem;
+    padding: 1rem;
+    max-width: 30rem;
+    transition: all .3s ease-out;
+    background-color: #f6f6f6;
+}
+.generic-box-shadow-card:hover{
+    box-shadow: 0 0 20px lightgray;
+    background-color: #ececec;
+    text-shadow: lightgray 0 0 5px;
+    scale: 1.01;
+
+
 }
 .avatar{
     transition: ease-out all 0.1s;

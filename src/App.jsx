@@ -7,7 +7,7 @@ import {parseBlob, selectCover} from 'music-metadata'
 import {baseUrl, fetchUrl, Kind} from "./Singletons";
 import {useCookies} from "react-cookie";
 import {NavLink} from "react-router-dom";
-import {Button, Flex, Modal, Switch, Text, useModalsStack} from "@mantine/core";
+import {Button, Flex, Group, Modal, Switch, Text, useModalsStack} from "@mantine/core";
 import {useDisclosure} from "@mantine/hooks";
 import {Lrc} from "react-lrc";
 import {Grid} from "@mantine/core";
@@ -20,10 +20,7 @@ import TF from "./Assets/TF.png";
 function Navbar({isFixed, username}) {
     const [loading, setLoading] = useState(true);
     const [login, setLogin] = useState({
-        loggedIn: false,
-        uuid: "",
-        username: "",
-        email: "",
+        loggedIn: false, uuid: "", username: "", email: "",
     });
     useEffect(() => {
         async function f() {
@@ -34,16 +31,10 @@ function Navbar({isFixed, username}) {
             if (res.ok) {
                 let json = await res.json();
                 setLogin({
-                    loggedIn: true,
-                    uuid: json.uuid,
-                    username: json.username,
-                    email: json.email,
+                    loggedIn: true, uuid: json.uuid, username: json.username, email: json.email,
                 })
                 localStorage.setItem("acc", JSON.stringify({
-                    loggedIn: true,
-                    uuid: json.uuid,
-                    username: json.username,
-                    email: json.email,
+                    loggedIn: true, uuid: json.uuid, username: json.username, email: json.email,
                 }))
                 if (json && (json.uuid === "7e29eb83-45a3-4a0c-ac61-3dc7375ab5ca" || json.username === "xiey0无节操")) {
                     localStorage.setItem("HelloKryze", true)
@@ -60,103 +51,95 @@ function Navbar({isFixed, username}) {
     }, [username])
 
 
-    return (
-        <>
+    return (<>
 
 
-            <nav
-                className={isFixed ? "navbar fixed-top navbar-expand-sm bg-dark navbar-dark" : "navbar navbar-expand-sm bg-dark navbar-dark"}>
-                <div className="container-fluid">
+        <nav
+            className={isFixed ? "navbar fixed-top navbar-expand-md bg-dark navbar-dark" : "navbar navbar-expand-md bg-dark navbar-dark"}>
+            <div className="container-fluid">
 
-                    <NavLink className="navbar-brand" to="/">伴奏网</NavLink>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapsibleNavbar">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="collapsibleNavbar">
-                        <ul className="navbar-nav" style={{marginRight: "auto"}}>
-                            <li className="nav-item">
-                                <NavLink className="nav-link" to="/">主页</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link" to="/Search">全部</NavLink>
-                            </li>
-                            <li className={"nav-item"}>
-                                <NavLink className="nav-link" to="/query">处理队列</NavLink>
-                            </li>
+                <NavLink className="navbar-brand" to="/">伴奏网</NavLink>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsibleNavbar">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul className="navbar-nav" style={{marginRight: "auto"}}>
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to="/">主页</NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to="/Search">全部</NavLink>
+                        </li>
+                        <li className={"nav-item"}>
+                            <NavLink className="nav-link" to="/query">处理队列</NavLink>
+                        </li>
 
-                            <li className="nav-item">
-                                <div className={"dropdown "}>
-                                    <button className="nav-link dropdown-toggle" type={"button"}
-                                            data-bs-toggle={"dropdown"}
-                                            aria-expanded={false}>联系我
-                                    </button>
+                        <li className="nav-item">
+                            <div className={"dropdown "}>
+                                <button className="nav-link dropdown-toggle" type={"button"}
+                                        data-bs-toggle={"dropdown"}
+                                        aria-expanded={false}>联系我
+                                </button>
 
-                                    <ul className={"dropdown-menu"}>
-                                        <li><NavLink className={"dropdown-item"}
-                                                     to={"mailto:xiey0@qq.com"}>邮箱</NavLink></li>
-                                        <li><NavLink className={"dropdown-item"}
-                                                     to={"https://message.bilibili.com/?spm_id_from=..0.0#/whisper/mid255413001"}>B站私信</NavLink>
-                                        </li>
-                                        <li><NavLink className={"dropdown-item"}
-                                                     to={"https://github.com/AXCWG/instrunet-vite/issues"}>GitHub
-                                            Issues</NavLink>
-                                        </li>
+                                <ul className={"dropdown-menu"}>
+                                    <li><NavLink className={"dropdown-item"}
+                                                 to={"mailto:xiey0@qq.com"}>邮箱</NavLink></li>
+                                    <li><NavLink className={"dropdown-item"}
+                                                 to={"https://message.bilibili.com/?spm_id_from=..0.0#/whisper/mid255413001"}>B站私信</NavLink>
+                                    </li>
+                                    <li><NavLink className={"dropdown-item"}
+                                                 to={"https://github.com/AXCWG/instrunet-vite/issues"}>GitHub
+                                        Issues</NavLink>
+                                    </li>
 
-                                    </ul>
-                                </div>
+                                </ul>
+                            </div>
 
-                            </li>
-                            <li className={"nav-item"}>
+                        </li>
+                        <li className={"nav-item"}>
 
-                                <a className="nav-link text-danger fw-bold "
-                                   href="https://afdian.com/a/re_xiey0" aria-expanded={false}>打赏
-                                </a>
-
-
-                            </li>
-                            <li className={"nav-item"}>
-                                <a className="nav-link text-danger fw-bold "
-                                   href="https://andyxie.cn:5000/" aria-expanded={false}>反馈论坛
-                                </a>
-                            </li>
-                            <li className={"nav-item"}>
-                                <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
-                            </li>
-                            <li className={"nav-item"}>
-                                <NavLink className="nav-link" to="/secret-page">神秘小网页</NavLink>
-                            </li>
+                            <a className="nav-link text-danger fw-bold "
+                               href="https://afdian.com/a/re_xiey0" aria-expanded={false}>打赏
+                            </a>
 
 
-                        </ul>
-                        <div className="d-flex">
+                        </li>
+                        <li className={"nav-item"}>
+                            <a className="nav-link text-danger fw-bold "
+                               href="https://andyxie.cn:5000/" aria-expanded={false}>反馈论坛
+                            </a>
+                        </li>
+                        <li className={"nav-item"}>
+                            <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
+                        </li>
+                        <li className={"nav-item"}>
+                            <NavLink className="nav-link" to="/secret-page">神秘小网页</NavLink>
+                        </li>
 
 
-                            {
-                                !username ?
-                                    loading ?
-                                        null :
-                                        login.loggedIn ?
-                                            <a className={"text-decoration-none me-3 right-hand"}
-                                               href={"/home"}>{login.username}</a> :
-                                            <>
-                                                <a className={" text-decoration-none me-3 right-hand"}
-                                                   href={"/login"}>登录</a>
-                                                <a className={" text-decoration-none me-1 right-hand"}
-                                                   href={"/register"}>注册</a>
-                                            </>
-                                    : <a className={"text-decoration-none me-3 right-hand"}
-                                         href={"/home"}>{username}</a>
+                    </ul>
+                    <div className="d-flex">
 
-                            }
 
-                        </div>
+                        {!username ? loading ? null : login.loggedIn ?
+                            <a className={"text-decoration-none me-3 right-hand"}
+                               href={"/home"}>{login.username}</a> : <>
+                                <a className={" text-decoration-none me-3 right-hand"}
+                                   href={"/login"}>登录</a>
+                                <a className={" text-decoration-none me-1 right-hand"}
+                                   href={"/register"}>注册</a>
+                            </> : <a className={"text-decoration-none me-3 right-hand"}
+                                     href={"/home"}>{username}</a>
+
+                        }
+
                     </div>
                 </div>
-            </nav>
+            </div>
+        </nav>
 
-        </>
-    )
+    </>)
 }
 
 function App() {
@@ -296,8 +279,7 @@ function App() {
     }
 
     return (<>
-        {
-            (loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
+            {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
                 <div style={{position: "fixed", zIndex: 1, top: "0"}}>
 
                     <div style={{position: "relative", marginTop: 0, width: "100vw", height: "100vh",}}>
@@ -323,66 +305,112 @@ function App() {
 
                     </div>
 
-                </div> : <Navbar isFixed={true}/>
-        }
+                </div> : <Navbar isFixed={true}/>}
 
 
             <div className="container mt-5 ">
 
-                <div style={{height: '81vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
+                <div className={"head"}
+                     style={{display: "flex", justifyContent: "center", flexDirection: "row", flexWrap: "wrap"}}>
 
 
-                    <div className="row">
-                        <div className={"display-1 text-lg-center"} style={{userSelect: "none"}}>
-                            {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
-                                <img src={TF} style={{width: "10rem"}} className={"mt-5"}></img> : null}
+                    <div style={{
+                        justifyContent: "center",
+
+                        display: "flex", flexDirection: "column", alignItems: "center"
+                    }}>
+                        <div className="row">
+                            <div className={"display-1 text-lg-center"} style={{userSelect: "none"}}>
+                                {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
+                                    <img src={TF} style={{width: "10rem"}} className={"mt-5"}></img> : null}
 
 
-                            <div>
-                                伴奏网
+                                <div>
+                                    伴奏网
+                                </div>
                             </div>
+                            <span className={"text-lg-center user-select-none "}
+                                  style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站
+                            <div
+                                className={" text-lg-center text-danger text-decoration-underline"}>本站秉持先搜索，后上传的原则
+                            </div>
+                        </span>
                         </div>
-                        <span className={"text-lg-center user-select-none "}
-                              style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站</span>
-                    </div>
-                    <div className={"row mt-5 "}>
-                        <form className={"d-flex w-100"} onSubmit={Prevent}>
-                            <input className={"form-control me-2"} type={"text"} placeholder={"搜索"} onChange={(e) => {
-                                setSearchParam(e.target.value);
-                            }} value={searchParam} onKeyDown={(e) => {
-                                if (e.key === "Enter") {
+                        <div className={"row mt-5"}>
+                            <form className={"d-flex w-100"} onSubmit={Prevent}>
+                                <input className={"form-control me-2"} type={"text"} placeholder={"搜索"}
+                                       onChange={(e) => {
+                                           setSearchParam(e.target.value);
+                                       }} value={searchParam} onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setState(-1)
+                                        searchGeneral();
+                                    }
+                                }}/>
+
+                            </form>
+                            <Flex id={"double"} style={{margin: "auto"}} mt={"md"} gap={"lg"} justify="space-evenly">
+                                <Button fullWidth={true}
+                                        className="btn btn-primary" onClick={() => {
                                     setState(-1)
-                                    searchGeneral();
-                                }
-                            }}/>
+                                    searchGeneral()
+                                }}>搜索
+                                </Button>
+                                <Button disabled={true} fullWidth={true} variant={"gradient"}
+                                        gradient={{from: "blue", to: "violet", deg: 45}}
+                                        className="btn btn-primary" onClick={() => {
+                                    setState(-1)
+                                    searchGeneral()
+                                }}>随机
+                                </Button>
+                            </Flex>
 
-                        </form>
-                        <Flex id={"double"} style={{margin: "auto"}} mt={"md"} gap={"lg"} justify="space-evenly">
-                            <Button fullWidth={true}
-                                    className="btn btn-primary" onClick={() => {
-                                setState(-1)
-                                searchGeneral()
-                            }}>搜索
-                            </Button>
-                            <Button disabled={true} fullWidth={true} variant={"gradient"}
-                                    gradient={{from: "blue", to: "violet", deg: 45}}
-                                    className="btn btn-primary" onClick={() => {
-                                setState(-1)
-                                searchGeneral()
-                            }}>随机
-                            </Button>
-                        </Flex>
+                        </div>
+                    </div>
 
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        alignItems: "center"
+                    }}>
+                        <div className={"generic-box-shadow-card"}>
+                            <h4>须知：</h4>
+                            <br/>
+                            <u>网易云的音乐分为两类：VIP歌曲和VIP付费歌曲的东西。</u>
+                            <br/>
+                            <br/>
+                            VIP歌曲365天随时可以下载，付费歌曲的话：
+                            <br/>
+                            <br/>
+                            如果账号一个月超过了下载付费VIP歌曲的额度，就<strong>无法再下载需付费的VIP歌曲，</strong>就会显示<strong>“不存在”</strong>，就需要升级账号的额度，于是就需要升级账号，就要<span
+                            style={{fontSize: "3rem"}}>钱</span>。<br/>
+                            <br/>
+                            要不就自己开个网易云会员后下载后通过<a
+                            href={"https://demo.unlock-music.dev/"}>某些路径（🪜）</a>解锁后上传到本网站后提取伴奏，要不就不用:)))
+
+                        </div>
+                    </div>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        alignItems: "center"
+                    }}>
+                        <div className={"generic-box-shadow-card"}>
+                            <h4>目前目标：</h4>
+                            QQ音乐下载（寻找API中）
+                            <br/>
+                            <br/>
+                            正经的，不加端口并且独立的域名（长远计划😂）
+                        </div>
                     </div>
 
                 </div>
-                <div
-                    className={"mt-5 text-center text-secondary text-decoration-underline"}>本站秉持先搜索，后上传的原则<br></br>找不到你想要的？
-                </div>
+
                 <div className={"row mt-5"}>
                     <div className={"h4"} style={{
-                        color: "darkblue",
-                        fontWeight: "lighter"
+                        color: "darkblue", fontWeight: "lighter"
                     }}>（请登录以获得最佳体验如：歌单功能，记录歌曲上传者……）
                     </div>
                     <div className={"display-4"}>为社区做一点贡献：</div>
@@ -422,10 +450,7 @@ function App() {
                                 }} id={"AlbumCover"}>
                                     <input type={"file"}
                                            style={{
-                                               height: "100%",
-                                               width: "100%",
-                                               color: "transparent",
-                                               filter: "opacity(0)"
+                                               height: "100%", width: "100%", color: "transparent", filter: "opacity(0)"
                                            }}
                                            onChange={(e) => {
                                                document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(e.target.files[0])})`;
@@ -434,8 +459,7 @@ function App() {
 
                                                reader.onload = async () => {
                                                    setForm({
-                                                       ...form,
-                                                       albumCover: reader.result,
+                                                       ...form, albumCover: reader.result,
                                                    })
                                                }
 
@@ -462,9 +486,7 @@ function App() {
                                                         ...form,
                                                         name: data.common.title ? data.common.title : null,
                                                         albumName: data.common.album ? data.common.album : null,
-                                                        artist: !data.common.artist
-                                                            ? data.common.albumartist ? data.common.albumartist : null
-                                                            : data.common.artist ? data.common.artist : null,
+                                                        artist: !data.common.artist ? data.common.albumartist ? data.common.albumartist : null : data.common.artist ? data.common.artist : null,
                                                         file: obj.target.files[0],
 
                                                         albumCover: reader.result,
@@ -476,9 +498,7 @@ function App() {
                                                         ...form,
                                                         name: data.common.title ? data.common.title : "",
                                                         albumName: data.common.album ? data.common.album : "",
-                                                        artist: !data.common.artist
-                                                            ? data.common.albumartist ? data.common.albumartist : ""
-                                                            : data.common.artist ? data.common.artist : "",
+                                                        artist: !data.common.artist ? data.common.albumartist ? data.common.albumartist : "" : data.common.artist ? data.common.artist : "",
                                                         file: obj.target.files[0],
                                                         albumCover: ""
                                                     })
@@ -522,46 +542,44 @@ function App() {
                                 <div className={"row mb-3"}>
                                     <div className={"col-lg-2 w-auto"}>
                                         <Flex wrap={"wrap"}>
-                                            {
-                                                Kind.map((val, index) =>
-                                                    <div key={index} style={{width: "100%", marginBottom: "1rem"}}>
-                                                        <Switch label={val} value={index} onChange={(event) => {
-                                                            if (event.target.checked) {
-                                                                console.log("selected")
-                                                                setForm({
-                                                                    ...form,
-                                                                    kind: (()=>{
-                                                                        let newArray = form.kind;
-                                                                        newArray.push(Number(event.target.value));
-                                                                        newArray.sort();
-                                                                        console.log(newArray);
-                                                                        return newArray;
-                                                                    })()
-                                                                })
-                                                            } else {
-                                                                console.log("deselected")
-                                                                setForm({
-                                                                    ...form,
-                                                                    kind: (()=>{
-                                                                        let newArray = [];
-                                                                        for(let x of form.kind){
-                                                                            if(x !== Number(event.target.value)){
-                                                                                newArray.push(x);
-                                                                            }
-                                                                        }
-                                                                        newArray.sort();
-                                                                        console.log(newArray)
-                                                                        return newArray;
-                                                                    })()
-                                                                })
-                                                            }
+                                            {Kind.map((val, index) => <div key={index}
+                                                                           style={{
+                                                                               width: "100%",
+                                                                               marginBottom: "1rem"
+                                                                           }}>
+                                                <Switch label={val} value={index} onChange={(event) => {
+                                                    if (event.target.checked) {
+                                                        console.log("selected")
+                                                        setForm({
+                                                            ...form, kind: (() => {
+                                                                let newArray = form.kind;
+                                                                newArray.push(Number(event.target.value));
+                                                                newArray.sort();
+                                                                console.log(newArray);
+                                                                return newArray;
+                                                            })()
+                                                        })
+                                                    } else {
+                                                        console.log("deselected")
+                                                        setForm({
+                                                            ...form, kind: (() => {
+                                                                let newArray = [];
+                                                                for (let x of form.kind) {
+                                                                    if (x !== Number(event.target.value)) {
+                                                                        newArray.push(x);
+                                                                    }
+                                                                }
+                                                                newArray.sort();
+                                                                console.log(newArray)
+                                                                return newArray;
+                                                            })()
+                                                        })
+                                                    }
 
-                                                        }}></Switch>
+                                                }}></Switch>
 
 
-                                                    </div>
-                                                )
-                                            }
+                                            </div>)}
                                             {/*<select name={"mode"} onChange={(e) => {*/}
                                             {/*    setForm({*/}
                                             {/*        ...form, kind: Number.parseInt(e.target.value)*/}
@@ -595,16 +613,14 @@ function App() {
                                 <input type={"text"} placeholder={"歌曲ID（网易云网页端地址中“id”参数）"}
                                        className={"mb-3 mt-3 form-control "} value={ncmForm.id} onChange={(e) => {
                                     setncmForm({
-                                        ...ncmForm,
-                                        id: e.target.value,
+                                        ...ncmForm, id: e.target.value,
 
                                     })
                                 }}/>
                                 <a href={"https://www.bilibili.com/video/BV1Buc8eGEmh/?share_source=copy_web&vd_source=fff871e844f34f38697fc936b8301df5&t=49"}>如何寻找？</a>
                                 <input onChange={(obj) => {
                                     setncmForm({
-                                        ...ncmForm,
-                                        email: obj.target.value,
+                                        ...ncmForm, email: obj.target.value,
                                     })
                                     setCookie("email", obj.target.value, {
                                         sameSite: "strict",
@@ -615,46 +631,44 @@ function App() {
                                 <div className={"row mb-3"}>
                                     <div className={"col-lg-2 w-auto"}>
                                         <Flex wrap={"wrap"}>
-                                            {
-                                                Kind.map((val, index) =>
-                                                    <div key={index} style={{width: "100%", marginBottom: "1rem"}}>
-                                                        <Switch label={val} value={index} onChange={(event) => {
-                                                            if (event.target.checked) {
-                                                                console.log("selected")
-                                                                setncmForm({
-                                                                    ...ncmForm,
-                                                                    kind: (()=>{
-                                                                        let newArray = ncmForm.kind;
-                                                                        newArray.push(Number(event.target.value));
-                                                                        newArray.sort();
-                                                                        console.log(newArray);
-                                                                        return newArray;
-                                                                    })()
-                                                                })
-                                                            } else {
-                                                                console.log("deselected")
-                                                                setncmForm({
-                                                                    ...ncmForm,
-                                                                    kind: (()=>{
-                                                                        let newArray = [];
-                                                                        for(let x of ncmForm.kind){
-                                                                            if(x !== Number(event.target.value)){
-                                                                                newArray.push(x);
-                                                                            }
-                                                                        }
-                                                                        newArray.sort();
-                                                                        console.log(newArray)
-                                                                        return newArray;
-                                                                    })()
-                                                                })
-                                                            }
+                                            {Kind.map((val, index) => <div key={index}
+                                                                           style={{
+                                                                               width: "100%",
+                                                                               marginBottom: "1rem"
+                                                                           }}>
+                                                <Switch label={val} value={index} onChange={(event) => {
+                                                    if (event.target.checked) {
+                                                        console.log("selected")
+                                                        setncmForm({
+                                                            ...ncmForm, kind: (() => {
+                                                                let newArray = ncmForm.kind;
+                                                                newArray.push(Number(event.target.value));
+                                                                newArray.sort();
+                                                                console.log(newArray);
+                                                                return newArray;
+                                                            })()
+                                                        })
+                                                    } else {
+                                                        console.log("deselected")
+                                                        setncmForm({
+                                                            ...ncmForm, kind: (() => {
+                                                                let newArray = [];
+                                                                for (let x of ncmForm.kind) {
+                                                                    if (x !== Number(event.target.value)) {
+                                                                        newArray.push(x);
+                                                                    }
+                                                                }
+                                                                newArray.sort();
+                                                                console.log(newArray)
+                                                                return newArray;
+                                                            })()
+                                                        })
+                                                    }
 
-                                                        }}></Switch>
+                                                }}></Switch>
 
 
-                                                    </div>
-                                                )
-                                            }
+                                            </div>)}
                                             {/*<select name={"mode"} onChange={(e) => {*/}
                                             {/*    setForm({*/}
                                             {/*        ...form, kind: Number.parseInt(e.target.value)*/}
@@ -676,14 +690,9 @@ function App() {
                                     setLoading(true);
                                     e.currentTarget.disabled = true;
                                     let res = (await fetch(baseUrl + "ncm/url", {
-                                        method: "POST",
-                                        body: JSON.stringify({
-                                            id: ncmForm.id,
-                                            kind: ncmForm.kind,
-                                            email: ncmForm.email,
-                                        }),
-                                        credentials: "include",
-                                        headers: {"Content-Type": "application/json"}
+                                        method: "POST", body: JSON.stringify({
+                                            id: ncmForm.id, kind: ncmForm.kind, email: ncmForm.email,
+                                        }), credentials: "include", headers: {"Content-Type": "application/json"}
                                     }))
                                     if (res.ok) {
                                         setState(3)
@@ -713,7 +722,8 @@ function App() {
                 </div>
 
             </div>
-    </>);
+        </>
+    );
 }
 
 export default App;
