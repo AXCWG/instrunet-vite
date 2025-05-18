@@ -1,4 +1,4 @@
-import {fetchUrl} from "./Singletons";
+import {fetchUrl, WebRoutes} from "./Singletons.js";
 
 function Register() {
     async function register(email, username, password) {
@@ -9,7 +9,7 @@ function Register() {
         })
         if (response.ok) {
             alert("注册成功，正在为您返回主界面……")
-            window.location.href = "/"
+            window.location.href = WebRoutes.instruNet + "/"
         } else {
             alert("错误")
         }

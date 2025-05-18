@@ -1,7 +1,7 @@
 import {Navbar} from "./App.jsx";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {baseUrl, fetchUrl, Kind} from "./Singletons.js";
+import {baseUrl, fetchUrl, Kind, WebRoutes} from "./Singletons.js";
 import {
     Button,
     Container, FileInput,
@@ -94,7 +94,7 @@ function PlayList({createNew}) {
             }
             if (createNew) {
                 if (!success) {
-                    window.location.href = "/login"
+                    window.location.href = WebRoutes.instruNet + "/login"
                 }
 
             } else {
@@ -375,7 +375,7 @@ function PlayList({createNew}) {
                                 })
                             })
                             if (res.ok) {
-                                window.location.replace("/playlist/" + (await res.json()).UUID);
+                                window.location.replace(WebRoutes.instruNet + "/playlist/" + (await res.json()).UUID);
                             }
                         }}>保存</Button><ShuffleButton></ShuffleButton></> : ownerCheck ? <>
                             <Button fullWidth={true} onClick={async () => {

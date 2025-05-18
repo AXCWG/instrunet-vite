@@ -1,4 +1,4 @@
-import {fetchUrl} from "./Singletons";
+import {fetchUrl, WebRoutes} from "./Singletons.js";
 
 function AccountDeletion() {
     return (<>
@@ -12,12 +12,12 @@ function AccountDeletion() {
                         credentials: "include",
                     })
 
-                    window.location.href = "/"
+                    window.location.href = WebRoutes.instruNet + "/"
 
                 }} className={"btn btn-danger w-100"}>确定
                 </button>
                 <button onClick={() => {
-                    window.location.href = "/home"
+                    window.location.href = WebRoutes.instruNet + "/home"
                 }} className={"btn btn-light w-100"}>取消
                 </button>
             </div>

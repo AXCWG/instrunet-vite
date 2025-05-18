@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {fetchUrl} from "./Singletons";
+import {fetchUrl} from "./Singletons.js";
 
 function Pitched() {
     const urlParams = new URLSearchParams(window.location.search);

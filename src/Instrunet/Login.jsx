@@ -1,4 +1,4 @@
-import {fetchUrl} from "./Singletons";
+import {fetchUrl, WebRoutes} from "./Singletons.js";
 import {useState} from "react";
 import {Alert} from "@mantine/core";
 
@@ -15,7 +15,7 @@ function Login() {
             setState(1)
             setInterval(() => {
 
-                window.location.href = "/";
+                window.location.href = WebRoutes.instruNet + "/";
             }, 500)
         } else {
             setState(-1)

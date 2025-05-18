@@ -1,6 +1,6 @@
 import H5AudioPlayer from "react-h5-audio-player";
 import 'react-h5-audio-player/lib/styles.css';
-import {baseUrl, fetchUrl, Kind, white} from "./Singletons";
+import {baseUrl, fetchUrl, Kind, WebRoutes, white} from "./Singletons.js";
 import sampleImg from "./Assets/SampleImg.png";
 import {Navbar} from "./App.jsx";
 import {useEffect, useState} from "react";
@@ -106,9 +106,9 @@ function Player() {
                                         {info.song_name}
                                     </div>
                                     <div >
-                                        <a className={"text-dark"} href={"/search?p="+info.album_name}>{info.album_name}</a>
+                                        <a className={"text-dark"} href={WebRoutes.instruNet + "/search?p="+info.album_name}>{info.album_name}</a>
                                           <br/>
-                                        <a className={"text-dark"} href={"/search?p="+info.artist}>{info.artist}</a>
+                                        <a className={"text-dark"} href={WebRoutes.instruNet +"/search?p="+info.artist}>{info.artist}</a>
                                     </div>
                                     <div>
                                         {Kind[info.kind]}
@@ -143,7 +143,7 @@ function Player() {
                                         borderColor: "gray",
                                         borderWidth: "thin",
                                     }} onClick={() => {
-                                        window.location.href = "/pitched-download?id=" + param;
+                                        window.location.href = WebRoutes.instruNet + "/pitched-download?id=" + param;
                                     }}>升降调下载
                                     </button>
                                 </div>

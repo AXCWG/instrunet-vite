@@ -1,6 +1,6 @@
 import {Navbar} from "./App.jsx";
 import {useEffect, useState} from "react";
-import {fetchUrl, Kind} from "./Singletons";
+import {fetchUrl, Kind} from "./Singletons.js";
 
 function Query() {
     const [query, setQuery] = useState([]);

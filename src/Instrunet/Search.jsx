@@ -1,6 +1,6 @@
 import './App.css'
 import {useEffect, useState} from "react";
-import {baseUrl, Kind} from "./Singletons.js";
+import {baseUrl, Kind, WebRoutes} from "./Singletons.js";
 import {Navbar} from "./App.jsx";
 
 const queryParams = new URLSearchParams(window.location.search);
@@ -14,7 +14,7 @@ function Cards({data}) {
 
             <div className={"col-lg-6 mb-3"}>
                 <div className={"card cards"} style={{width: "100%"}} onClick={(e) => {
-                    window.location.href = "/player?play=" + data.uuid;
+                    window.location.href = WebRoutes.instruNet + "/player?play=" + data.uuid;
                 }}>
                     <div className={"card-body"}>
                         <div className={"display-6 text-wrap"}>

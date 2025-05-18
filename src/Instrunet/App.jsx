@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {useEffect, useState} from "react";
 import {parseBlob, selectCover} from 'music-metadata'
-import {baseUrl, fetchUrl, Kind} from "./Singletons";
+import {baseUrl, fetchUrl, Kind, WebRoutes} from "./Singletons.js";
 import {useCookies} from "react-cookie";
 import {NavLink} from "react-router-dom";
 import {Button, Flex, Group, Modal, Switch, Text, useModalsStack} from "@mantine/core";
@@ -12,6 +12,7 @@ import {useDisclosure} from "@mantine/hooks";
 import {Lrc} from "react-lrc";
 import {Grid} from "@mantine/core";
 import TF from "./Assets/TF.png";
+
 
 // TODO Localizations
 // TODO 登录以管理XXXXXX
@@ -58,7 +59,7 @@ function Navbar({isFixed, username}) {
             className={isFixed ? "navbar fixed-top navbar-expand-md bg-dark navbar-dark" : "navbar navbar-expand-md bg-dark navbar-dark"}>
             <div className="container-fluid">
 
-                <NavLink className="navbar-brand" to="/">伴奏网</NavLink>
+                <NavLink className="navbar-brand" to={WebRoutes.instruNet+"/"}>伴奏网</NavLink>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapsibleNavbar">
                     <span className="navbar-toggler-icon"></span>
@@ -66,13 +67,13 @@ function Navbar({isFixed, username}) {
                 <div className="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul className="navbar-nav" style={{marginRight: "auto"}}>
                         <li className="nav-item">
-                            <NavLink className="nav-link" to="/">主页</NavLink>
+                            <NavLink className="nav-link" to={WebRoutes.instruNet+ "/"}>主页</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink className="nav-link" to="/Search">全部</NavLink>
+                            <NavLink className="nav-link" to={WebRoutes.instruNet + "/Search"}>全部</NavLink>
                         </li>
                         <li className={"nav-item"}>
-                            <NavLink className="nav-link" to="/query">处理队列</NavLink>
+                            <NavLink className="nav-link" to={WebRoutes.instruNet + "/query"}>处理队列</NavLink>
                         </li>
 
                         <li className="nav-item">
@@ -114,7 +115,7 @@ function Navbar({isFixed, username}) {
                             <a className="nav-link" href="https://github.com/AXCWG/instrunet-vite">GitHub</a>
                         </li>
                         <li className={"nav-item"}>
-                            <NavLink className="nav-link" to="/secret-page">神秘小网页</NavLink>
+                            <NavLink className="nav-link" to={WebRoutes.instruNet + "/secret-page"}>神秘小网页</NavLink>
                         </li>
 
 
@@ -124,13 +125,13 @@ function Navbar({isFixed, username}) {
 
                         {!username ? loading ? null : login.loggedIn ?
                             <a className={"text-decoration-none me-3 right-hand"}
-                               href={"/home"}>{login.username}</a> : <>
+                               href={WebRoutes.instruNet + "/home"}>{login.username}</a> : <>
                                 <a className={" text-decoration-none me-3 right-hand"}
-                                   href={"/login"}>登录</a>
+                                   href={WebRoutes.instruNet + "/login"}>登录</a>
                                 <a className={" text-decoration-none me-1 right-hand"}
-                                   href={"/register"}>注册</a>
+                                   href={WebRoutes.instruNet + "/register"}>注册</a>
                             </> : <a className={"text-decoration-none me-3 right-hand"}
-                                     href={"/home"}>{username}</a>
+                                     href={WebRoutes.instruNet + "/home"}>{username}</a>
 
                         }
 
@@ -171,7 +172,7 @@ function App() {
     }
 
     function searchGeneral() {
-        window.location.href = "/search?p=" + searchParam;
+        window.location.href = WebRoutes.instruNet + "/search?p=" + searchParam;
     }
 
     const [state, setState] = useState(-1)

@@ -1,9 +1,9 @@
 import {Navbar} from "./App.jsx";
 import {useEffect, useState} from "react";
 import {
-    fetchUrl, Kind,
+    fetchUrl, Kind, WebRoutes,
     // white
-} from "./Singletons";
+} from "./Singletons.js";
 import Akkarin from './Assets/Transparent_Akkarin.png'
 import {Link as RLink} from "react-router-dom";
 import SampleImg from "./Assets/SampleImg.png"
@@ -166,7 +166,7 @@ function Home() {
                             borderWidth: "0.3px",
                             borderColor: "gray",
 
-                        }} className={"pl-item"} to={"/playlist/" + item.uuid}><Image
+                        }} className={"pl-item"} to={WebRoutes.instruNet + "/playlist/" + item.uuid}><Image
                             src={(item.tmb.data && item.tmb.data.length !== 0) ? URL.createObjectURL(new Blob([Uint8Array.from(item.tmb.data)])) : SampleImg}></Image></RLink>
                 })}
                 {inEdit ? <RLink
@@ -183,7 +183,7 @@ function Home() {
                         width: "5rem",
                         height: "5rem", flexShrink: 0
                     }}
-                    className={"btn btn-primary"} to={"/playlist"}>添加</RLink>
+                    className={"btn btn-primary"} to={WebRoutes.instruNet + "/playlist"}>添加</RLink>
                     <RLink
                         style={{
                             display: "flex",
@@ -226,7 +226,7 @@ function Home() {
                     email: json.email,
                 })
             } else {
-                window.location.href = "/login"
+                window.location.href = WebRoutes.instruNet + "/login"
 
             }
 
@@ -389,11 +389,11 @@ function Home() {
                                 {<UploadedMusics/>}
 
                                 <button onClick={() => {
-                                    window.location.href = "/logout"
+                                    window.location.href = WebRoutes.instruNet + "/logout"
                                 }} className={"btn btn-secondary"}>登出
                                 </button>
                                 <button className={"btn btn-danger"} onClick={() => {
-                                    window.location.href = "/AccDel"
+                                    window.location.href = WebRoutes.instruNet + "/AccDel"
                                 }}>删除账号
                                 </button>
 
