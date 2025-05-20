@@ -25,6 +25,7 @@ const Languages = [
     "普通话",
     "英语",
     "日语",
+    "广东话",
     "自动检测"
 ]
 const WebRoutes = {
