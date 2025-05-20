@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {
     fetchUrl, Kind, WebRoutes,
     // white
-} from "./Singletons.js";
+} from "../Singletons.js";
 import Akkarin from './Assets/Transparent_Akkarin.png'
 import {Link as RLink} from "react-router-dom";
 import SampleImg from "./Assets/SampleImg.png"

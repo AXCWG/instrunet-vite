@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {useEffect, useState} from "react";
 import {parseBlob, selectCover} from 'music-metadata'
-import {baseUrl, fetchUrl, Kind, WebRoutes} from "./Singletons.js";
+import {baseUrl, fetchUrl, Kind, WebRoutes} from "../Singletons.js";
 import {useCookies} from "react-cookie";
 import {NavLink} from "react-router-dom";
 import {Button, Flex, Group, Modal, Switch, Text, useModalsStack} from "@mantine/core";

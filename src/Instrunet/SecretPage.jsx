@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {baseUrl} from "./Singletons.js";
+import {baseUrl} from "../Singletons.js";
 
 const SecretPage = () => {
     const [id, setId] = useState(Number());

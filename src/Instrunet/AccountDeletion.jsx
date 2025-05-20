@@ -1,4 +1,4 @@
-import {fetchUrl, WebRoutes} from "./Singletons.js";
+import {fetchUrl, WebRoutes} from "../Singletons.js";
 
 function AccountDeletion() {
     return (<>

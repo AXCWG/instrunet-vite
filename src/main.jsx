@@ -7,7 +7,7 @@ import Query from "./Instrunet/Query.jsx";
 import Login from "./Instrunet/Login.jsx";
 import Register from "./Instrunet/Register.jsx";
 import Userapi from "./Instrunet/userapi.jsx";
-import {fetchUrl, WebRoutes} from "./Instrunet/Singletons.js";
+import {fetchUrl, WebRoutes} from "./Singletons.js";
 import Pitched from "./Instrunet/Pitched.jsx";
 import '@mantine/core/styles.css'
 import {MantineProvider} from "@mantine/core";
@@ -19,6 +19,7 @@ import LrcTest from "./Instrunet/LrcTest.jsx";
 import 'react-image-crop/dist/ReactCrop.css'
 import SecretPage from "./Instrunet/SecretPage.jsx";
 import {Index} from "./index.jsx";
+import SttIndex from "./Stt/SttIndex.jsx";
 
 (async () => {
     const online = await (async () => {
@@ -74,6 +75,9 @@ import {Index} from "./index.jsx";
                             <Route path={"playlist/:playlistuuid"} element={<PlayList createNew={false}/>}/>
                             <Route path={"LrcTest"} element={<LrcTest/>}/>
                             <Route path={"secret-page"} element={<SecretPage/>}/>
+                        </Route>
+                        <Route path={"/speech-to-text"}>
+                            <Route index element={<SttIndex/>}/>
                         </Route>
 
 

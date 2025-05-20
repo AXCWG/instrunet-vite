@@ -1,6 +1,6 @@
 ///temp
 
-import {fetchUrl} from "./Singletons.js";
+import {fetchUrl} from "../Singletons.js";
 
 function Userapi() {
     fetch(fetchUrl + "userapi", {

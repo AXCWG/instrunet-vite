@@ -1,7 +1,7 @@
 import {Navbar} from "./App.jsx";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {baseUrl, fetchUrl, Kind, WebRoutes} from "./Singletons.js";
+import {baseUrl, fetchUrl, Kind, WebRoutes} from "../Singletons.js";
 import {
     Button,
     Container, FileInput,

@@ -1,6 +1,6 @@
 import './App.css'
 import {useEffect, useState} from "react";
-import {baseUrl, Kind, WebRoutes} from "./Singletons.js";
+import {baseUrl, Kind, WebRoutes} from "../Singletons.js";
 import {Navbar} from "./App.jsx";
 
 const queryParams = new URLSearchParams(window.location.search);
