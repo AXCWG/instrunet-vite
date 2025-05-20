@@ -245,10 +245,13 @@ function App() {
                         setLoading(false);
                         setState(2)
                         // alert("傻逼，重复了。请在盲目上传之前看看库里有没有好么傻逼？")
-                    } else {
+                    } else if (res.ok) {
                         setLoading(false);
                         setState(0)
                         // alert("上传完成，正在分析，将在5-30分钟内在数据库中出现")
+                    }else{
+                        setLoading(false);
+                        alert("未知错误")
                     }
                 }
 

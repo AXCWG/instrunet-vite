@@ -4,7 +4,7 @@ import {
     Input,
     Loader,
     MultiSelect,
-    Select,
+    Select, Switch,
     Table,
     TableTbody, TableTd, TableTh, TableThead,
     TableTr,
@@ -15,7 +15,7 @@ import {useEffect, useState} from "react";
 
 function SttIndex() {
     const [form, setForm] = useState({
-        file: undefined, language: 0, email: ""
+        file: undefined, language: 0, email: "", completeSentence: false
     })
 
     const [queueInfo, setQueueInfo] = useState([])
@@ -84,7 +84,11 @@ function SttIndex() {
                     }
                 </select>
 
-
+                <br/>
+                <Switch label={"尽量保持句子完整性"} checked={form.completeSentence}  onChange={(e) => {
+                    console.log(e.currentTarget.checked);
+                    setForm({...form, completeSentence: e.currentTarget.checked});
+                }}/>
                 <br/>
                 <Button type={"submit"} fullWidth={true}>上传</Button>
                 <br/>
