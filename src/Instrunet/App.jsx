@@ -1,4 +1,4 @@
-import './App.css';
+import '../App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
@@ -59,7 +59,7 @@ function Navbar({isFixed, username}) {
             className={isFixed ? "navbar fixed-top navbar-expand-md bg-dark navbar-dark" : "navbar navbar-expand-md bg-dark navbar-dark"}>
             <div className="container-fluid">
 
-                <NavLink className="navbar-brand" to={WebRoutes.instruNet+"/"}>伴奏网</NavLink>
+                <NavLink className="navbar-brand" to={"/"}>返回</NavLink>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapsibleNavbar">
                     <span className="navbar-toggler-icon"></span>
@@ -67,7 +67,7 @@ function Navbar({isFixed, username}) {
                 <div className="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul className="navbar-nav" style={{marginRight: "auto"}}>
                         <li className="nav-item">
-                            <NavLink className="nav-link" to={WebRoutes.instruNet+ "/"}>主页</NavLink>
+                            <NavLink className="nav-link" to={WebRoutes.instruNet+ "/"}>伴奏网主页</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink className="nav-link" to={WebRoutes.instruNet + "/Search"}>全部</NavLink>

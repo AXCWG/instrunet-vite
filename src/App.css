@@ -9,6 +9,12 @@
     transition: all 0.1s ease-out;
     user-select: none;
 }
+.zoom-on-hover{
+    transition: scale 0.1s ease-out;
+}
+.zoom-on-hover:hover{
+    scale: 1.05;
+}
 .head{
     height: 90vh;
     gap: 1rem;

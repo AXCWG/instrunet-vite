@@ -1,13 +1,10 @@
 import {
     Button,
     FileInput,
-    Input,
     Loader,
-    MultiSelect,
-    Select, Switch,
+    Switch,
     Table,
-    TableTbody, TableTd, TableTh, TableThead,
-    TableTr,
+    TableTbody, TableTd, TableTr,
     TextInput
 } from "@mantine/core";
 import {fetchUrl, Languages, readAsDataUrlAsync} from "../Singletons.js";
@@ -30,7 +27,12 @@ function SttIndex() {
     const [errorMessage, setErrorMessage] = useState("")
     return <>
         <div className={"container"}>
-            <div className={"display-4 mb-5"}>正经的UI正在加急中</div>
+            <div className={"mb-5 mt-5"}>
+                <a href={"/"}>返回</a>
+                <div className={"display-3 "}>语音转文字</div>
+                <div>不要尝试放音乐进去：通常结果不会太好😂</div>
+            </div>
+
             {
                 pageState === 1 ? <div className={"alert alert-success"}>成功</div> : pageState === 2 ?
                     <div className={"alert alert-danger"}>未上传文件</div> : pageState === 3 ?
@@ -68,7 +70,7 @@ function SttIndex() {
                             return await readAsDataUrlAsync(e)
                         })()
                     });
-                }} id={"file-input"} placeholder={"点击选择或拖拽"}/>
+                }} id={"file-input"} placeholder={"点击选择"}/>
                 <br/>
                 <TextInput id={"email-input"} type={"email"} value={form.email} onChange={(e) => {
                     setForm({...form, email: e.target.value});
