@@ -27,7 +27,7 @@ function CommentSegments({parent, root, masterUuid, userUuid, content}) {
             const nest = await response2.json();
             setCs(nest)
             // eslint-disable-next-line react/prop-types
-            const response3 = await (await fetch(`${baseUrl}userapi?uuid=${parent.poster}&getname=true`)).text()
+            const response3 = await (await fetch(`${baseUrl}userapi?uuid=${parent.parent.poster}&getname=true`)).text()
             setUsernameReplyTo(response3)
         }
 
@@ -95,6 +95,7 @@ function CommentSegments({parent, root, masterUuid, userUuid, content}) {
 
         {
             cs.map((item, index) => {
+                item.parent = parent;
                 return <CommentSegments parent={item} root={false} masterUuid={item.uuid} key={index}
                                         content={item.content} userUuid={item.poster}/>
             })
@@ -131,6 +132,7 @@ function Comments({uuid}) {
                  className={"border-1 border-secondary-subtle border-opacity-100 "}>
                 {
                     cs.length !== 0 ? cs.map((item, index) => {
+
                         // masterUuid not really "it's master", but rather the "current master".
                         /**
                          * E.g. Comment "ascare" under song with "uuid" "iioowls"
