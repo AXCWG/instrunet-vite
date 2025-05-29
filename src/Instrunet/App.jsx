@@ -371,7 +371,31 @@ function App() {
 
                         </div>
                     </div>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        alignItems: "center"
+                    }}>
+                        <div className={"generic-box-shadow-card"}>
+                            <h4 className={"text-danger"} style={{fontWeight: "bold"}}>!5.29 更新!</h4>
+                            <br/>
+                            <ul>
+                                <li>
+                                    歌曲评论功能
+                                </li>
+                                <li>
+                                    歌曲点赞/点踩——用于通知我某伴奏是垃圾 需要重新上传完整版本。按下踩时我的邮箱会收到邮件通知。如果我在一段时间没有回应，在点踩数超过10时歌曲会自动删除（设计上 通常24小时内会处理）。
+                                </li>
 
+                            </ul>
+                            同志们：这是我踏出建立社区梦想的众多第一步的其中一步 请各位赏脸了。
+                            <br/>
+                            <br/>
+
+                            ——A.X. 5.29.25 21.53
+                        </div>
+                    </div>
                     <div style={{
                         display: "flex",
                         justifyContent: "center",
@@ -407,6 +431,10 @@ function App() {
                             <br/>
                             <br/>
                             正经的，不加端口并且独立的域名（长远计划😂）
+                            <br/>
+                            ====5.29====
+                            <br/>
+                            删除评论、
                         </div>
                     </div>
 
@@ -435,7 +463,7 @@ function App() {
 
                         <ul className="nav nav-tabs">
                             <li className="nav-item">
-                                <a className="nav-link active" data-bs-toggle="tab" href="#file-mode">文件模式</a>
+                            <a className="nav-link active" data-bs-toggle="tab" href="#file-mode">文件模式</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" data-bs-toggle="tab" href="#ncm-mode">网易云模式</a>

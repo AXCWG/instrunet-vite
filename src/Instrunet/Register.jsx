@@ -1,4 +1,5 @@
 import {fetchUrl, WebRoutes} from "../Singletons.js";
+import {NavLink} from "react-router-dom";
 
 function Register() {
     async function register(email, username, password) {
@@ -20,6 +21,7 @@ function Register() {
 
                 <div className={"col-2"}></div>
                 <div className={"col-8"}>
+
                     <div className={"h5"}>伴奏网</div>
                     <div className={"display-2"}>注册</div>
                     <form onSubmit={async (e)=>{
@@ -38,6 +40,7 @@ function Register() {
                         <input className={"form-control mt-4"} placeholder={"确认密码"} type={"password"}
                                required={true}></input>
                         <button className={"btn btn-primary mt-4 w-100"}>注册</button>
+                        <NavLink  className={"mt-4 d-block"} to={WebRoutes.instruNet + "/login"}>登录</NavLink>
 
                     </form>
 

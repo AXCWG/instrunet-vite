@@ -1,6 +1,7 @@
 import {fetchUrl, WebRoutes} from "../Singletons.js";
 import {useState} from "react";
 import {Alert} from "@mantine/core";
+import {NavLink} from "react-router-dom";
 
 function Login() {
     const [state, setState] = useState(0)
@@ -41,6 +42,7 @@ function Login() {
                         <input required={true} className={"form-control mt-4"} placeholder={"密码"} type={"password"}
                                autoComplete={"current-password"}></input>
                         <button type={"submit"} className={"btn btn-primary mt-4 w-100"}>登录</button>
+                        <NavLink  className={"mt-4 d-block"} to={WebRoutes.instruNet + "/register"}>注册</NavLink>
                     </form>
 
                     <div className={"col-2"}></div>

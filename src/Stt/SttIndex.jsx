@@ -65,6 +65,7 @@ function SttIndex() {
             }}>
                 <label htmlFor={"file-input"}>选择音频文件：</label>
                 <FileInput accept={"audio/*"} onChange={async (e) => {
+                    console.log(e)
                     setForm({
                         ...form, file: await (async () => {
                             return await readAsDataUrlAsync(e)
@@ -92,7 +93,7 @@ function SttIndex() {
                     setForm({...form, completeSentence: e.currentTarget.checked});
                 }}/>
                 <br/>
-                <Button type={"submit"} fullWidth={true}>上传</Button>
+                <Button type={"submit"} fullWidth={true} disabled={pageState === 3}>上传</Button>
                 <br/>
                 <br/>
 

@@ -18,11 +18,8 @@
 .head{
     height: 90vh;
     gap: 1rem;
-    @media(max-width: 1200px){
-        margin-top: 10rem;
-        height: auto;
+    margin-top: 10rem;
 
-    }
 }
 .lyric-box{
     @media(max-width: 1200px) {

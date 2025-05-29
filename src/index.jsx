@@ -32,6 +32,15 @@ function Index(){
                         </div>
                         “不大可用”于歌词类“带有旋律”的语音音频。
                     </Card>
+
+                </div>
+                <div className={"col-sm-6 "}>
+                    <Card onClick={()=>window.location.href="https://andyxie.cn:5000"} className={"zoom-on-hover"} withBorder={true} shadow={"sm"}>
+                        <div className={"display-6"}>
+                            Sanctuary
+                        </div>
+                        论坛
+                    </Card>
                 </div>
 
                 <NavLink to={WebRoutes.instruNet + "/"}></NavLink>
