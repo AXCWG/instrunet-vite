@@ -378,6 +378,25 @@ function App() {
                         alignItems: "center"
                     }}>
                         <div className={"generic-box-shadow-card"}>
+                            <div className={"display-6"}>为各位的时间、耐心道歉🙇</div>
+                            <div>近些天 服务器一直不稳定 有的是经济问题，另一些则是技术问题……</div>
+                            <div><strong>不过没有关系！</strong>从前些天开始，重启服务器不再会导致待处理歌曲消失。这就意味着无论何时服务器关闭，再开启时不会需要你们重新上传歌曲。</div>
+                            <br/>
+                            <div style={{fontSize: "1.5rem"}}>对浪费各位的时间，再次道歉。</div>
+                            <br/>
+                            <div>若遇到服务器无响应的问题，请致电：<a href={"tel:13693590652"}>我的电话</a></div>
+                            <br/>
+                            <div>还望各位继续使用、多加交流。</div>
+                            ——A.X. 6.9.25.15.17
+                        </div>
+                    </div>
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        alignItems: "center"
+                    }}>
+                        <div className={"generic-box-shadow-card"}>
                             <h4 className={"text-danger"} style={{fontWeight: "bold"}}>!5.29 更新!</h4>
                             <br/>
                             <ul>
@@ -385,7 +404,9 @@ function App() {
                                     歌曲评论功能
                                 </li>
                                 <li>
-                                    歌曲点赞/点踩——用于通知我某伴奏是垃圾 需要重新上传完整版本。按下踩时我的邮箱会收到邮件通知。如果我在一段时间没有回应，在点踩数超过10时歌曲会自动删除（设计上 通常24小时内会处理）。
+                                    歌曲点赞/点踩——用于通知我某伴奏是垃圾
+                                    需要重新上传完整版本。按下踩时我的邮箱会收到邮件通知。如果我在一段时间没有回应，在点踩数超过10时歌曲会自动删除（设计上
+                                    通常24小时内会处理）。
                                 </li>
 
                             </ul>
@@ -432,9 +453,6 @@ function App() {
                             <br/>
                             正经的，不加端口并且独立的域名（长远计划😂）
                             <br/>
-                            ====5.29====
-                            <br/>
-                            删除评论、
                         </div>
                     </div>
 

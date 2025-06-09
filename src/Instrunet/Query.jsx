@@ -27,13 +27,15 @@ function Query() {
                             <td>专辑名</td>
                             <td>创作者</td>
                             <td>类别</td>
+                            <td>上传时间</td>
                             <td>状态</td>
+
                         </tr>
                         </thead>
                         <tbody>
 
                         {loading ? <tr>
-                            <td colSpan={5} className={"text-center"}>正在加载</td>
+                            <td colSpan={6} className={"text-center"}>正在加载</td>
                         </tr> : query.length !== 0 ? query.map((item, index) => {
 
                             if (index === 0) {
@@ -43,6 +45,7 @@ function Query() {
                                         <td>{item.albumName}</td>
                                         <td>{item.artist}</td>
                                         <td>{Kind[item.kind]}</td>
+                                        <td>{item.dateTimeUploaded }</td>
                                         <td>正在处理</td>
                                     </tr>
                                 )
@@ -53,12 +56,13 @@ function Query() {
                                         <td>{item.albumName}</td>
                                         <td>{item.artist}</td>
                                         <td>{Kind[item.kind]}</td>
+                                        <td>{item.dateTimeUploaded}</td>
                                         <td>队列中</td>
                                     </tr>
                                 )
                             }
                         }) : <tr>
-                            <td colSpan={5} className={"text-center"}>空</td>
+                            <td colSpan={6} className={"text-center"}>空</td>
                         </tr>}
 
                         </tbody>
