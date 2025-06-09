@@ -397,7 +397,7 @@ function App() {
                         alignItems: "center"
                     }}>
                         <div className={"generic-box-shadow-card"}>
-                            <h4 className={"text-danger"} style={{fontWeight: "bold"}}>!5.29 更新!</h4>
+                            <h4 className={"text-danger"} style={{fontWeight: "bold"}}>!5.29、6.9 更新!</h4>
                             <br/>
                             <ul>
                                 <li>
@@ -408,7 +408,7 @@ function App() {
                                     需要重新上传完整版本。按下踩时我的邮箱会收到邮件通知。如果我在一段时间没有回应，在点踩数超过10时歌曲会自动删除（设计上
                                     通常24小时内会处理）。
                                 </li>
-
+                                <li>6.29：新增缓存，网站播放、下载速度加快</li>
                             </ul>
                             同志们：这是我踏出建立社区梦想的众多第一步的其中一步 请各位赏脸了。
                             <br/>
