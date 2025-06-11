@@ -2,15 +2,15 @@ import '../App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import {useEffect, useState} from "react";
-import {parseBlob, selectCover} from 'music-metadata'
-import {baseUrl, fetchUrl, Kind, WebRoutes} from "../Singletons.js";
-import {useCookies} from "react-cookie";
-import {NavLink} from "react-router-dom";
-import {Button, Flex, Group, Modal, Switch, Text, useModalsStack} from "@mantine/core";
-import {useDisclosure} from "@mantine/hooks";
-import {Lrc} from "react-lrc";
-import {Grid} from "@mantine/core";
+import { useEffect, useState } from "react";
+import { parseBlob, selectCover } from 'music-metadata'
+import { baseUrl, fetchUrl, Kind, WebRoutes } from "../Singletons.js";
+import { useCookies } from "react-cookie";
+import { NavLink } from "react-router-dom";
+import { Button, Flex, Group, Modal, Switch, Text, useModalsStack } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Lrc } from "react-lrc";
+import { Grid } from "@mantine/core";
 import TF from "./Assets/TF.png";
 
 
@@ -18,7 +18,7 @@ import TF from "./Assets/TF.png";
 // TODO 登录以管理XXXXXX
 
 // eslint-disable-next-line react/prop-types
-function Navbar({isFixed, username}) {
+function Navbar({ isFixed, username }) {
     const [loading, setLoading] = useState(true);
     const [login, setLogin] = useState({
         loggedIn: false, uuid: "", username: "", email: "",
@@ -61,13 +61,13 @@ function Navbar({isFixed, username}) {
 
                 <NavLink className="navbar-brand" to={"/"}>返回</NavLink>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapsibleNavbar">
+                    data-bs-target="#collapsibleNavbar">
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul className="navbar-nav" style={{marginRight: "auto"}}>
+                    <ul className="navbar-nav" style={{ marginRight: "auto" }}>
                         <li className="nav-item">
-                            <NavLink className="nav-link" to={WebRoutes.instruNet+ "/"}>伴奏网主页</NavLink>
+                            <NavLink className="nav-link" to={WebRoutes.instruNet + "/"}>伴奏网主页</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink className="nav-link" to={WebRoutes.instruNet + "/Search"}>全部</NavLink>
@@ -79,18 +79,18 @@ function Navbar({isFixed, username}) {
                         <li className="nav-item">
                             <div className={"dropdown "}>
                                 <button className="nav-link dropdown-toggle" type={"button"}
-                                        data-bs-toggle={"dropdown"}
-                                        aria-expanded={false}>联系我
+                                    data-bs-toggle={"dropdown"}
+                                    aria-expanded={false}>联系我
                                 </button>
 
                                 <ul className={"dropdown-menu"}>
                                     <li><NavLink className={"dropdown-item"}
-                                                 to={"mailto:xiey0@qq.com"}>邮箱</NavLink></li>
+                                        to={"mailto:xiey0@qq.com"}>邮箱</NavLink></li>
                                     <li><NavLink className={"dropdown-item"}
-                                                 to={"https://message.bilibili.com/?spm_id_from=..0.0#/whisper/mid255413001"}>B站私信</NavLink>
+                                        to={"https://message.bilibili.com/?spm_id_from=..0.0#/whisper/mid255413001"}>B站私信</NavLink>
                                     </li>
                                     <li><NavLink className={"dropdown-item"}
-                                                 to={"https://github.com/AXCWG/instrunet-vite/issues"}>GitHub
+                                        to={"https://github.com/AXCWG/instrunet-vite/issues"}>GitHub
                                         Issues</NavLink>
                                     </li>
 
@@ -101,14 +101,14 @@ function Navbar({isFixed, username}) {
                         <li className={"nav-item"}>
 
                             <a className="nav-link text-danger fw-bold "
-                               href="https://afdian.com/a/re_xiey0" aria-expanded={false}>打赏
+                                href="https://afdian.com/a/re_xiey0" aria-expanded={false}>打赏
                             </a>
 
 
                         </li>
                         <li className={"nav-item"}>
                             <a className="nav-link text-danger fw-bold "
-                               href="https://andyxie.cn:5000/" aria-expanded={false}>反馈论坛
+                                href="https://andyxie.cn:5000/" aria-expanded={false}>反馈论坛
                             </a>
                         </li>
                         <li className={"nav-item"}>
@@ -125,13 +125,13 @@ function Navbar({isFixed, username}) {
 
                         {!username ? loading ? null : login.loggedIn ?
                             <a className={"text-decoration-none me-3 right-hand"}
-                               href={WebRoutes.instruNet + "/home"}>{login.username}</a> : <>
+                                href={WebRoutes.instruNet + "/home"}>{login.username}</a> : <>
                                 <a className={" text-decoration-none me-3 right-hand"}
-                                   href={WebRoutes.instruNet + "/login"}>登录</a>
+                                    href={WebRoutes.instruNet + "/login"}>登录</a>
                                 <a className={" text-decoration-none me-1 right-hand"}
-                                   href={WebRoutes.instruNet + "/register"}>注册</a>
+                                    href={WebRoutes.instruNet + "/register"}>注册</a>
                             </> : <a className={"text-decoration-none me-3 right-hand"}
-                                     href={WebRoutes.instruNet + "/home"}>{username}</a>
+                                href={WebRoutes.instruNet + "/home"}>{username}</a>
 
                         }
 
@@ -147,7 +147,7 @@ function App() {
     const [helloKryze, setHelloKryze] = useState("false");
     const [loginHelloKryze, setLoginHelloKryze] = useState(null);
 
-    const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
+    const [cookies, setCookie] = useCookies(['InstruNet'], { doNotParse: true })
 
     const [form, setForm] = useState({
         name: "未知名称",
@@ -249,7 +249,7 @@ function App() {
                         setLoading(false);
                         setState(0)
                         // alert("上传完成，正在分析，将在5-30分钟内在数据库中出现")
-                    }else{
+                    } else {
                         setLoading(false);
                         alert("未知错误")
                     }
@@ -283,40 +283,40 @@ function App() {
     }
 
     return (<>
-    <div style={{backgroundColor: "white"}}>
-{(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
-                <div style={{position: "fixed", zIndex: 1, top: "0"}}>
+        <div style={{ backgroundColor: "white" }}>
+            {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
+                <div style={{ position: "fixed", zIndex: 1, top: "0" }}>
 
-                    <div style={{position: "relative", marginTop: 0, width: "100vw", height: "100vh",}}>
-                        <Navbar isFixed={false}/>
+                    <div style={{ position: "relative", marginTop: 0, width: "100vw", height: "100vh", }}>
+                        <Navbar isFixed={false} />
                         <div>
-                            <div style={{position: "absolute"}}>
-                                <img src={TF} style={{width: "5rem"}}></img>
+                            <div style={{ position: "absolute" }}>
+                                <img src={TF} style={{ width: "5rem" }}></img>
 
                             </div>
-                            <div style={{position: "absolute", right: 0}}>
-                                <img src={TF} style={{width: "5rem"}}></img>
+                            <div style={{ position: "absolute", right: 0 }}>
+                                <img src={TF} style={{ width: "5rem" }}></img>
 
                             </div>
-                            <div style={{position: "absolute", bottom: 0}}>
-                                <img src={TF} style={{width: "5rem"}}></img>
+                            <div style={{ position: "absolute", bottom: 0 }}>
+                                <img src={TF} style={{ width: "5rem" }}></img>
 
                             </div>
-                            <div style={{position: "absolute", bottom: 0, right: 0}}>
-                                <img src={TF} style={{width: "5rem"}}></img>
+                            <div style={{ position: "absolute", bottom: 0, right: 0 }}>
+                                <img src={TF} style={{ width: "5rem" }}></img>
 
                             </div>
                         </div>
 
                     </div>
 
-                </div> : <Navbar isFixed={true}/>}
+                </div> : <Navbar isFixed={true} />}
 
 
-            <div className="container  " style={{paddingTop: "10rem"}}>
+            <div className="container  " style={{ paddingTop: "10rem" }}>
 
                 <div className={"head"}
-                     style={{display: "flex", justifyContent: "center", flexDirection: "row", flexWrap: "wrap"}}>
+                    style={{ display: "flex", justifyContent: "center", flexDirection: "row", flexWrap: "wrap" }}>
 
 
                     <div style={{
@@ -325,9 +325,9 @@ function App() {
                         display: "flex", flexDirection: "column", alignItems: "center"
                     }}>
                         <div className="row">
-                            <div className={"display-1 text-lg-center"} style={{userSelect: "none"}}>
+                            <div className={"display-1 text-lg-center"} style={{ userSelect: "none" }}>
                                 {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
-                                    <img src={TF} style={{width: "10rem"}} className={"mt-5"}></img> : null}
+                                    <img src={TF} style={{ width: "10rem" }} className={"mt-5"}></img> : null}
 
 
                                 <div>
@@ -335,38 +335,38 @@ function App() {
                                 </div>
                             </div>
                             <span className={"text-lg-center user-select-none "}
-                                  style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站
-                            <div
-                                className={" text-lg-center text-danger text-decoration-underline"}>本站秉持先搜索，后上传的原则
-                            </div>
-                        </span>
+                                style={{ fontSize: ".9rem" }}>AI支持的，免费无登录的伴奏分享网站
+                                <div
+                                    className={" text-lg-center text-danger text-decoration-underline"}>本站秉持先搜索，后上传的原则
+                                </div>
+                            </span>
                         </div>
                         <div className={"row mt-5"}>
                             <form className={"d-flex w-100"} onSubmit={Prevent}>
                                 <input className={"form-control me-2"} type={"text"} placeholder={"搜索"}
-                                       onChange={(e) => {
-                                           setSearchParam(e.target.value);
-                                       }} value={searchParam} onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        setState(-1)
-                                        searchGeneral();
-                                    }
-                                }}/>
+                                    onChange={(e) => {
+                                        setSearchParam(e.target.value);
+                                    }} value={searchParam} onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            setState(-1)
+                                            searchGeneral();
+                                        }
+                                    }} />
 
                             </form>
-                            <Flex id={"double"} style={{margin: "auto"}} mt={"md"} gap={"lg"} justify="space-evenly">
+                            <Flex id={"double"} style={{ margin: "auto" }} mt={"md"} gap={"lg"} justify="space-evenly">
                                 <Button fullWidth={true}
-                                        className="btn btn-primary" onClick={() => {
-                                    setState(-1)
-                                    searchGeneral()
-                                }}>搜索
+                                    className="btn btn-primary" onClick={() => {
+                                        setState(-1)
+                                        searchGeneral()
+                                    }}>搜索
                                 </Button>
                                 <Button disabled={true} fullWidth={true} variant={"gradient"}
-                                        gradient={{from: "blue", to: "violet", deg: 45}}
-                                        className="btn btn-primary" onClick={() => {
-                                    setState(-1)
-                                    searchGeneral()
-                                }}>随机
+                                    gradient={{ from: "blue", to: "violet", deg: 45 }}
+                                    className="btn btn-primary" onClick={() => {
+                                        setState(-1)
+                                        searchGeneral()
+                                    }}>随机
                                 </Button>
                             </Flex>
 
@@ -379,21 +379,21 @@ function App() {
                         alignItems: "center", maxWidth: "30rem"
                     }}>
                         <div className='generic-box-shadow-card'>
-                             
-                        
-                                <div className={"display-6"}>为各位的时间、耐心道歉🙇</div>
-                                <div>近些天 服务器一直不稳定 有的是经济问题，另一些则是技术问题……</div>
-                                <div><strong>不过没有关系！</strong>从前些天开始，重启服务器不再会导致待处理歌曲消失。这就意味着无论何时服务器关闭，再开启时不会需要你们重新上传歌曲。</div>
-                                <br/>
-                                <div style={{fontSize: "1.5rem"}}>对浪费各位的时间，再次道歉。</div>
-                                <br/>
-                                <div>若遇到服务器无响应的问题，请致电：<a href={"tel:13693590652"}>我的电话</a></div>
-                                <br/>
-                                <div>还望各位继续使用、多加交流。</div>
-                                ——A.X. 6.9.25.15.17
-                   
+
+
+                            <div className={"display-6"}>为各位的时间、耐心道歉🙇</div>
+                            <div>近些天 服务器一直不稳定 有的是经济问题，另一些则是技术问题……</div>
+                            <div><strong>不过没有关系！</strong>从前些天开始，重启服务器不再会导致待处理歌曲消失。这就意味着无论何时服务器关闭，再开启时不会需要你们重新上传歌曲。</div>
+                            <br />
+                            <div style={{ fontSize: "1.5rem" }}>对浪费各位的时间，再次道歉。</div>
+                            <br />
+                            <div>若遇到服务器无响应的问题，请致电：<a href={"tel:13693590652"}>我的电话</a></div>
+                            <br />
+                            <div>还望各位继续使用、多加交流。</div>
+                            ——A.X. 6.9.25.15.17
+
                         </div>
-                        
+
                     </div>
                     <div style={{
                         display: "flex",
@@ -402,8 +402,8 @@ function App() {
                         alignItems: "center"
                     }}>
                         <div className={"generic-box-shadow-card"}>
-                            <h4 className={"text-danger"} style={{fontWeight: "bold"}}>!5.29、6.9 更新!</h4>
-                            <br/>
+                            <h4 className={"text-danger"} style={{ fontWeight: "bold" }}>!5.29、6.9 更新!</h4>
+                            <br />
                             <ul>
                                 <li>
                                     歌曲评论功能
@@ -416,8 +416,8 @@ function App() {
                                 <li>6.29：新增缓存，网站播放、下载速度加快</li>
                             </ul>
                             同志们：这是我踏出建立社区梦想的众多第一步的其中一步 请各位赏脸了。
-                            <br/>
-                            <br/>
+                            <br />
+                            <br />
 
                             ——A.X. 5.29.25 21.53
                         </div>
@@ -430,18 +430,18 @@ function App() {
                     }}>
                         <div className={"generic-box-shadow-card"}>
                             <h4>须知：</h4>
-                            <br/>
+                            <br />
                             <u>网易云的音乐分为两类：VIP歌曲和VIP付费歌曲的东西。</u>
-                            <br/>
-                            <br/>
+                            <br />
+                            <br />
                             VIP歌曲365天随时可以下载，付费歌曲的话：
-                            <br/>
-                            <br/>
+                            <br />
+                            <br />
                             如果账号一个月超过了下载付费VIP歌曲的额度，就<strong>无法再下载需付费的VIP歌曲，</strong>就会显示<strong>“不存在”</strong>，就需要升级账号的额度，于是就需要升级账号，就要<span
-                            style={{fontSize: "3rem"}}>钱</span>。<br/>
-                            <br/>
+                                style={{ fontSize: "3rem" }}>钱</span>。<br />
+                            <br />
                             要不就自己开个网易云会员后下载后通过<a
-                            href={"https://demo.unlock-music.dev/"}>某些路径（🪜）</a>解锁后上传到本网站后提取伴奏，要不就不用:)))
+                                href={"https://demo.unlock-music.dev/"}>某些路径（🪜）</a>解锁后上传到本网站后提取伴奏，要不就不用:)))
 
                         </div>
                     </div>
@@ -454,10 +454,10 @@ function App() {
                         <div className={"generic-box-shadow-card"}>
                             <h4>目前目标：</h4>
                             QQ音乐下载（寻找API中）
-                            <br/>
-                            <br/>
+                            <br />
+                            <br />
                             正经的，不加端口并且独立的域名（长远计划😂）
-                            <br/>
+                            <br />
                         </div>
                     </div>
 
@@ -475,10 +475,10 @@ function App() {
                     <div className={"h6"}>不会太久。</div>
                     <h6>全程大概5-30分钟左右。</h6>
                 </div>
-                <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
-                    <Banner/>
-                    <form className={" px-0"} style={{width: '80%'}} onSubmit={Prevent}>
-                        <div style={{visibility: loading ? "visible" : "collapse"}}>
+                <div className={"row mt-5  justify-content-center "} style={{ marginBottom: "90px" }}>
+                    <Banner />
+                    <form className={" px-0"} style={{ width: '80%' }} onSubmit={Prevent}>
+                        <div style={{ visibility: loading ? "visible" : "collapse" }}>
                             <span className={"spinner-border"}
                             ></span><span>正在加载</span>
 
@@ -486,7 +486,7 @@ function App() {
 
                         <ul className="nav nav-tabs">
                             <li className="nav-item">
-                            <a className="nav-link active" data-bs-toggle="tab" href="#file-mode">文件模式</a>
+                                <a className="nav-link active" data-bs-toggle="tab" href="#file-mode">文件模式</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" data-bs-toggle="tab" href="#ncm-mode">网易云模式</a>
@@ -504,21 +504,21 @@ function App() {
                                     backgroundSize: "contain"
                                 }} id={"AlbumCover"}>
                                     <input type={"file"}
-                                           style={{
-                                               height: "100%", width: "100%", color: "transparent", filter: "opacity(0)"
-                                           }}
-                                           onChange={(e) => {
-                                               document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(e.target.files[0])})`;
-                                               const reader = new FileReader();
-                                               reader.readAsDataURL(e.target.files[0]);
+                                        style={{
+                                            height: "100%", width: "100%", color: "transparent", filter: "opacity(0)"
+                                        }}
+                                        onChange={(e) => {
+                                            document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(e.target.files[0])})`;
+                                            const reader = new FileReader();
+                                            reader.readAsDataURL(e.target.files[0]);
 
-                                               reader.onload = async () => {
-                                                   setForm({
-                                                       ...form, albumCover: reader.result,
-                                                   })
-                                               }
+                                            reader.onload = async () => {
+                                                setForm({
+                                                    ...form, albumCover: reader.result,
+                                                })
+                                            }
 
-                                           }}/>
+                                        }} />
 
 
                                 </div>
@@ -571,18 +571,18 @@ function App() {
                                     setForm({
                                         ...form, name: obj.target.value,
                                     });
-                                }} className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"}/>
+                                }} className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"} />
                                 <input onChange={(obj) => {
                                     setForm({
                                         ...form, albumName: obj.target.value
                                     });
                                 }} value={form.albumName} className={"  mb-3 form-control"} placeholder={"所属专辑名"}
-                                       name={"albumName"}/>
+                                    name={"albumName"} />
                                 <input onChange={(obj) => {
                                     setForm({
                                         ...form, artist: obj.target.value
                                     })
-                                }} placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist}/>
+                                }} placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist} />
 
                                 <input onChange={(obj) => {
                                     setForm({
@@ -592,16 +592,16 @@ function App() {
                                         sameSite: "strict",
                                     })
                                 }} value={form.email} className={"mb-3 form-control"}
-                                       placeholder={"邮箱（通知何时完毕，可选）"} type="email"
+                                    placeholder={"邮箱（通知何时完毕，可选）"} type="email"
                                 />
                                 <div className={"row mb-3"}>
                                     <div className={"col-lg-2 w-auto"}>
                                         <Flex wrap={"wrap"}>
                                             {Kind.map((val, index) => <div key={index}
-                                                                           style={{
-                                                                               width: "100%",
-                                                                               marginBottom: "1rem"
-                                                                           }}>
+                                                style={{
+                                                    width: "100%",
+                                                    marginBottom: "1rem"
+                                                }}>
                                                 <Switch label={val} value={index} onChange={(event) => {
                                                     if (event.target.checked) {
                                                         console.log("selected")
@@ -659,19 +659,19 @@ function App() {
                                     setState(-1)
                                     await UploadEntry()
                                 }}
-                                        disabled={loading}><i
-                                    className={"bi-upload"}></i> 上传
+                                    disabled={loading}><i
+                                        className={"bi-upload"}></i> 上传
                                 </button>
                             </div>
                             <div className={"tab-pane"} id={"ncm-mode"}>
 
                                 <input type={"text"} placeholder={"歌曲ID（网易云网页端地址中“id”参数）"}
-                                       className={"mb-3 mt-3 form-control "} value={ncmForm.id} onChange={(e) => {
-                                    setncmForm({
-                                        ...ncmForm, id: e.target.value,
+                                    className={"mb-3 mt-3 form-control "} value={ncmForm.id} onChange={(e) => {
+                                        setncmForm({
+                                            ...ncmForm, id: e.target.value,
 
-                                    })
-                                }}/>
+                                        })
+                                    }} />
                                 <a href={"https://www.bilibili.com/video/BV1Buc8eGEmh/?share_source=copy_web&vd_source=fff871e844f34f38697fc936b8301df5&t=49"}>如何寻找？</a>
                                 <input onChange={(obj) => {
                                     setncmForm({
@@ -681,16 +681,16 @@ function App() {
                                         sameSite: "strict",
                                     })
                                 }} value={ncmForm.email} className={"mb-3 form-control"}
-                                       placeholder={"邮箱（通知何时完毕，可选）"} type="email"
+                                    placeholder={"邮箱（通知何时完毕，可选）"} type="email"
                                 />
                                 <div className={"row mb-3"}>
                                     <div className={"col-lg-2 w-auto"}>
                                         <Flex wrap={"wrap"}>
                                             {Kind.map((val, index) => <div key={index}
-                                                                           style={{
-                                                                               width: "100%",
-                                                                               marginBottom: "1rem"
-                                                                           }}>
+                                                style={{
+                                                    width: "100%",
+                                                    marginBottom: "1rem"
+                                                }}>
                                                 <Switch label={val} value={index} onChange={(event) => {
                                                     if (event.target.checked) {
                                                         console.log("selected")
@@ -747,7 +747,7 @@ function App() {
                                     let res = (await fetch(baseUrl + "ncm/url", {
                                         method: "POST", body: JSON.stringify({
                                             id: ncmForm.id, kind: ncmForm.kind, email: ncmForm.email,
-                                        }), credentials: "include", headers: {"Content-Type": "application/json"}
+                                        }), credentials: "include", headers: { "Content-Type": "application/json" }
                                     }))
                                     if (res.ok) {
                                         setState(3)
@@ -764,12 +764,12 @@ function App() {
 
 
                         </div>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
 
                     </form>
 
@@ -777,11 +777,11 @@ function App() {
                 </div>
 
             </div>
-    </div>
-            
-        </>
+        </div>
+
+    </>
     );
 }
 
 export default App;
-export {Navbar}
+export { Navbar }
