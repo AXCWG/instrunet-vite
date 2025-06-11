@@ -21,6 +21,9 @@ import SecretPage from "./Instrunet/SecretPage.jsx";
 import {Index} from "./index.jsx";
 import SttIndex from "./Stt/SttIndex.jsx";
 
+
+// TODO UI: move back to nav brand. 
+// TODO delete comment 
 (async () => {
     const online = await (async () => {
         try {

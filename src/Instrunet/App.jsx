@@ -283,7 +283,8 @@ function App() {
     }
 
     return (<>
-            {(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
+    <div style={{backgroundColor: "white"}}>
+{(loginHelloKryze && loginHelloKryze.kryze) || helloKryze === "true" ?
                 <div style={{position: "fixed", zIndex: 1, top: "0"}}>
 
                     <div style={{position: "relative", marginTop: 0, width: "100vw", height: "100vh",}}>
@@ -312,7 +313,7 @@ function App() {
                 </div> : <Navbar isFixed={true}/>}
 
 
-            <div className="container mt-5 ">
+            <div className="container  " style={{paddingTop: "10rem"}}>
 
                 <div className={"head"}
                      style={{display: "flex", justifyContent: "center", flexDirection: "row", flexWrap: "wrap"}}>
@@ -375,20 +376,24 @@ function App() {
                         display: "flex",
                         justifyContent: "center",
                         flexDirection: "column",
-                        alignItems: "center"
+                        alignItems: "center", maxWidth: "30rem"
                     }}>
-                        <div className={"generic-box-shadow-card"}>
-                            <div className={"display-6"}>为各位的时间、耐心道歉🙇</div>
-                            <div>近些天 服务器一直不稳定 有的是经济问题，另一些则是技术问题……</div>
-                            <div><strong>不过没有关系！</strong>从前些天开始，重启服务器不再会导致待处理歌曲消失。这就意味着无论何时服务器关闭，再开启时不会需要你们重新上传歌曲。</div>
-                            <br/>
-                            <div style={{fontSize: "1.5rem"}}>对浪费各位的时间，再次道歉。</div>
-                            <br/>
-                            <div>若遇到服务器无响应的问题，请致电：<a href={"tel:13693590652"}>我的电话</a></div>
-                            <br/>
-                            <div>还望各位继续使用、多加交流。</div>
-                            ——A.X. 6.9.25.15.17
+                        <div className='generic-box-shadow-card'>
+                             
+                        
+                                <div className={"display-6"}>为各位的时间、耐心道歉🙇</div>
+                                <div>近些天 服务器一直不稳定 有的是经济问题，另一些则是技术问题……</div>
+                                <div><strong>不过没有关系！</strong>从前些天开始，重启服务器不再会导致待处理歌曲消失。这就意味着无论何时服务器关闭，再开启时不会需要你们重新上传歌曲。</div>
+                                <br/>
+                                <div style={{fontSize: "1.5rem"}}>对浪费各位的时间，再次道歉。</div>
+                                <br/>
+                                <div>若遇到服务器无响应的问题，请致电：<a href={"tel:13693590652"}>我的电话</a></div>
+                                <br/>
+                                <div>还望各位继续使用、多加交流。</div>
+                                ——A.X. 6.9.25.15.17
+                   
                         </div>
+                        
                     </div>
                     <div style={{
                         display: "flex",
@@ -772,6 +777,8 @@ function App() {
                 </div>
 
             </div>
+    </div>
+            
         </>
     );
 }
