@@ -1,6 +1,6 @@
 import { Button, Container } from "@mantine/core";
 import { useState } from "react";
-import { fetchUrl } from "../Singletons";
+import { fetchUrl, WebRoutes } from "../Singletons";
 
 function UnlockMusic() {
     const [file, setFile] = useState({
@@ -11,6 +11,7 @@ function UnlockMusic() {
         <Container>
             <div className="display-1 pt-5">音乐解锁</div>
             <div>Powered by: <a href="https://git.unlock-music.dev/um/web">Unlock Music 项目</a></div>
+            <div>注意：QQ音乐仅支持老版本 <a href={fetchUrl + "api/decrypter/qqm"}>点击下载老版本</a></div>
             <div>状态：<div id="status"></div></div>
             <input className="form-control" id="file_input" type="file" name="file" onChange={(e) => {
                 document.getElementById("status").innerText = "加载中"
