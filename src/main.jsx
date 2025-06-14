@@ -20,6 +20,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 import SecretPage from "./Instrunet/SecretPage.jsx";
 import {Index} from "./index.jsx";
 import SttIndex from "./Stt/SttIndex.jsx";
+import UnlockMusic from './Decrypter/UnlockMusic.jsx';
 
 
 // TODO UI: move back to nav brand. 
@@ -81,6 +82,9 @@ import SttIndex from "./Stt/SttIndex.jsx";
                         </Route>
                         <Route path={"/speech-to-text"}>
                             <Route index element={<SttIndex/>}/>
+                        </Route>
+                        <Route path={"/unlock-music"}>
+                            <Route index element={<UnlockMusic/>}/>
                         </Route>
 
 

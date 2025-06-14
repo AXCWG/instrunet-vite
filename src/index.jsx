@@ -42,6 +42,14 @@ function Index(){
                         论坛
                     </Card>
                 </div>
+                 <div className={"col-sm-6 "}>
+                    <Card onClick={()=>window.location.href=WebRoutes.unlockMusic + "/"} className={"zoom-on-hover"} withBorder={true} shadow={"sm"}>
+                        <div className={"display-6"}>
+                            音乐解锁
+                        </div>
+                        VIP平台下载音乐解锁
+                    </Card>
+                </div>
 
                 <NavLink to={WebRoutes.instruNet + "/"}></NavLink>
                 <br/>

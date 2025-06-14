@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import { useEffect, useState } from "react";
 import { parseBlob, selectCover } from 'music-metadata'
-import { baseUrl, fetchUrl, Kind, WebRoutes } from "../Singletons.js";
+import { baseUrl, fetchUrl, Kind, l, WebRoutes } from "../Singletons.js";
 import { useCookies } from "react-cookie";
 import { NavLink } from "react-router-dom";
 import { Button, Flex, Group, Modal, Switch, Text, useModalsStack } from "@mantine/core";
@@ -142,7 +142,7 @@ function Navbar({ isFixed, username }) {
 
     </>)
 }
-
+// TODO Website logging
 function App() {
     const [helloKryze, setHelloKryze] = useState("false");
     const [loginHelloKryze, setLoginHelloKryze] = useState(null);
@@ -207,10 +207,12 @@ function App() {
     }, [])
 
     async function UploadEntry() {
+        l.add(`Now start uploading: ${form.name}, ${Kind[form.kind]}`)
         if (!form.name || !form.file) {
             setState(1)
             setLoading(false)
             // alert("格式不正确")
+            l.add(`驳回。驳回原因：填写名称，上传文件并确保文件格式正确。`)
 
         } else {
             setLoading(true);
@@ -229,7 +231,7 @@ function App() {
 
 
                 }
-
+                l.add(`开始上传`);
                 let res = await fetch(baseUrl + "submit", {
                     method: 'POST', body: JSON.stringify(prep), headers: {
                         'Content-Type': 'application/json',
@@ -238,19 +240,23 @@ function App() {
 
                 }).catch((e) => {
                     console.log(e)
+                    l.add(`错误；错误原因：${e}`)
                     setLoading(false);
                 })
                 if (res !== undefined) {
                     if (res.status === 500) {
                         setLoading(false);
                         setState(2)
+                        l.add("重复项。")
                         // alert("傻逼，重复了。请在盲目上传之前看看库里有没有好么傻逼？")
                     } else if (res.ok) {
                         setLoading(false);
                         setState(0)
+                        l.add("上传完成。")
                         // alert("上传完成，正在分析，将在5-30分钟内在数据库中出现")
                     } else {
                         setLoading(false);
+                        l.add("未知错误。")
                         alert("未知错误")
                     }
                 }
@@ -522,7 +528,7 @@ function App() {
 
 
                                 </div>
-
+                                {/** File Input  */}
                                 <input required={true} onChange={(obj) => {
                                     if (obj.target.files[0]) {
                                         parseBlob(obj.target.files[0], {
@@ -534,6 +540,9 @@ function App() {
                                             reader.onload = () => {
                                                 /** I really don't know what to do here. Sorry for violating React.*/
                                                 /** Jan 09 25 I really should use useState. Fuck me. **/
+                                                /** Not too necessary now I think lul 6.13.25 */
+
+                                                /** Album Cover detection + Metadata reader. */
                                                 if (data.common.picture) {
                                                     let coverBlob = new Blob([selectCover(data.common.picture).data.buffer])
                                                     document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(coverBlob)})`;
@@ -546,6 +555,12 @@ function App() {
 
                                                         albumCover: reader.result,
                                                     })
+                                                    l.add(`Album cover setted according to metadata read. \n`+
+                                                        `Name setted to: ${data.common.title ? data.common.title : "NULL"} according to metadata read. \n`+
+                                                        `Album name setted to: ${data.common.album ? data.common.album : "NULL"} according to metadata read. \n`+
+                                                    `Artist setted to: ${data.common.artist} or ${data.common.albumartist} or NULL according to metadata read. Unfortunately due to code architecture, we cannot know. `); 
+                                                    
+                                                    
                                                 } else {
                                                     document.getElementById("AlbumCover").style.backgroundImage = ``;
 
@@ -557,6 +572,10 @@ function App() {
                                                         file: obj.target.files[0],
                                                         albumCover: ""
                                                     })
+                                                    l.add(`Album cover setted according to metadata read. \n`+
+                                                        `Name setted to: ${data.common.title ? data.common.title : "NULL"} according to metadata read. \n`+
+                                                        `Album name setted to: ${data.common.album ? data.common.album : "NULL"} according to metadata read. \n`+
+                                                    `Artist setted to: ${data.common.artist} or ${data.common.albumartist} or NULL according to metadata read. Unfortunately due to code architecture, we cannot know. `); 
                                                 }
                                             }
 
@@ -571,17 +590,20 @@ function App() {
                                     setForm({
                                         ...form, name: obj.target.value,
                                     });
+                                    l.add(`Name setted to: ${obj.target.value}`, true); 
                                 }} className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"} />
                                 <input onChange={(obj) => {
                                     setForm({
                                         ...form, albumName: obj.target.value
                                     });
+                                    l.add(`Album setted to: ${obj.target.value}`,true); 
                                 }} value={form.albumName} className={"  mb-3 form-control"} placeholder={"所属专辑名"}
                                     name={"albumName"} />
                                 <input onChange={(obj) => {
                                     setForm({
                                         ...form, artist: obj.target.value
                                     })
+                                    l.add(`Artist setted to: ${obj.target.value}`,true)
                                 }} placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist} />
 
                                 <input onChange={(obj) => {
@@ -591,6 +613,7 @@ function App() {
                                     setCookie("email", obj.target.value, {
                                         sameSite: "strict",
                                     })
+                                    l.add(`Email setted to: ${obj.target.value}`, true)
                                 }} value={form.email} className={"mb-3 form-control"}
                                     placeholder={"邮箱（通知何时完毕，可选）"} type="email"
                                 />
