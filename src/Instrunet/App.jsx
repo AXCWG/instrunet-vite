@@ -447,7 +447,7 @@ function App() {
                                 style={{ fontSize: "3rem" }}>钱</span>。<br />
                             <br />
                             要不就自己开个网易云会员后下载后通过<a
-                                href={"https://demo.unlock-music.dev/"}>某些路径（🪜）</a>解锁后上传到本网站后提取伴奏，要不就不用:)))
+                                href={WebRoutes.unlockMusic + "/"}>这个网站</a>解锁后上传到本网站后提取伴奏，要不就不用:)))
 
                         </div>
                     </div>
