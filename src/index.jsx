@@ -50,6 +50,14 @@ function Index(){
                         VIP平台下载音乐解锁
                     </Card>
                 </div>
+                <div className={"col-sm-6 "}>
+                    <Card onClick={()=>window.location.href="https://andyxie.cn:4001"} className={"zoom-on-hover"} withBorder={true} shadow={"sm"}>
+                        <div className={"display-6"}>
+                            JustTalk
+                        </div>
+                        极客，，，
+                    </Card>
+                </div>
 
                 <NavLink to={WebRoutes.instruNet + "/"}></NavLink>
                 <br/>
