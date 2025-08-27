@@ -244,7 +244,11 @@ function App() {
                     setLoading(false);
                 })
                 if (res !== undefined) {
-                    if (res.status === 500) {
+                    if(res.status === 503){
+                        setLoading(false);
+                        setState(503)
+
+                    }else if (res.status === 500) {
                         setLoading(false);
                         setState(2)
                         l.add("重复项。")
@@ -282,6 +286,10 @@ function App() {
                     <strong>和数据库中条目重复</strong></div>
             case 3:
                 return <div className={"alert alert-success"}><strong>提交成功！</strong></div>
+            case 503:
+                return <div className={"alert alert-danger"}>
+                    <strong>所有人在五分钟内仅可上传五首歌曲。</strong>
+                </div>
             default:
                 return null
 
