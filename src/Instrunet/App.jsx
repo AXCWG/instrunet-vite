@@ -628,56 +628,57 @@ function App() {
                                 <div className={"row mb-3"}>
                                     <div className={"col-lg-2 w-auto"}>
                                         <Flex wrap={"wrap"}>
-                                            {Kind.map((val, index) => <div key={index}
-                                                style={{
-                                                    width: "100%",
-                                                    marginBottom: "1rem"
-                                                }}>
-                                                <Switch label={val} value={index} onChange={(event) => {
-                                                    if (event.target.checked) {
-                                                        console.log("selected")
-                                                        setForm({
-                                                            ...form, kind: (() => {
-                                                                let newArray = form.kind;
-                                                                newArray.push(Number(event.target.value));
-                                                                newArray.sort();
-                                                                console.log(newArray);
-                                                                return newArray;
-                                                            })()
-                                                        })
-                                                    } else {
-                                                        console.log("deselected")
-                                                        setForm({
-                                                            ...form, kind: (() => {
-                                                                let newArray = [];
-                                                                for (let x of form.kind) {
-                                                                    if (x !== Number(event.target.value)) {
-                                                                        newArray.push(x);
-                                                                    }
-                                                                }
-                                                                newArray.sort();
-                                                                console.log(newArray)
-                                                                return newArray;
-                                                            })()
-                                                        })
-                                                    }
+                                            {/*{Kind.map((val, index) => <div key={index}*/}
+                                            {/*    style={{*/}
+                                            {/*        width: "100%",*/}
+                                            {/*        marginBottom: "1rem"*/}
+                                            {/*    }}>*/}
+                                            {/*    <Switch label={val} value={index} onChange={(event) => {*/}
+                                            {/*        if (event.target.checked) {*/}
+                                            {/*            console.log("selected")*/}
+                                            {/*            setForm({*/}
+                                            {/*                ...form, kind: (() => {*/}
+                                            {/*                    let newArray = form.kind;*/}
+                                            {/*                    newArray.push(Number(event.target.value));*/}
+                                            {/*                    newArray.sort();*/}
+                                            {/*                    console.log(newArray);*/}
+                                            {/*                    return newArray;*/}
+                                            {/*                })()*/}
+                                            {/*            })*/}
+                                            {/*        } else {*/}
+                                            {/*            console.log("deselected")*/}
+                                            {/*            setForm({*/}
+                                            {/*                ...form, kind: (() => {*/}
+                                            {/*                    let newArray = [];*/}
+                                            {/*                    for (let x of form.kind) {*/}
+                                            {/*                        if (x !== Number(event.target.value)) {*/}
+                                            {/*                            newArray.push(x);*/}
+                                            {/*                        }*/}
+                                            {/*                    }*/}
+                                            {/*                    newArray.sort();*/}
+                                            {/*                    console.log(newArray)*/}
+                                            {/*                    return newArray;*/}
+                                            {/*                })()*/}
+                                            {/*            })*/}
+                                            {/*        }*/}
 
-                                                }}></Switch>
-
-
-                                            </div>)}
-                                            {/*<select name={"mode"} onChange={(e) => {*/}
-                                            {/*    setForm({*/}
-                                            {/*        ...form, kind: Number.parseInt(e.target.value)*/}
-                                            {/*    })*/}
-                                            {/*}} className={"form-control form-select"} style={{userSelect: "none"}}>*/}
-
-                                            {/*    {Kind.map((val, index) =>*/}
-                                            {/*        <option key={index} value={index}>{val}</option>*/}
-                                            {/*    )}*/}
+                                            {/*    }}></Switch>*/}
 
 
-                                            {/*</select>*/}
+                                            {/*</div>)}*/}
+                                            <select name={"mode"} onChange={(e) => {
+                                                setForm({
+                                                    ...form, kind: [Number.parseInt(e.target.value)]
+                                                })
+
+                                            }} className={"form-control form-select"} style={{userSelect: "none"}}>
+
+                                                {Kind.map((val, index) =>
+                                                    <option key={index} value={index}>{val}</option>
+                                                )}
+
+
+                                            </select>
                                         </Flex>
 
 
@@ -717,56 +718,56 @@ function App() {
                                 <div className={"row mb-3"}>
                                     <div className={"col-lg-2 w-auto"}>
                                         <Flex wrap={"wrap"}>
-                                            {Kind.map((val, index) => <div key={index}
-                                                style={{
-                                                    width: "100%",
-                                                    marginBottom: "1rem"
-                                                }}>
-                                                <Switch label={val} value={index} onChange={(event) => {
-                                                    if (event.target.checked) {
-                                                        console.log("selected")
-                                                        setncmForm({
-                                                            ...ncmForm, kind: (() => {
-                                                                let newArray = ncmForm.kind;
-                                                                newArray.push(Number(event.target.value));
-                                                                newArray.sort();
-                                                                console.log(newArray);
-                                                                return newArray;
-                                                            })()
-                                                        })
-                                                    } else {
-                                                        console.log("deselected")
-                                                        setncmForm({
-                                                            ...ncmForm, kind: (() => {
-                                                                let newArray = [];
-                                                                for (let x of ncmForm.kind) {
-                                                                    if (x !== Number(event.target.value)) {
-                                                                        newArray.push(x);
-                                                                    }
-                                                                }
-                                                                newArray.sort();
-                                                                console.log(newArray)
-                                                                return newArray;
-                                                            })()
-                                                        })
-                                                    }
+                                            {/*{Kind.map((val, index) => <div key={index}*/}
+                                            {/*    style={{*/}
+                                            {/*        width: "100%",*/}
+                                            {/*        marginBottom: "1rem"*/}
+                                            {/*    }}>*/}
+                                            {/*    <Switch label={val} value={index} onChange={(event) => {*/}
+                                            {/*        if (event.target.checked) {*/}
+                                            {/*            console.log("selected")*/}
+                                            {/*            setncmForm({*/}
+                                            {/*                ...ncmForm, kind: (() => {*/}
+                                            {/*                    let newArray = ncmForm.kind;*/}
+                                            {/*                    newArray.push(Number(event.target.value));*/}
+                                            {/*                    newArray.sort();*/}
+                                            {/*                    console.log(newArray);*/}
+                                            {/*                    return newArray;*/}
+                                            {/*                })()*/}
+                                            {/*            })*/}
+                                            {/*        } else {*/}
+                                            {/*            console.log("deselected")*/}
+                                            {/*            setncmForm({*/}
+                                            {/*                ...ncmForm, kind: (() => {*/}
+                                            {/*                    let newArray = [];*/}
+                                            {/*                    for (let x of ncmForm.kind) {*/}
+                                            {/*                        if (x !== Number(event.target.value)) {*/}
+                                            {/*                            newArray.push(x);*/}
+                                            {/*                        }*/}
+                                            {/*                    }*/}
+                                            {/*                    newArray.sort();*/}
+                                            {/*                    console.log(newArray)*/}
+                                            {/*                    return newArray;*/}
+                                            {/*                })()*/}
+                                            {/*            })*/}
+                                            {/*        }*/}
 
-                                                }}></Switch>
-
-
-                                            </div>)}
-                                            {/*<select name={"mode"} onChange={(e) => {*/}
-                                            {/*    setForm({*/}
-                                            {/*        ...form, kind: Number.parseInt(e.target.value)*/}
-                                            {/*    })*/}
-                                            {/*}} className={"form-control form-select"} style={{userSelect: "none"}}>*/}
-
-                                            {/*    {Kind.map((val, index) =>*/}
-                                            {/*        <option key={index} value={index}>{val}</option>*/}
-                                            {/*    )}*/}
+                                            {/*    }}></Switch>*/}
 
 
-                                            {/*</select>*/}
+                                            {/*</div>)}*/}
+                                            <select name={"mode"} onChange={(e) => {
+                                                setForm({
+                                                    ...form, kind: [Number.parseInt(e.target.value)]
+                                                })
+                                            }} className={"form-control form-select"} style={{userSelect: "none"}}>
+
+                                                {Kind.map((val, index) =>
+                                                    <option key={index} value={index}>{val}</option>
+                                                )}
+
+
+                                            </select>
                                         </Flex>
                                     </div>
 
