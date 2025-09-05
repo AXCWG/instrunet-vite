@@ -399,7 +399,7 @@ function Player() {
 
 
                         </div>
-                        <div className={" col-xl-6 p-4 "} style={{maxHeight: "87vh"}}>
+                        <div className={" col-xl-6 p-4 "} style={{maxHeight: "83vh"}}>
                             <select style={{margin: "auto"}} className={"form-select mb-3 select "}
                                     onChange={(e) => {
                                         setLyrics({
@@ -414,7 +414,22 @@ function Player() {
                                                            key={i}>{data.title} - {data.artist ? data.artist : data.artists} - {data.album}</option>
                                         })
                                 }
-                            </select>
+                            </select>{
+                            lyrics.lyrics.length === 0 || lyrics.lyrics.some((i)=>{
+                                return i.title === undefined && i.artist === undefined && i.album === undefined
+                            })? null :<Button fullWidth={true} onClick={()=>{
+                                const blob = new Blob([lyrics.lyrics[lyrics.selected].lyrics], {type: "text/binary"});
+                                const url = URL.createObjectURL(blob);
+                                const a =  document.createElement("a");
+                                a.href=url;
+                                a.download=lyrics.lyrics[lyrics.selected].title + '.lrc';
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                            }} className={"mb-3"}>下载歌词</Button>
+                        }
+
                             <div className={"lyric-box"}
                                  style={{
                                      margin: "auto",
@@ -422,7 +437,6 @@ function Player() {
                                      flexDirection: "column",
                                      maxHeight: "100%"
                                  }}>
-
 
                                 <div style={{
                                     width: '100%',

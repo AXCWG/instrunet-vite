@@ -21,6 +21,7 @@ import SecretPage from "./Instrunet/SecretPage.jsx";
 import {Index} from "./index.jsx";
 import SttIndex from "./Stt/SttIndex.jsx";
 import UnlockMusic from './Decrypter/UnlockMusic.jsx';
+import Announcement from "./Instrunet/Announcement.jsx";
 
 
 // TODO UI: move back to nav brand. 
@@ -79,6 +80,7 @@ import UnlockMusic from './Decrypter/UnlockMusic.jsx';
                             <Route path={"playlist/:playlistuuid"} element={<PlayList createNew={false}/>}/>
                             <Route path={"LrcTest"} element={<LrcTest/>}/>
                             <Route path={"secret-page"} element={<SecretPage/>}/>
+                            <Route path={"announcement"} element={<Announcement/>}/>
                         </Route>
                         <Route path={"/speech-to-text"}>
                             <Route index element={<SttIndex/>}/>
