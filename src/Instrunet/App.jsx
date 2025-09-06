@@ -156,13 +156,13 @@ function App() {
         file: {},
         email: cookies["email"] ? localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email : cookies["email"] : "",
         artist: "",
-        kind: [],
+        kind: [0],
         albumCover: ""
     })
     const [ncmForm, setncmForm] = useState({
         id: "",
         email: localStorage.getItem("acc") ? JSON.parse(localStorage.getItem("acc")).email : cookies["email"],
-        kind: [],
+        kind: [0],
     })
 
     const [loading, setLoading] = useState(false);
