@@ -7,7 +7,7 @@ import Query from "./Instrunet/Query.jsx";
 import Login from "./Instrunet/Login.jsx";
 import Register from "./Instrunet/Register.jsx";
 import Userapi from "./Instrunet/userapi.jsx";
-import {fetchUrl, WebRoutes} from "./Singletons.js";
+import {fetchUrl} from "./Singletons.js";
 import Pitched from "./Instrunet/Pitched.jsx";
 import '@mantine/core/styles.css'
 import {MantineProvider} from "@mantine/core";

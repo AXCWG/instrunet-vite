@@ -7,10 +7,7 @@ import { parseBlob, selectCover } from 'music-metadata'
 import { baseUrl, fetchUrl, Kind, l, WebRoutes } from "../Singletons.js";
 import { useCookies } from "react-cookie";
 import { NavLink } from "react-router-dom";
-import { Button, Flex, Group, Modal, Switch, Text, useModalsStack } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { Lrc } from "react-lrc";
-import { Grid } from "@mantine/core";
+import { Button, Flex } from "@mantine/core";
 import TF from "./Assets/TF.png";
 
 

@@ -1,4 +1,3 @@
-import {useEffect} from "react";
 import {WebRoutes} from "./Singletons.js";
 import {NavLink} from "react-router-dom";
 import {Card} from "@mantine/core";
