@@ -7,7 +7,7 @@ import Query from "./Instrunet/Query.jsx";
 import Login from "./Instrunet/Login.jsx";
 import Register from "./Instrunet/Register.jsx";
 import Userapi from "./Instrunet/userapi.jsx";
-import {fetchUrl} from "./Singletons.js";
+import {fetchUrl, WebRoutes} from "./Singletons.js";
 import Pitched from "./Instrunet/Pitched.jsx";
 import '@mantine/core/styles.css'
 import {MantineProvider} from "@mantine/core";
@@ -22,6 +22,7 @@ import {Index} from "./index.jsx";
 import SttIndex from "./Stt/SttIndex.jsx";
 import UnlockMusic from './Decrypter/UnlockMusic.jsx';
 import Announcement from "./Instrunet/Announcement.jsx";
+import LrcDownloader from "./LrcDownloader/LrcDownloader.jsx";
 
 
 // TODO UI: move back to nav brand. 
@@ -64,7 +65,7 @@ import Announcement from "./Instrunet/Announcement.jsx";
                         <Route path={"*"} element={<Navigate replace to="/404"/>}/>
                         <Route path={"/404"} element={<PageNotFound/>}/>
                         <Route path={"/"} element={<Index/>}/>
-                        <Route path={"/instrunet"}>
+                        <Route path={WebRoutes.instruNet}>
                             <Route index element={<App/>}/>
                             <Route path={"search"} element={<Search/>}/>
                             <Route path={"player"} element={<Player/>}/>
@@ -82,11 +83,14 @@ import Announcement from "./Instrunet/Announcement.jsx";
                             <Route path={"secret-page"} element={<SecretPage/>}/>
                             <Route path={"announcement"} element={<Announcement/>}/>
                         </Route>
-                        <Route path={"/speech-to-text"}>
+                        <Route path={WebRoutes.speechToText}>
                             <Route index element={<SttIndex/>}/>
                         </Route>
-                        <Route path={"/unlock-music"}>
+                        <Route path={WebRoutes.unlockMusic}>
                             <Route index element={<UnlockMusic/>}/>
+                        </Route>
+                        <Route path={WebRoutes.lrcDownload}>
+                            <Route index element={<LrcDownloader/>}/>
                         </Route>
 
 

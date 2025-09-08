@@ -1,6 +1,6 @@
 import {WebRoutes} from "./Singletons.js";
-import {NavLink} from "react-router-dom";
 import {Card} from "@mantine/core";
+import CardWrapper from "./Components/CardWrapper.jsx";
 
 function Index(){
 
@@ -56,9 +56,12 @@ function Index(){
                         </div>
                         极客，，，
                     </Card>
-                </div>
 
-                <NavLink to={WebRoutes.instruNet + "/"}></NavLink>
+                </div>
+                <CardWrapper href={WebRoutes.lrcDownload} title={"歌词下载器"}>
+                    批量下载歌词的最佳工具
+                </CardWrapper>
+
                 <br/>
                 <br/>
 
