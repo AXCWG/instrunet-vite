@@ -18,3 +18,8 @@ TODO list:
 
 ## Vite
 曾经的我对React的Framework极其鄙夷，然而我错了。
+
+
+9.9.2025
+=========
+I don't care. I'm going to reconst this. Fucking React is becoming an abomination dumpster-fire. Solid.JS is the way to go and estimated will be online in: 9.15
