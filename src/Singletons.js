@@ -2,6 +2,7 @@
 
 const baseUrl= "https://andyxie.cn:8200/";
  // const baseUrl = "http://localhost:5052/";
+// const baseUrl = "http://localhost:5298/";  // new api
 const fetchUrl = baseUrl;
 
 const Kind = [

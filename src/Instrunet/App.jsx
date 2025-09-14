@@ -610,9 +610,9 @@ function App() {
                             <div className={"tab-pane"} id={"ncm-mode"}>
 
                                 <input type={"text"} placeholder={"歌曲ID（网易云网页端地址中“id”参数）"}
-                                    className={"mb-3 mt-3 form-control "} value={ncmForm.id} onChange={(e) => {
+                                    className={"mb-3 mt-3 form-control "} value={ncmForm.id} onInput={(e) => {
                                         setncmForm({
-                                            ...ncmForm, id: e.target.value,
+                                            ...ncmForm, id: e.currentTarget.value,
 
                                         })
                                     }} />
@@ -669,9 +669,11 @@ function App() {
 
                                             {/*</div>)}*/}
                                             <select name={"mode"} onChange={(e) => {
-                                                setForm({
-                                                    ...form, kind: [Number.parseInt(e.target.value)]
+                                                console.log(e.target.value);
+                                                setncmForm({
+                                                    ...ncmForm, kind: [Number.parseInt(e.target.value)]
                                                 })
+                                                console.log(form);
                                             }} className={"form-control form-select"} style={{userSelect: "none"}}>
 
                                                 {Kind.map((val, index) =>

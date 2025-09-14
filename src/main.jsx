@@ -31,6 +31,7 @@ import Announcement from "./Instrunet/Announcement.jsx";
         try {
             return (await fetch(fetchUrl + "ping")).ok
         } catch (e) {
+            console.log(e)
             return false;
         }
     })()

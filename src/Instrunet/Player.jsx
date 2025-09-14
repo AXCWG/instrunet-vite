@@ -304,9 +304,10 @@ function Player() {
                 type: 2, info: info_local, url: baseUrl
             })
             myWorker.onmessage = e => {
+                console.log(e.data)
                 setLyrics({
                     ...lyrics,
-                    lyrics: e.data,
+                    lyrics: JSON.parse(e.data),
                 });
             }
 
